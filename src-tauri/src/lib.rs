@@ -12,7 +12,11 @@ pub mod schema;
 
 const MIGRATIONS: EmbeddedMigrations = embed_migrations!();
 
-fn establish_connection(database_url: &str) -> SqliteConnection {
+struct AppState {
+    database_url: String,
+  }
+
+fn establish_connection(database_url: String) -> SqliteConnection {
     dotenv().ok();
     SqliteConnection::establish(&database_url)
         .unwrap_or_else(|_| panic!("Error connecting to {}", database_url))
@@ -21,12 +25,8 @@ fn establish_connection(database_url: &str) -> SqliteConnection {
 // Learn more about Tauri commands at https://tauri.app/develop/calling-rust/
 #[tauri::command]
 fn greet(app_handle: tauri::AppHandle, food_id: &str) -> Food {
-    let app_dir = app_handle
-        .path()
-        .app_data_dir()
-        .expect("The app data directory should exist.");
-    let binding = app_dir.join("food.db");
-    let database_url = binding.to_str().unwrap();
+    let database_url = app_handle.state::<AppState>().database_url.clone();
+
 
     /**
      *  let pattern = format!("%{}%", target);
@@ -49,7 +49,6 @@ fn greet(app_handle: tauri::AppHandle, food_id: &str) -> Food {
         .load::<Food>(connection)
         .expect("Error loading food");
 
-    // format!("Hello, {}! You've been greeted from Rust!", result[0].description)
     result[0].clone()
 }
 
@@ -63,10 +62,14 @@ pub fn run() {
                 .expect("The app data directory should exist.");
 
             let binding = path.join("food.db");
-            let database_url = binding.to_str().unwrap();
+            let database_url = binding.to_str().unwrap().to_string();
 
-            let connection = &mut establish_connection(database_url);
+            let connection = &mut establish_connection(database_url.clone());
             let _ = connection.run_pending_migrations(MIGRATIONS);
+
+            app.manage(AppState {
+                database_url: database_url
+            });
 
             Ok(())
         })
