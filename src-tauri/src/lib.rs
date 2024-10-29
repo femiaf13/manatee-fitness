@@ -20,7 +20,7 @@ fn establish_connection(database_url: &str) -> SqliteConnection {
 
 // Learn more about Tauri commands at https://tauri.app/develop/calling-rust/
 #[tauri::command]
-fn greet(app_handle: tauri::AppHandle, food_id: &str) -> String {
+fn greet(app_handle: tauri::AppHandle, food_id: &str) -> Food {
     let app_dir = app_handle.path().app_data_dir().expect("The app data directory should exist.");
     let binding = app_dir.join("food.db");
     let database_url = binding.to_str().unwrap();
@@ -36,7 +36,8 @@ fn greet(app_handle: tauri::AppHandle, food_id: &str) -> String {
         .load::<Food>(connection)
         .expect("Error loading food");
 
-    format!("Hello, {}! You've been greeted from Rust!", result[0].description)
+    // format!("Hello, {}! You've been greeted from Rust!", result[0].description)
+    result[0].clone()
 }
 
 #[cfg_attr(mobile, tauri::mobile_entry_point)]

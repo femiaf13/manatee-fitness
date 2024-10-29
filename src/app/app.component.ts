@@ -1,7 +1,22 @@
-import { Component } from '@angular/core';
+import { Component, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterOutlet } from '@angular/router';
 import { invoke } from "@tauri-apps/api/core";
+
+
+class Food {
+  id!: Number;
+  description!: string;
+  calories_per_100g!: Number;
+  grams_per_serving!: Number;
+  serving_text!: String;
+  calories_per_serving!: Number;
+  fat!: Number;
+  carbs!: Number;
+  protein!: Number;
+  cholesterol!: Number;
+  fiber!: Number;
+}
 
 @Component({
   selector: 'app-root',
@@ -11,14 +26,14 @@ import { invoke } from "@tauri-apps/api/core";
   styleUrl: './app.component.css'
 })
 export class AppComponent {
-  greetingMessage = "";
+  greetingMessage = signal("");
 
   greet(event: SubmitEvent, foodId: string): void {
     event.preventDefault();
 
     // Learn more about Tauri commands at https://tauri.app/develop/calling-rust/
-    invoke<string>("greet", { foodId }).then((text) => {
-      this.greetingMessage = text;
+    invoke<Food>("greet", { foodId }).then((food) => {
+      this.greetingMessage.set(`${food.description}: ${food.calories_per_100g}kcal/100g`);
     });
   }
 }
