@@ -1,11 +1,10 @@
 use tauri::Manager;
 
-use diesel::{prelude::*, sql_query};
+use diesel::prelude::*;
 use diesel::sqlite::SqliteConnection;
 use diesel_migrations::{embed_migrations, EmbeddedMigrations, MigrationHarness};
 use dotenvy::dotenv;
 use models::Food;
-use schema::foods;
 use std::env;
 
 pub mod models;
@@ -15,9 +14,6 @@ const MIGRATIONS: EmbeddedMigrations = embed_migrations!();
 
 fn establish_connection(database_url: &str) -> SqliteConnection {
     dotenv().ok();
-
-    // let database_url = env::var("DATABASE_URL").expect("DATABASE_URL must be set");
-    // let database_url = "sqlite://food.db";
     SqliteConnection::establish(&database_url)
         .unwrap_or_else(|_| panic!("Error connecting to {}", database_url))
 }
@@ -28,11 +24,12 @@ fn greet(app_handle: tauri::AppHandle, food_id: &str) -> String {
     let app_dir = app_handle.path().app_data_dir().expect("The app data directory should exist.");
     let binding = app_dir.join("food.db");
     let database_url = binding.to_str().unwrap();
+    // println!("{}", database_url);
     use self::schema::foods::dsl::*;
 
     let connection = &mut establish_connection(database_url);
 
-    let food_id_int: i32 = food_id.parse().unwrap();
+    let food_id_int: i32 = food_id.parse().unwrap_or(1);
     let result = foods
         .filter(id.eq(food_id_int))
         .select(Food::as_select())
