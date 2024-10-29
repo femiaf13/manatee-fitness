@@ -21,9 +21,21 @@ fn establish_connection(database_url: &str) -> SqliteConnection {
 // Learn more about Tauri commands at https://tauri.app/develop/calling-rust/
 #[tauri::command]
 fn greet(app_handle: tauri::AppHandle, food_id: &str) -> Food {
-    let app_dir = app_handle.path().app_data_dir().expect("The app data directory should exist.");
+    let app_dir = app_handle
+        .path()
+        .app_data_dir()
+        .expect("The app data directory should exist.");
     let binding = app_dir.join("food.db");
     let database_url = binding.to_str().unwrap();
+
+    /**
+     *  let pattern = format!("%{}%", target);
+     *
+     *    let connection = &mut establish_connection();
+     *    let num_deleted = diesel::delete(posts.filter(title.like(pattern)))
+     *    .execute(connection)
+     *    .expect("Error deleting posts");
+     */
     // println!("{}", database_url);
     use self::schema::foods::dsl::*;
 
@@ -32,7 +44,8 @@ fn greet(app_handle: tauri::AppHandle, food_id: &str) -> Food {
     let food_id_int: i32 = food_id.parse().unwrap_or(1);
     let result = foods
         .filter(id.eq(food_id_int))
-        .select(Food::as_select())
+        // Haven't tried without the select but I think it will automatically do *
+        // .select(Food::as_select())
         .load::<Food>(connection)
         .expect("Error loading food");
 
@@ -44,11 +57,14 @@ fn greet(app_handle: tauri::AppHandle, food_id: &str) -> Food {
 pub fn run() {
     tauri::Builder::default()
         .setup(|app| {
-            let path = app.path().app_data_dir().expect("The app data directory should exist.");
+            let path = app
+                .path()
+                .app_data_dir()
+                .expect("The app data directory should exist.");
 
             let binding = path.join("food.db");
             let database_url = binding.to_str().unwrap();
-            
+
             let connection = &mut establish_connection(database_url);
             let _ = connection.run_pending_migrations(MIGRATIONS);
 

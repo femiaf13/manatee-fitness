@@ -15,5 +15,5 @@ pub struct Food {
     pub carbs: f32,
     pub protein: f32,
     pub cholesterol: f32,
-    pub fiber: f32
+    pub fiber: f32,
 }
