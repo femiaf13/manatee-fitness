@@ -28,12 +28,13 @@ class Food {
 export class AppComponent {
   greetingMessage = signal("");
 
-  greet(event: SubmitEvent, foodId: string): void {
+  greet(event: SubmitEvent, foodDescription: string): void {
     event.preventDefault();
 
     // Learn more about Tauri commands at https://tauri.app/develop/calling-rust/
-    invoke<Food>("greet", { foodId }).then((food) => {
-      this.greetingMessage.set(`${food.description}: ${food.calories_per_100g}kcal/100g`);
+    invoke<Array<Food>>("find_food_by_description", { foodDescription }).then((foods) => {
+      // this.greetingMessage.set(`${food.description}: ${food.calories_per_100g}kcal/100g`);
+      this.greetingMessage.set(JSON.stringify(foods));
     });
   }
 }

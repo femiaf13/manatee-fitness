@@ -1,12 +1,11 @@
 use tauri::Manager;
 
 use diesel::prelude::*;
-use diesel::sqlite::SqliteConnection;
 use diesel_migrations::{embed_migrations, EmbeddedMigrations, MigrationHarness};
-use dotenvy::dotenv;
 use models::Food;
 use std::env;
 
+pub mod database;
 pub mod models;
 pub mod schema;
 
@@ -14,19 +13,12 @@ const MIGRATIONS: EmbeddedMigrations = embed_migrations!();
 
 struct AppState {
     database_url: String,
-  }
-
-fn establish_connection(database_url: String) -> SqliteConnection {
-    dotenv().ok();
-    SqliteConnection::establish(&database_url)
-        .unwrap_or_else(|_| panic!("Error connecting to {}", database_url))
 }
 
 // Learn more about Tauri commands at https://tauri.app/develop/calling-rust/
 #[tauri::command]
 fn greet(app_handle: tauri::AppHandle, food_id: &str) -> Food {
     let database_url = app_handle.state::<AppState>().database_url.clone();
-
 
     /**
      *  let pattern = format!("%{}%", target);
@@ -39,7 +31,7 @@ fn greet(app_handle: tauri::AppHandle, food_id: &str) -> Food {
     // println!("{}", database_url);
     use self::schema::foods::dsl::*;
 
-    let connection = &mut establish_connection(database_url);
+    let connection = &mut database::establish_connection(database_url);
 
     let food_id_int: i32 = food_id.parse().unwrap_or(1);
     let result = foods
@@ -64,17 +56,21 @@ pub fn run() {
             let binding = path.join("food.db");
             let database_url = binding.to_str().unwrap().to_string();
 
-            let connection = &mut establish_connection(database_url.clone());
+            let connection = &mut database::establish_connection(database_url.clone());
             let _ = connection.run_pending_migrations(MIGRATIONS);
 
             app.manage(AppState {
-                database_url: database_url
+                database_url: database_url,
             });
 
             Ok(())
         })
         .plugin(tauri_plugin_shell::init())
-        .invoke_handler(tauri::generate_handler![greet])
+        .invoke_handler(tauri::generate_handler![
+            greet,
+            database::find_food_by_id,
+            database::find_food_by_description
+        ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
 }
