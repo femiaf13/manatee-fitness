@@ -20,12 +20,10 @@ pub fn find_food_by_id(app_handle: tauri::AppHandle, food_id: &str) -> Food {
     let food_id_int: i32 = food_id.parse().unwrap_or(1);
     let result = foods
         .filter(id.eq(food_id_int))
-        // Haven't tried without the select but I think it will automatically do *
-        // .select(Food::as_select())
-        .load::<Food>(connection)
+        .first::<Food>(connection)
         .expect("Error loading food");
 
-    result[0].clone()
+    result
 }
 
 #[tauri::command]

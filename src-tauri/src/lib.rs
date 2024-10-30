@@ -2,9 +2,9 @@ pub mod database;
 pub mod models;
 pub mod schema;
 
-use tauri::Manager;
-use diesel_migrations::{embed_migrations, EmbeddedMigrations, MigrationHarness};
 use database::*;
+use diesel_migrations::{embed_migrations, EmbeddedMigrations, MigrationHarness};
+use tauri::Manager;
 
 const MIGRATIONS: EmbeddedMigrations = embed_migrations!();
 
