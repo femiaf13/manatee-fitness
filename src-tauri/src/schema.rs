@@ -15,3 +15,16 @@ diesel::table! {
         fiber -> Float,
     }
 }
+
+diesel::table! {
+    meals (id) {
+        id -> Integer,
+        meal_date -> Timestamp,
+        meal_name -> Text,
+    }
+}
+
+diesel::allow_tables_to_appear_in_same_query!(
+    foods,
+    meals,
+);

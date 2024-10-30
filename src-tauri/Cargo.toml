@@ -22,8 +22,9 @@ tauri = { version = "2", features = [] }
 tauri-plugin-shell = "2"
 serde = { version = "1", features = ["derive"] }
 serde_json = "1"
-diesel = { version = "2.2.0", features = ["sqlite", "returning_clauses_for_sqlite_3_35"] }
+diesel = { version = "2.2.0", features = ["sqlite", "returning_clauses_for_sqlite_3_35", "time"] }
 diesel_migrations = {version = "2.0.0", features = ["sqlite"] }
 # build libsqlite3 as part of the build process
 # uncomment this line if you run into setup issues
 libsqlite3-sys = { version = "0.30", features = ["bundled"] }
+time = { version = "0.3.36", features = ['serde'] }

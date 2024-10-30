@@ -17,3 +17,12 @@ pub struct Food {
     pub cholesterol: f32,
     pub fiber: f32,
 }
+
+#[derive(Queryable, Selectable, Clone, Serialize)]
+#[diesel(table_name = crate::schema::meals)]
+#[diesel(check_for_backend(diesel::sqlite::Sqlite))]
+pub struct Meal {
+    pub id: i32,
+    pub meal_date: time::PrimitiveDateTime,
+    pub meal_name: String,
+}
