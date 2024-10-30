@@ -36,7 +36,7 @@ pub fn run() {
         .plugin(tauri_plugin_shell::init())
         .invoke_handler(tauri::generate_handler![
             find_food_by_id,
-            find_food_by_description
+            find_foods_by_description
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");

@@ -32,7 +32,7 @@ export class AppComponent {
     event.preventDefault();
 
     // Learn more about Tauri commands at https://tauri.app/develop/calling-rust/
-    invoke<Array<Food>>("find_food_by_description", { foodDescription }).then((foods) => {
+    invoke<Array<Food>>("find_foods_by_description", { foodDescription }).then((foods) => {
       // this.greetingMessage.set(`${food.description}: ${food.calories_per_100g}kcal/100g`);
       this.greetingMessage.set(JSON.stringify(foods));
     });

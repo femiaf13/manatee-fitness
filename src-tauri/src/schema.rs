@@ -19,7 +19,7 @@ diesel::table! {
 diesel::table! {
     meals (id) {
         id -> Integer,
-        meal_date -> Timestamp,
+        meal_date -> Date,
         meal_name -> Text,
     }
 }
