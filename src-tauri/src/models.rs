@@ -26,3 +26,15 @@ pub struct Meal {
     pub meal_date: time::Date,
     pub meal_name: String,
 }
+
+#[derive(Queryable, Selectable, Identifiable, Associations, Clone, Serialize)]
+#[diesel(belongs_to(Food))]
+#[diesel(belongs_to(Meal))]
+#[diesel(table_name = crate::schema::meal_foods)]
+#[diesel(primary_key(meal_id, food_id))]
+#[diesel(check_for_backend(diesel::sqlite::Sqlite))]
+pub struct MealFood {
+    pub meal_id: i32,
+    pub food_id: i32,
+    pub quantity_grams: f32,
+}

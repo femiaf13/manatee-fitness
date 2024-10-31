@@ -31,6 +31,9 @@ pub fn run() {
                 database_url: database_url,
             });
 
+            // use time::macros::date;
+            // find_calories_by_date(app.app_handle().clone(), date!(2024-10-30));
+
             Ok(())
         })
         .plugin(tauri_plugin_shell::init())

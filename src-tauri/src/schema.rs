@@ -17,6 +17,14 @@ diesel::table! {
 }
 
 diesel::table! {
+    meal_foods (meal_id, food_id) {
+        meal_id -> Integer,
+        food_id -> Integer,
+        quantity_grams -> Float,
+    }
+}
+
+diesel::table! {
     meals (id) {
         id -> Integer,
         meal_date -> Date,
@@ -24,4 +32,11 @@ diesel::table! {
     }
 }
 
-diesel::allow_tables_to_appear_in_same_query!(foods, meals,);
+diesel::joinable!(meal_foods -> foods (food_id));
+diesel::joinable!(meal_foods -> meals (meal_id));
+
+diesel::allow_tables_to_appear_in_same_query!(
+    foods,
+    meal_foods,
+    meals,
+);
