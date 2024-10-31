@@ -1,6 +1,8 @@
 use diesel::prelude::*;
 use serde::Serialize;
 
+use diesel::sql_types::*;
+
 #[derive(Queryable, Selectable, Clone, Serialize)]
 #[diesel(table_name = crate::schema::foods)]
 #[diesel(check_for_backend(diesel::sqlite::Sqlite))]
@@ -37,4 +39,21 @@ pub struct MealFood {
     pub meal_id: i32,
     pub food_id: i32,
     pub quantity_grams: f32,
+}
+
+#[derive(Default, QueryableByName, Clone, serde::Serialize)]
+#[diesel(check_for_backend(diesel::sqlite::Sqlite))]
+pub struct SummedFood {
+    #[diesel(sql_type = Float)]
+    pub calories: f32,
+    #[diesel(sql_type = Float)]
+    pub fat: f32,
+    #[diesel(sql_type = Float)]
+    pub carbs: f32,
+    #[diesel(sql_type = Float)]
+    pub protein: f32,
+    #[diesel(sql_type = Float)]
+    pub cholesterol: f32,
+    #[diesel(sql_type = Float)]
+    pub fiber: f32,
 }
