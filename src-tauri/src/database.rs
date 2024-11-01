@@ -62,7 +62,7 @@ pub fn find_meals_by_date(app_handle: tauri::AppHandle, date_to_find: Date) -> V
 }
 
 #[tauri::command]
-pub fn find_calories_by_date(app_handle: tauri::AppHandle, date_to_find: Date) -> f32 {
+pub fn find_calories_by_date(app_handle: tauri::AppHandle, date_to_find: Date) -> SummedFood {
     let database_url = app_handle.state::<AppState>().database_url.clone();
     let connection = &mut establish_connection(database_url);
     // This is a now outdated example of a more complicated query actually using diesel
@@ -95,14 +95,47 @@ pub fn find_calories_by_date(app_handle: tauri::AppHandle, date_to_find: Date) -
             WHERE 
 	            M.meal_date = ?;",
     );
-    let better_result: SummedFood = query
+    let summed_day: SummedFood = query
         .bind::<Text, _>(date_to_find.to_string())
         .get_result(connection)
         .ok()
         .unwrap();
 
-    let pretty_json = serde_json::to_string_pretty(&better_result).ok().unwrap();
+    let pretty_json = serde_json::to_string_pretty(&summed_day).ok().unwrap();
     println!("{}", pretty_json);
 
-    better_result.calories
+    summed_day
+}
+
+#[tauri::command]
+pub fn find_calories_by_date_and_meal(app_handle: tauri::AppHandle, date_to_find: Date, meal_to_find: &str) -> SummedFood {
+    let database_url = app_handle.state::<AppState>().database_url.clone();
+    let connection = &mut establish_connection(database_url);
+    let query = sql_query(
+            "SELECT 
+	            ifnull(SUM(MF.quantity_grams * F.calories_per_100g / 100), 0) AS calories,
+	            ifnull(SUM(MF.quantity_grams * F.fat / 100), 0) AS fat,
+	            ifnull(SUM(MF.quantity_grams * F.carbs / 100), 0) AS protein,
+	            ifnull(SUM(MF.quantity_grams * F.protein / 100), 0) AS carbs,
+	            ifnull(SUM(MF.quantity_grams * F.cholesterol / 100), 0) AS cholesterol,
+	            ifnull(SUM(MF.quantity_grams * F.fiber / 100), 0) AS fiber
+            FROM meals M 
+	            JOIN meal_foods MF ON M.id = MF.meal_id
+	            JOIN foods F ON MF.food_id = F.id
+            WHERE 
+	            M.meal_date = ?
+                AND
+                M.meal_name = ?;",
+    );
+    let summed_meal: SummedFood = query
+        .bind::<Text, _>(date_to_find.to_string())
+        .bind::<Text, _>(meal_to_find)
+        .get_result(connection)
+        .ok()
+        .unwrap();
+
+    let pretty_json = serde_json::to_string_pretty(&summed_meal).ok().unwrap();
+    println!("{}", pretty_json);
+
+    summed_meal
 }

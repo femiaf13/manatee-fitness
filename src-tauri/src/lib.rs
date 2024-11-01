@@ -33,6 +33,7 @@ pub fn run() {
 
             use time::macros::date;
             find_calories_by_date(app.app_handle().clone(), date!(2024 - 10 - 30));
+            find_calories_by_date_and_meal(app.app_handle().clone(), date!(2024 - 10 - 30), "dinner");
 
             Ok(())
         })
@@ -40,7 +41,9 @@ pub fn run() {
         .invoke_handler(tauri::generate_handler![
             find_food_by_id,
             find_foods_by_description,
-            find_meals_by_date
+            find_meals_by_date,
+            find_calories_by_date,
+            find_calories_by_date_and_meal
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
