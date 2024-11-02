@@ -32,9 +32,8 @@ export class AppComponent {
     event.preventDefault();
 
     this.todayDate.set( addDays(this.todayDate(), -1) )
-    const dateToFind = this.todayFormatted();
 
-    invoke<Array<Meal>>("find_meals_by_date", { dateToFind }).then( (meals) => {
+    invoke<Array<Meal>>("find_meals_by_date", { dateToFind: this.todayFormatted() }).then( (meals) => {
       this.greetingMessage.set(JSON.stringify(meals));
     });
 
