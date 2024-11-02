@@ -1,6 +1,10 @@
 <main class="container">
   <h1>Welcome to Manatee Fitness!</h1>
 
+  <h2>Today's date is {{ todayFormatted() }}</h2>
+
+  <h2>Tomorrow's date is {{ tomorrowFormatted() }}</h2>
+
   <form class="row" (submit)="greet($event, greetInput.value)">
     <mat-form-field>
       <mat-label>Name</mat-label>
