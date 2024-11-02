@@ -1,6 +1,6 @@
 <div class="main-content">
     @for (item of meals; track $index) {
-        <app-meal-card></app-meal-card>
+        <app-meal-card [meal]="item"></app-meal-card>
         <br>
     }
 </div>
