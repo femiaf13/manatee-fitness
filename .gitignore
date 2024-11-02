@@ -42,5 +42,6 @@ testem.log
 Thumbs.db
 
 # No SQL except migrations
+*.db
 *.sql
 **/migrations/*
