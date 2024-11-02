@@ -3,25 +3,16 @@ import { CommonModule } from '@angular/common';
 import { RouterOutlet } from '@angular/router';
 import { invoke } from "@tauri-apps/api/core";
 
+import { MatButtonModule } from '@angular/material/button';
+import { MatInputModule } from '@angular/material/input';
+import { MatFormFieldModule } from '@angular/material/form-field';
 
-class Food {
-  id!: Number;
-  description!: string;
-  calories_per_100g!: Number;
-  grams_per_serving!: Number;
-  serving_text!: String;
-  calories_per_serving!: Number;
-  fat!: Number;
-  carbs!: Number;
-  protein!: Number;
-  cholesterol!: Number;
-  fiber!: Number;
-}
+import { Food } from '@models/food.model';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [CommonModule, RouterOutlet],
+  imports: [CommonModule, RouterOutlet, MatButtonModule, MatFormFieldModule, MatInputModule],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css'
 })
