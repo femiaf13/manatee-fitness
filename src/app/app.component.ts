@@ -2,20 +2,19 @@ import { Component, computed, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterOutlet } from '@angular/router';
 import { invoke } from "@tauri-apps/api/core";
-
 import { MatButtonModule } from '@angular/material/button';
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
-
 import { addDays, format } from "date-fns";
 
 import { Food } from '@models/food.model';
 import { Meal } from '@models/meal.model';
+import { DiaryComponent } from './pages/diary/diary.component'
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [CommonModule, RouterOutlet, MatButtonModule, MatFormFieldModule, MatInputModule],
+  imports: [CommonModule, RouterOutlet, MatButtonModule, MatFormFieldModule, MatInputModule, DiaryComponent],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css'
 })
