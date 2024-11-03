@@ -13,10 +13,19 @@ export class Food {
 }
 
 export class SummedFood {
-    calories!: Number;
-    fat!: Number;
-    carbs!: Number;
-    protein!: Number;
-    cholesterol!: Number;
-    fiber!: Number;
+    calories: Number;
+    fat: Number;
+    carbs: Number;
+    protein: Number;
+    cholesterol: Number;
+    fiber: Number;
+
+    constructor() {
+        this.calories = 0;
+        this.fat = 0;
+        this.carbs = 0;
+        this.protein = 0;
+        this.cholesterol = 0;
+        this.fiber = 0;
+    }
 }
