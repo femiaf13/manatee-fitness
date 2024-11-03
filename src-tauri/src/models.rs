@@ -3,7 +3,7 @@ use serde::Serialize;
 
 use diesel::sql_types::*;
 
-#[derive(Queryable, Selectable, Clone, Serialize)]
+#[derive(Identifiable, Queryable, Selectable, PartialEq, Clone, Serialize)]
 #[diesel(table_name = crate::schema::foods)]
 #[diesel(check_for_backend(diesel::sqlite::Sqlite))]
 pub struct Food {
@@ -20,7 +20,7 @@ pub struct Food {
     pub fiber: f32,
 }
 
-#[derive(Queryable, Selectable, Clone, Serialize)]
+#[derive(Identifiable, Queryable, Selectable, PartialEq, Clone, Serialize)]
 #[diesel(table_name = crate::schema::meals)]
 #[diesel(check_for_backend(diesel::sqlite::Sqlite))]
 pub struct Meal {
@@ -29,7 +29,7 @@ pub struct Meal {
     pub meal_name: String,
 }
 
-#[derive(Queryable, Selectable, Identifiable, Associations, Clone, Serialize)]
+#[derive(Identifiable, Queryable, Selectable, Associations, PartialEq, Clone, Serialize)]
 #[diesel(belongs_to(Food))]
 #[diesel(belongs_to(Meal))]
 #[diesel(table_name = crate::schema::meal_foods)]

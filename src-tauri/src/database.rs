@@ -4,8 +4,10 @@ use diesel::sql_types::Text;
 use diesel::sqlite::SqliteConnection;
 use tauri::Manager;
 use time::*;
+use time::macros::date;
 
 use crate::models::*;
+use crate::schema::*;
 use crate::AppState;
 
 pub fn establish_connection(database_url: String) -> SqliteConnection {
@@ -45,6 +47,34 @@ pub fn find_foods_by_description(
         .expect("Error loading food");
 
     result
+}
+
+#[tauri::command]
+pub fn find_foods_by_meal(app_handle: tauri::AppHandle, meal_id: i32) -> Vec<Food> {
+    let database_url = app_handle.state::<AppState>().database_url.clone();
+    let connection = &mut establish_connection(database_url);
+
+    let meal = meals::table
+        .filter(meals::id.eq(meal_id))
+        .select(Meal::as_select())
+        .first(connection)
+        .unwrap_or(Meal {
+            id: -1,
+            meal_date: date!(1970-1-1),
+            meal_name: String::from(""),
+        });
+    
+    if meal.id == -1 {
+        return vec![];
+    }
+
+    let foods = MealFood::belonging_to(&meal)
+        .inner_join(foods::table)
+        .select(Food::as_select())
+        .load(connection)
+        .unwrap_or_default();
+
+    foods
 }
 
 #[tauri::command]
@@ -133,9 +163,6 @@ pub fn find_calories_by_date_and_meal(app_handle: tauri::AppHandle, date_to_find
         .get_result(connection)
         .ok()
         .unwrap();
-
-    let pretty_json = serde_json::to_string_pretty(&summed_meal).ok().unwrap();
-    println!("{}", pretty_json);
 
     summed_meal
 }

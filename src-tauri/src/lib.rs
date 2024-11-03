@@ -31,9 +31,13 @@ pub fn run() {
                 database_url: database_url,
             });
 
-            use time::macros::date;
-            find_calories_by_date(app.app_handle().clone(), date!(2024 - 10 - 30));
-            find_calories_by_date_and_meal(app.app_handle().clone(), date!(2024 - 10 - 30), "dinner");
+            // use time::macros::date;
+            // find_calories_by_date(app.app_handle().clone(), date!(2024 - 10 - 30));
+            // find_calories_by_date_and_meal(app.app_handle().clone(), date!(2024 - 10 - 30), "dinner");
+            // let foods = find_foods_by_meal(app.app_handle().clone(), 3);
+
+            // let pretty_json = serde_json::to_string_pretty(&foods).ok().unwrap();
+            // println!("{}", pretty_json);
 
             Ok(())
         })
@@ -41,6 +45,7 @@ pub fn run() {
         .invoke_handler(tauri::generate_handler![
             find_food_by_id,
             find_foods_by_description,
+            find_foods_by_meal,
             find_meals_by_date,
             find_calories_by_date,
             find_calories_by_date_and_meal
