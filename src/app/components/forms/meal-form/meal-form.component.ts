@@ -1,6 +1,6 @@
-import { Component, inject, input, output } from '@angular/core';
+import { Component, effect, inject, input, OnInit, output } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import {ReactiveFormsModule, FormBuilder, Validators} from '@angular/forms';
+import {ReactiveFormsModule, NonNullableFormBuilder, Validators} from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import {MatDatepickerModule} from '@angular/material/datepicker';
 import {MatInputModule} from '@angular/material/input';
@@ -23,20 +23,20 @@ export class MealFormComponent {
     inputMeal = input<MealDTO>(new MealDTO());
     outputMeal = output<MealDTO>();
 
-    private formBuilder = inject(FormBuilder);
+    private formBuilder = inject(NonNullableFormBuilder);
     mealForm = this.formBuilder.group({
         mealDate: ['', [Validators.required]],
         mealName: ['', [Validators.required]]
     });
 
     constructor() {
-        if( this.inputMeal() !== undefined) {
-            const inputMealDto = this.inputMeal() as MealDTO; 
+        effect( () => {
+            const inputMealDto = this.inputMeal(); 
             this.mealForm.setValue({
                 mealDate: inputMealDto.meal_date,
                 mealName: inputMealDto.meal_name
             })
-        }
+        });
     }
 
     formatDate() {
