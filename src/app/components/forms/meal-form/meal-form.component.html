@@ -1,0 +1,17 @@
+<form [formGroup]="mealForm" (ngSubmit)="onSubmit()">
+    <mat-form-field>
+        <mat-label>Name of this meal</mat-label>
+        <input matInput placeholder="Enter a name..." formControlName="mealName" />
+    </mat-form-field>
+    <br>
+    <mat-form-field>
+        <mat-label>Choose the date of this meal</mat-label>
+        <input matInput [matDatepicker]="picker" formControlName="mealDate" (dateChange)="formatDate()">
+        <mat-hint>MM/DD/YYYY</mat-hint>
+        <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+        <mat-datepicker #picker></mat-datepicker>
+    </mat-form-field>
+    <br>
+    <button mat-flat-button type="submit" [disabled]="!mealForm.valid">Submit</button>
+    {{ mealForm.value | json }}
+</form>

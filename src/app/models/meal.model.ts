@@ -1,17 +1,15 @@
 import { format } from "date-fns";
 
-export class Meal {
-    id!: Number;
-    meal_date!: String;
-    meal_name!: String;
-}
-
 export class MealDTO {
-    meal_date: String;
-    meal_name: String;
+    meal_date: string;
+    meal_name: string;
 
     constructor() {
         this.meal_date = format(new Date(), "yyyy-MM-dd");
-        this.meal_name = '';
+        this.meal_name = 'New Meal';
     }
+}
+
+export class Meal extends MealDTO {
+    id!: Number;
 }

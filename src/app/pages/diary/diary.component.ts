@@ -34,7 +34,7 @@ export class DiaryComponent {
                 meal_date: this.today()
             }
             const success = await invoke<Boolean>("create_meal", {meal: meal});
-            if(success) {
+            if (success) {
                 invoke<Array<Meal>>("find_meals_by_date", { dateToFind: this.today() }).then( (meals) => this.meals = meals);
             } else {
                 console.error("Failed to insert")
