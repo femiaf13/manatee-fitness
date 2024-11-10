@@ -7,7 +7,6 @@ import {MatInputModule} from '@angular/material/input';
 import {MatFormFieldModule} from '@angular/material/form-field';
 import {provideNativeDateAdapter} from '@angular/material/core';
 import { MealDTO } from '@models/meal.model';
-import { formatDate } from '@angular/common';
 
 @Component({
     selector: 'app-meal-form',
@@ -43,10 +42,7 @@ export class MealFormComponent {
     onSubmit() {
         console.log(this.mealForm.value)
         const rawFormValues = this.mealForm.getRawValue();
-        const mealDtoOutput: MealDTO = {
-            meal_date: formatDate(rawFormValues.mealDate, 'yyyy-MM-dd', 'en'),
-            meal_name: rawFormValues.mealName
-        };
+        const mealDtoOutput: MealDTO = new MealDTO(rawFormValues.mealDate, rawFormValues.mealName);
         this.outputMeal.emit(mealDtoOutput);
     }
 }

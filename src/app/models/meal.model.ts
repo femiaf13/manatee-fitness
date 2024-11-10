@@ -1,12 +1,13 @@
+import { DateService } from "@services/date.service";
 import { format } from "date-fns";
 
 export class MealDTO {
     meal_date: string;
     meal_name: string;
 
-    constructor() {
-        this.meal_date = format(new Date(), "yyyy-MM-dd");
-        this.meal_name = 'New Meal';
+    constructor(date: Date = new Date(), name: string = 'New Meal') {
+        this.meal_date = format(date, DateService.DATE_FORMAT_STRING);
+        this.meal_name = name;
     }
 }
 

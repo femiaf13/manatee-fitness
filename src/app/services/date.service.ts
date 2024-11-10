@@ -5,14 +5,15 @@ import { format } from 'date-fns';
     providedIn: 'root'
 })
 export class DateService {
+    // This is how the date string needs to look before it hits the DB
+    public static readonly DATE_FORMAT_STRING = "yyyy-MM-dd";
+
     selectedDate = signal(new Date())
-    selectedDateFormatted = computed(() => format(this.selectedDate(), "yyyy-MM-dd"));
+    selectedDateFormatted = computed(() => format(this.selectedDate(), DateService.DATE_FORMAT_STRING));
 
     constructor() { }
 
     /**
-     * set
-     * 
      * Sets the Date signal for the application
      */
     public set(newDate: Date) {
