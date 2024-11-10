@@ -1,10 +1,11 @@
-import { Component, effect, input } from '@angular/core';
+import { Component, effect, inject } from '@angular/core';
 import { invoke } from '@tauri-apps/api/core';
 
 import { MatButtonModule } from '@angular/material/button';
 
 import { Meal, MealDTO } from '@models/meal.model';
 import { MealCardComponent } from "@components/meal-card/meal-card.component";
+import { DateService } from '@services/date.service';
 
 
 @Component({
@@ -15,7 +16,8 @@ import { MealCardComponent } from "@components/meal-card/meal-card.component";
   styleUrl: './diary.component.css'
 })
 export class DiaryComponent {
-    today = input.required<string>();
+    dateService = inject(DateService);
+    today = this.dateService.selectedDateFormatted;
     meals: Array<Meal> = [];
 
     constructor() {
