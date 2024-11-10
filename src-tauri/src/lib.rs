@@ -43,9 +43,11 @@ pub fn run() {
         })
         .plugin(tauri_plugin_shell::init())
         .invoke_handler(tauri::generate_handler![
+            create_food,
             find_food_by_id,
             find_foods_by_description,
             find_foods_by_meal,
+            create_meal,
             find_meals_by_date,
             find_calories_by_date,
             find_calories_by_date_and_meal

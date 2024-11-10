@@ -1,10 +1,11 @@
+use diesel::insert_into;
 use diesel::prelude::*;
 use diesel::sql_query;
 use diesel::sql_types::Text;
 use diesel::sqlite::SqliteConnection;
 use tauri::Manager;
-use time::*;
 use time::macros::date;
+use time::*;
 
 use crate::models::*;
 use crate::schema::*;
@@ -13,6 +14,22 @@ use crate::AppState;
 pub fn establish_connection(database_url: String) -> SqliteConnection {
     SqliteConnection::establish(&database_url)
         .unwrap_or_else(|_| panic!("Error connecting to {}", database_url))
+}
+
+#[tauri::command]
+pub fn create_food(app_handle: tauri::AppHandle, food: FoodDTO) -> bool {
+    let database_url = app_handle.state::<AppState>().database_url.clone();
+    let connection = &mut establish_connection(database_url);
+    use crate::schema::foods::dsl::*;
+
+    let query_result = insert_into(foods).values(&food).execute(connection);
+
+    let result: bool = match query_result {
+        Ok(_numer_of_rows) => true,
+        Err(_e) => false,
+    };
+
+    result
 }
 
 #[tauri::command]
@@ -60,10 +77,10 @@ pub fn find_foods_by_meal(app_handle: tauri::AppHandle, meal_id: i32) -> Vec<Foo
         .first(connection)
         .unwrap_or(Meal {
             id: -1,
-            meal_date: date!(1970-1-1),
+            meal_date: date!(1970 - 1 - 1),
             meal_name: String::from(""),
         });
-    
+
     if meal.id == -1 {
         return vec![];
     }
@@ -75,6 +92,22 @@ pub fn find_foods_by_meal(app_handle: tauri::AppHandle, meal_id: i32) -> Vec<Foo
         .unwrap_or_default();
 
     foods
+}
+
+#[tauri::command]
+pub fn create_meal(app_handle: tauri::AppHandle, meal: MealDTO) -> bool {
+    let database_url = app_handle.state::<AppState>().database_url.clone();
+    let connection = &mut establish_connection(database_url);
+    use crate::schema::meals::dsl::*;
+
+    let query_result = insert_into(meals).values(&meal).execute(connection);
+
+    let result: bool = match query_result {
+        Ok(_numer_of_rows) => true,
+        Err(_e) => false,
+    };
+
+    result
 }
 
 #[tauri::command]
@@ -112,7 +145,7 @@ pub fn find_calories_by_date(app_handle: tauri::AppHandle, date_to_find: Date) -
     // I lose protections with raw sql, but by using ifnull I make sure we get a number back
     // no matter what
     let query = sql_query(
-            "SELECT 
+        "SELECT 
 	            ifnull(SUM(MF.quantity_grams * F.calories_per_100g / 100), 0) AS calories,
 	            ifnull(SUM(MF.quantity_grams * F.fat / 100), 0) AS fat,
 	            ifnull(SUM(MF.quantity_grams * F.carbs / 100), 0) AS protein,
@@ -138,11 +171,15 @@ pub fn find_calories_by_date(app_handle: tauri::AppHandle, date_to_find: Date) -
 }
 
 #[tauri::command]
-pub fn find_calories_by_date_and_meal(app_handle: tauri::AppHandle, date_to_find: Date, meal_to_find: &str) -> SummedFood {
+pub fn find_calories_by_date_and_meal(
+    app_handle: tauri::AppHandle,
+    date_to_find: Date,
+    meal_to_find: &str,
+) -> SummedFood {
     let database_url = app_handle.state::<AppState>().database_url.clone();
     let connection = &mut establish_connection(database_url);
     let query = sql_query(
-            "SELECT 
+        "SELECT 
 	            ifnull(SUM(MF.quantity_grams * F.calories_per_100g / 100), 0) AS calories,
 	            ifnull(SUM(MF.quantity_grams * F.fat / 100), 0) AS fat,
 	            ifnull(SUM(MF.quantity_grams * F.carbs / 100), 0) AS protein,

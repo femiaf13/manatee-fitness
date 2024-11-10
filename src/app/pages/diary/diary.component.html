@@ -1,4 +1,5 @@
 <div class="main-content">
+    <button mat-flat-button (click)="addDinner()">Add Dinner</button>
     @for (item of meals; track $index) {
         <app-meal-card [meal]="item"></app-meal-card>
         <br>
