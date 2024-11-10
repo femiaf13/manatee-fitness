@@ -25,7 +25,7 @@ export class MealFormComponent {
 
     private formBuilder = inject(NonNullableFormBuilder);
     mealForm = this.formBuilder.group({
-        mealDate: ['', [Validators.required]],
+        mealDate: [new Date(), [Validators.required]],
         mealName: ['', [Validators.required]]
     });
 
@@ -33,21 +33,20 @@ export class MealFormComponent {
         effect( () => {
             const inputMealDto = this.inputMeal(); 
             this.mealForm.setValue({
-                mealDate: inputMealDto.meal_date,
+                // I HATE that this fixes the off by 1 day problem, peak JS
+                mealDate: new Date(inputMealDto.meal_date.replaceAll('-', '/')),
                 mealName: inputMealDto.meal_name
             })
         });
     }
 
-    formatDate() {
-        if (this.mealForm.value.mealDate) {
-            this.mealForm.value.mealDate = formatDate(this.mealForm.value.mealDate, 'yyyy-MM-dd', 'en')
-        }
-    }
-
     onSubmit() {
         console.log(this.mealForm.value)
-        // make mealDTO from form
-        // meal.emit() it
+        const rawFormValues = this.mealForm.getRawValue();
+        const mealDtoOutput: MealDTO = {
+            meal_date: formatDate(rawFormValues.mealDate, 'yyyy-MM-dd', 'en'),
+            meal_name: rawFormValues.mealName
+        };
+        this.outputMeal.emit(mealDtoOutput);
     }
 }

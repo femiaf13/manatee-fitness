@@ -5,13 +5,16 @@
     </mat-form-field>
     <br>
     <mat-form-field>
-        <mat-label>Choose the date of this meal</mat-label>
-        <input matInput [matDatepicker]="picker" formControlName="mealDate" (dateChange)="formatDate()">
+        <mat-label>Date of this meal</mat-label>
+        <input matInput [matDatepicker]="picker" formControlName="mealDate">
         <mat-hint>MM/DD/YYYY</mat-hint>
         <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
         <mat-datepicker #picker></mat-datepicker>
     </mat-form-field>
     <br>
     <button mat-flat-button type="submit" [disabled]="!mealForm.valid">Submit</button>
+    <br>
     {{ mealForm.value | json }}
+    <br>
+    {{ mealForm.value.mealDate | date:'yyyy-MM-dd' }}
 </form>
