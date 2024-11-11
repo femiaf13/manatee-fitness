@@ -27,9 +27,7 @@ pub fn run() {
             let connection = &mut establish_connection(database_url.clone());
             let _ = connection.run_pending_migrations(MIGRATIONS);
 
-            app.manage(AppState {
-                database_url: database_url,
-            });
+            app.manage(AppState { database_url });
 
             // use time::macros::date;
             // find_calories_by_date(app.app_handle().clone(), date!(2024 - 10 - 30));

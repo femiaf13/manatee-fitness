@@ -40,12 +40,11 @@ pub fn find_food_by_id(app_handle: tauri::AppHandle, food_id: &str) -> Food {
     let connection = &mut establish_connection(database_url);
 
     let food_id_int: i32 = food_id.parse().unwrap_or(1);
-    let result = foods
+
+    foods
         .filter(id.eq(food_id_int))
         .first::<Food>(connection)
-        .expect("Error loading food");
-
-    result
+        .expect("Error loading food")
 }
 
 #[tauri::command]
@@ -58,12 +57,11 @@ pub fn find_foods_by_description(
     use crate::schema::foods::dsl::*;
 
     let connection = &mut establish_connection(database_url);
-    let result = foods
+
+    foods
         .filter(description.like(pattern))
         .load::<Food>(connection)
-        .expect("Error loading food");
-
-    result
+        .expect("Error loading food")
 }
 
 #[tauri::command]
@@ -85,13 +83,11 @@ pub fn find_foods_by_meal(app_handle: tauri::AppHandle, meal_id: i32) -> Vec<Foo
         return vec![];
     }
 
-    let foods = MealFood::belonging_to(&meal)
+    MealFood::belonging_to(&meal)
         .inner_join(foods::table)
         .select(Food::as_select())
         .load(connection)
-        .unwrap_or_default();
-
-    foods
+        .unwrap_or_default()
 }
 
 #[tauri::command]
@@ -116,12 +112,11 @@ pub fn find_meals_by_date(app_handle: tauri::AppHandle, date_to_find: Date) -> V
     use crate::schema::meals::dsl::*;
 
     let connection = &mut establish_connection(database_url);
-    let result = meals
+
+    meals
         .filter(meal_date.eq(date_to_find))
         .load::<Meal>(connection)
-        .expect("Error loading meals");
-
-    result
+        .expect("Error loading meals")
 }
 
 #[tauri::command]
