@@ -1,5 +1,5 @@
-import { DateService } from "@services/date.service";
-import { format } from "date-fns";
+import { DateService } from '@services/date.service';
+import { format } from 'date-fns';
 
 export class MealDTO {
     meal_date: string;

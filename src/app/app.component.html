@@ -1,20 +1,20 @@
 <main class="container">
-  <h1>Welcome to Manatee Fitness!</h1>
+    <h1>Welcome to Manatee Fitness!</h1>
 
-  <h2>Today's date is {{ this.dateService.selectedDateFormatted() }}</h2>
+    <h2>Today's date is {{ this.dateService.selectedDateFormatted() }}</h2>
 
-  <h2>Tomorrow's date is {{ tomorrowFormatted() }}</h2>
+    <h2>Tomorrow's date is {{ tomorrowFormatted() }}</h2>
 
-  <app-page-diary></app-page-diary>
+    <app-page-diary></app-page-diary>
 
-  <form class="row" (submit)="greet($event)">
-    <mat-form-field>
-      <mat-label>Name</mat-label>
-      <input matInput #greetInput id="greet-input" placeholder="Enter a name..." />
-    </mat-form-field>
-    <button mat-flat-button type="submit">Search</button>
-  </form>
-  <p>{{ greetingMessage() }}</p>
+    <form class="row" (submit)="greet($event)">
+        <mat-form-field>
+            <mat-label>Name</mat-label>
+            <input matInput #greetInput id="greet-input" placeholder="Enter a name..." />
+        </mat-form-field>
+        <button mat-flat-button type="submit">Search</button>
+    </form>
+    <p>{{ greetingMessage() }}</p>
 
-  <router-outlet></router-outlet>
+    <router-outlet></router-outlet>
 </main>

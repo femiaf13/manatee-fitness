@@ -13,9 +13,11 @@
         </mat-card-content>
         <mat-card-actions align="end">
             {{ summedMeal.calories }} Calories
-            <button mat-button><mat-icon aria-hidden="false" aria-label="Example home icon" fontIcon="add"></mat-icon></button>
+            <button mat-button>
+                <mat-icon aria-hidden="false" aria-label="Example home icon" fontIcon="add"></mat-icon>
+            </button>
         </mat-card-actions>
-    </mat-card>    
+    </mat-card>
 </div>
 
 <app-meal-form [inputMeal]="meal()"></app-meal-form>

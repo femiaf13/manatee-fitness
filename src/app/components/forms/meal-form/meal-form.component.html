@@ -3,18 +3,18 @@
         <mat-label>Name of this meal</mat-label>
         <input matInput placeholder="Enter a name..." formControlName="mealName" />
     </mat-form-field>
-    <br>
+    <br />
     <mat-form-field>
         <mat-label>Date of this meal</mat-label>
-        <input matInput [matDatepicker]="picker" formControlName="mealDate">
+        <input matInput [matDatepicker]="picker" formControlName="mealDate" />
         <mat-hint>MM/DD/YYYY</mat-hint>
         <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
         <mat-datepicker #picker></mat-datepicker>
     </mat-form-field>
-    <br>
+    <br />
     <button mat-flat-button type="submit" [disabled]="!mealForm.valid">Submit</button>
-    <br>
+    <br />
     {{ mealForm.value | json }}
-    <br>
-    {{ mealForm.value.mealDate | date:'yyyy-MM-dd' }}
+    <br />
+    {{ mealForm.value.mealDate | date: 'yyyy-MM-dd' }}
 </form>
