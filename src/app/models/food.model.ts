@@ -1,27 +1,27 @@
 export class Food {
-    id!: Number;
+    id!: number;
     description!: string;
-    calories_per_100g!: Number;
-    grams_per_serving!: Number;
-    serving_text!: String;
-    calories_per_serving!: Number;
-    fat!: Number;
-    carbs!: Number;
-    protein!: Number;
-    cholesterol!: Number;
-    fiber!: Number;
+    calories_per_100g!: number;
+    grams_per_serving!: number;
+    serving_text!: string;
+    calories_per_serving!: number;
+    fat!: number;
+    carbs!: number;
+    protein!: number;
+    cholesterol!: number;
+    fiber!: number;
 }
 
 export class FoodDTO {
     description: string;
-    calories_per_100g: Number;
-    grams_per_serving: Number;
-    serving_text: String;
-    fat: Number;
-    carbs: Number;
-    protein: Number;
-    cholesterol: Number;
-    fiber: Number;
+    calories_per_100g: number;
+    grams_per_serving: number;
+    serving_text: string;
+    fat: number;
+    carbs: number;
+    protein: number;
+    cholesterol: number;
+    fiber: number;
 
     constructor() {
         this.description = '';
@@ -37,12 +37,12 @@ export class FoodDTO {
 }
 
 export class SummedFood {
-    calories: Number;
-    fat: Number;
-    carbs: Number;
-    protein: Number;
-    cholesterol: Number;
-    fiber: Number;
+    calories: number;
+    fat: number;
+    carbs: number;
+    protein: number;
+    cholesterol: number;
+    fiber: number;
 
     constructor() {
         this.calories = 0;

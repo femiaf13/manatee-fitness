@@ -5,9 +5,9 @@
 
   <h2>Tomorrow's date is {{ tomorrowFormatted() }}</h2>
 
-  <page-diary></page-diary>
+  <app-page-diary></app-page-diary>
 
-  <form class="row" (submit)="greet($event, greetInput.value)">
+  <form class="row" (submit)="greet($event)">
     <mat-form-field>
       <mat-label>Name</mat-label>
       <input matInput #greetInput id="greet-input" placeholder="Enter a name..." />

@@ -12,5 +12,5 @@ export class MealDTO {
 }
 
 export class Meal extends MealDTO {
-    id!: Number;
+    id!: number;
 }

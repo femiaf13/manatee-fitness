@@ -7,7 +7,6 @@ import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { addDays, format } from "date-fns";
 
-import { Food } from '@models/food.model';
 import { Meal } from '@models/meal.model';
 import { DiaryComponent } from '@pages/diary/diary.component'
 import { DateService } from '@services/date.service';
@@ -25,9 +24,9 @@ export class AppComponent {
 
   tomorrowFormatted = computed(() => {
     return format(addDays(this.dateService.selectedDate(), 1), "yyyy-MM-dd")
-  } )
+  });
 
-  greet(event: SubmitEvent, foodDescription: string): void {
+  greet(event: SubmitEvent): void {
     event.preventDefault();
 
     this.dateService.set( addDays(this.dateService.selectedDate(), -1) )

@@ -6,12 +6,13 @@ import { invoke } from '@tauri-apps/api/core';
 
 import { Food, SummedFood } from '@models/food.model';
 import { Meal } from '@models/meal.model';
+import { MealFormComponent } from "../forms/meal-form/meal-form.component";
 
 
 @Component({
     selector: 'app-meal-card',
     standalone: true,
-    imports: [MatButtonModule, MatCardModule, MatIconModule],
+    imports: [MatButtonModule, MatCardModule, MatIconModule, MealFormComponent],
     templateUrl: './meal-card.component.html',
     styleUrl: './meal-card.component.css'
 })

@@ -9,7 +9,7 @@ import { DateService } from '@services/date.service';
 
 
 @Component({
-  selector: 'page-diary',
+  selector: 'app-page-diary',
   standalone: true,
   imports: [MealCardComponent, MatButtonModule],
   templateUrl: './diary.component.html',
@@ -28,14 +28,14 @@ export class DiaryComponent {
     }
 
     async addDinner() {
-        let meals = await invoke<Array<Meal>>("find_meals_by_date", { dateToFind: this.today() });
+        const meals = await invoke<Array<Meal>>("find_meals_by_date", { dateToFind: this.today() });
         console.log(JSON.stringify(meals));
         if (meals.length === 0 ) {
-            let meal: MealDTO = {
+            const meal: MealDTO = {
                 meal_name: 'dinner',
                 meal_date: this.today()
             }
-            const success = await invoke<Boolean>("create_meal", {meal: meal});
+            const success = await invoke<boolean>("create_meal", {meal: meal});
             if (success) {
                 invoke<Array<Meal>>("find_meals_by_date", { dateToFind: this.today() }).then( (meals) => this.meals = meals);
             } else {

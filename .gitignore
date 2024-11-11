@@ -45,3 +45,6 @@ Thumbs.db
 *.db
 *.sql
 **/migrations/*
+
+.nx/cache
+.nx/workspace-data
