@@ -10,11 +10,20 @@ import { addDays, format } from 'date-fns';
 import { Meal } from '@models/meal.model';
 import { DiaryComponent } from '@pages/diary/diary.component';
 import { DateService } from '@services/date.service';
+import { TopBarComponent } from './components/top-bar/top-bar.component';
 
 @Component({
     selector: 'app-root',
     standalone: true,
-    imports: [CommonModule, RouterOutlet, MatButtonModule, MatFormFieldModule, MatInputModule, DiaryComponent],
+    imports: [
+        CommonModule,
+        RouterOutlet,
+        MatButtonModule,
+        MatFormFieldModule,
+        MatInputModule,
+        DiaryComponent,
+        TopBarComponent,
+    ],
     templateUrl: './app.component.html',
     styleUrl: './app.component.css',
 })
