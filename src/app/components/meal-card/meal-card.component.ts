@@ -1,4 +1,4 @@
-import { Component, computed, input } from '@angular/core';
+import { Component, computed, effect, input } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
@@ -21,27 +21,19 @@ export class MealCardComponent {
     foods: Array<Food> = [];
     summedMeal: SummedFood = new SummedFood();
 
-    // This signal will automatically re-run anytime the meal signal is changed,
-    // calculating our foods and nutrition summation
-    mealChangeHandler = computed(() => {
-        const meal = this.meal();
-        this.getFoods(meal);
-
-        return true;
-    });
-
-    constructor() {}
-
-    getFoods(meal: Meal) {
-        invoke<Array<Food>>('find_foods_by_meal', { mealId: meal.id }).then(foods => {
-            console.log('Help me');
-            this.foods = foods;
-        });
-        invoke<SummedFood>('find_calories_by_date_and_meal', {
-            dateToFind: meal.meal_date,
-            mealToFind: meal.meal_name,
-        }).then(summedFood => {
-            this.summedMeal = summedFood;
+    constructor() {
+        // This effect will automatically re-run anytime the meal signal is changed,
+        // calculating our foods and nutrition summation
+        effect(() => {
+            invoke<Array<Food>>('find_foods_by_meal', { mealId: this.meal().id }).then(foods => {
+                this.foods = foods;
+            });
+            invoke<SummedFood>('find_calories_by_date_and_meal', {
+                dateToFind: this.meal().meal_date,
+                mealToFind: this.meal().meal_name,
+            }).then(summedFood => {
+                this.summedMeal = summedFood;
+            });
         });
     }
 }
