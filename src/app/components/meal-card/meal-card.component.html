@@ -1,25 +1,26 @@
-<div>
-    <mat-card>
-        <mat-card-header>
-            <mat-card-title>{{ meal().meal_name.toUpperCase() }}</mat-card-title>
-            <mat-card-subtitle>End</mat-card-subtitle>
-        </mat-card-header>
-        <mat-card-content>
-            <ul>
-                @for (food of foods; track $index) {
-                    <li>{{ food.description }}</li>
-                }
-            </ul>
-        </mat-card-content>
-        <mat-card-actions align="end">
-            {{ summedMeal.calories }} Calories
-            <button mat-button>
-                <mat-icon aria-hidden="false" aria-label="Example home icon" fontIcon="add"></mat-icon>
-            </button>
-        </mat-card-actions>
-    </mat-card>
-</div>
-
-<app-meal-form [inputMeal]="meal()"></app-meal-form>
+@if (mealChangeHandler()) {
+    <div>
+        <mat-card>
+            <mat-card-header>
+                <mat-card-title>{{ mealName() }}</mat-card-title>
+                <mat-card-subtitle>End</mat-card-subtitle>
+            </mat-card-header>
+            <mat-card-content>
+                <ul>
+                    @for (food of foods; track $index) {
+                        <li>{{ food.description }}</li>
+                    }
+                </ul>
+            </mat-card-content>
+            <mat-card-actions align="end">
+                {{ summedMeal.calories }} Calories
+                <button mat-button>
+                    <mat-icon aria-hidden="false" aria-label="Example home icon" fontIcon="add"></mat-icon>
+                </button>
+            </mat-card-actions>
+        </mat-card>
+    </div>
+    <app-meal-form [inputMeal]="meal()"></app-meal-form>
+}
 
 <!-- <app-meal-form></app-meal-form> -->
