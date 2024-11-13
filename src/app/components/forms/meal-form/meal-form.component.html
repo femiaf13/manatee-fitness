@@ -1,4 +1,4 @@
-<form [formGroup]="mealForm" (ngSubmit)="onSubmit()">
+<form [formGroup]="mealForm">
     <mat-form-field>
         <mat-label>Name of this meal</mat-label>
         <input matInput placeholder="Enter a name..." formControlName="mealName" />
@@ -12,5 +12,8 @@
         <mat-datepicker #picker></mat-datepicker>
     </mat-form-field>
     <br />
-    <button mat-flat-button style="float: right" type="submit" [disabled]="!mealForm.valid">Submit</button>
+    <button mat-flat-button style="float: right" type="submit" [disabled]="!mealForm.valid" (click)="onSubmit()">
+        Submit
+    </button>
+    <button mat-flat-button style="float: right" (click)="onCancel()">Cancel</button>
 </form>

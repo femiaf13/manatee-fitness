@@ -36,6 +36,7 @@ export class DiaryComponent {
         };
         const dialogRef = this.dialog.open(MealDialogComponent, {
             data: dialogData,
+            disableClose: true,
         });
         const newMeal: MealDTO | undefined = await lastValueFrom(dialogRef.afterClosed());
         if (newMeal !== undefined) {

@@ -23,4 +23,8 @@ export class MealDialogComponent {
     onSubmit(meal: MealDTO) {
         this.dialog.close(meal);
     }
+
+    onCancel() {
+        this.dialog.close(undefined);
+    }
 }

@@ -26,6 +26,7 @@ import { MealDTO } from '@models/meal.model';
 export class MealFormComponent {
     inputMeal = input<MealDTO>(new MealDTO());
     outputMeal = output<MealDTO>();
+    cancel = output<boolean>();
 
     private formBuilder = inject(NonNullableFormBuilder);
     mealForm = this.formBuilder.group({
@@ -45,9 +46,12 @@ export class MealFormComponent {
     }
 
     onSubmit() {
-        console.log(this.mealForm.value);
         const rawFormValues = this.mealForm.getRawValue();
         const mealDtoOutput: MealDTO = new MealDTO(rawFormValues.mealDate, rawFormValues.mealName);
         this.outputMeal.emit(mealDtoOutput);
+    }
+
+    onCancel() {
+        this.cancel.emit(true);
     }
 }
