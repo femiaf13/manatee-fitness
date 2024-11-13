@@ -1,4 +1,4 @@
-import { Component, computed, effect, input } from '@angular/core';
+import { Component, computed, effect, input, untracked } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
@@ -25,14 +25,18 @@ export class MealCardComponent {
         // This effect will automatically re-run anytime the meal signal is changed,
         // calculating our foods and nutrition summation
         effect(() => {
-            invoke<Array<Food>>('find_foods_by_meal', { mealId: this.meal().id }).then(foods => {
-                this.foods = foods;
-            });
-            invoke<SummedFood>('find_calories_by_date_and_meal', {
-                dateToFind: this.meal().meal_date,
-                mealToFind: this.meal().meal_name,
-            }).then(summedFood => {
-                this.summedMeal = summedFood;
+            const meal = this.meal();
+
+            untracked(() => {
+                invoke<Array<Food>>('find_foods_by_meal', { mealId: meal.id }).then(foods => {
+                    this.foods = foods;
+                });
+                invoke<SummedFood>('find_calories_by_date_and_meal', {
+                    dateToFind: meal.meal_date,
+                    mealToFind: meal.meal_name,
+                }).then(summedFood => {
+                    this.summedMeal = summedFood;
+                });
             });
         });
     }
