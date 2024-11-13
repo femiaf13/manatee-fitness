@@ -4,6 +4,11 @@ import { MatDialogTitle, MatDialogContent, MAT_DIALOG_DATA, MatDialogRef } from 
 import { MealFormComponent } from '@components/forms/meal-form/meal-form.component';
 import { MealDTO } from '@models/meal.model';
 
+export interface MealDialogData {
+    modify: boolean;
+    meal?: MealDTO;
+}
+
 @Component({
     selector: 'app-meal-dialog',
     standalone: true,
@@ -13,7 +18,7 @@ import { MealDTO } from '@models/meal.model';
 })
 export class MealDialogComponent {
     dialog = inject(MatDialogRef);
-    data = inject(MAT_DIALOG_DATA);
+    data = inject<MealDialogData>(MAT_DIALOG_DATA);
 
     onSubmit(meal: MealDTO) {
         this.dialog.close(meal);
