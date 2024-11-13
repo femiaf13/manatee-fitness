@@ -13,8 +13,4 @@
     </mat-form-field>
     <br />
     <button mat-flat-button type="submit" [disabled]="!mealForm.valid">Submit</button>
-    <br />
-    {{ mealForm.value | json }}
-    <br />
-    {{ mealForm.value.mealDate | date: 'yyyy-MM-dd' }}
 </form>
