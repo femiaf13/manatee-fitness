@@ -1,7 +1,7 @@
 <div class="main-content">
-    <button mat-flat-button (click)="addMeal()">Add Meal</button>
     @for (item of meals; track $index) {
         <app-meal-card [meal]="item"></app-meal-card>
         <br />
     }
 </div>
+<button class="bottom-right" mat-flat-button (click)="addMeal()">Add Meal</button>
