@@ -1,10 +1,23 @@
 <mat-toolbar>
     <mat-toolbar-row>
-        <button mat-icon-button class="example-icon" aria-label="Example icon-button with menu icon">
+        <button mat-icon-button>
             <mat-icon>menu</mat-icon>
         </button>
-        <span>Manatee Fitness</span>
+        <!-- <span>Manatee Fitness</span> -->
         <span class="spacer"></span>
-        <span class="">{{ dateString() }}</span>
+
+        <button mat-button [matMenuTriggerFor]="appMenu">
+            <span>{{ dateString() }}</span>
+            <mat-icon>calendar_today</mat-icon>
+        </button>
+        <mat-menu #appMenu="matMenu">
+            <mat-calendar
+                style="width: 17rem"
+                touchUi
+                #calendar
+                (click)="$event.stopPropagation()"
+                (selectedChange)="this.dateService.set($event)">
+            </mat-calendar>
+        </mat-menu>
     </mat-toolbar-row>
 </mat-toolbar>
