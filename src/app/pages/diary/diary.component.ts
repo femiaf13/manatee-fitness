@@ -1,5 +1,6 @@
 import { Component, effect, inject } from '@angular/core';
 import { invoke } from '@tauri-apps/api/core';
+import { lastValueFrom } from 'rxjs';
 
 import { MatButtonModule } from '@angular/material/button';
 import { MatDialog } from '@angular/material/dialog';
@@ -36,12 +37,11 @@ export class DiaryComponent {
         const dialogRef = this.dialog.open(MealDialogComponent, {
             data: dialogData,
         });
-        dialogRef.afterClosed().subscribe(async (mealDto: MealDTO) => {
-            const success = await invoke<boolean>('create_meal', { meal: mealDto });
-            if (!success) {
-                console.error('Failed to add meal: ' + JSON.stringify(mealDto));
-            }
-            this.meals = await invoke<Array<Meal>>('find_meals_by_date', { dateToFind: this.today() });
-        });
+        const newMeal: MealDTO = await lastValueFrom(dialogRef.afterClosed());
+        const success = await invoke<boolean>('create_meal', { meal: newMeal });
+        if (!success) {
+            console.error('Failed to add meal: ' + JSON.stringify(newMeal));
+        }
+        this.meals = await invoke<Array<Meal>>('find_meals_by_date', { dateToFind: this.today() });
     }
 }
