@@ -37,10 +37,12 @@ export class DiaryComponent {
         const dialogRef = this.dialog.open(MealDialogComponent, {
             data: dialogData,
         });
-        const newMeal: MealDTO = await lastValueFrom(dialogRef.afterClosed());
-        const success = await invoke<boolean>('create_meal', { meal: newMeal });
-        if (!success) {
-            console.error('Failed to add meal: ' + JSON.stringify(newMeal));
+        const newMeal: MealDTO | undefined = await lastValueFrom(dialogRef.afterClosed());
+        if (newMeal !== undefined) {
+            const success = await invoke<boolean>('create_meal', { meal: newMeal });
+            if (!success) {
+                console.error('Failed to add meal: ' + JSON.stringify(newMeal));
+            }
         }
         this.meals = await invoke<Array<Meal>>('find_meals_by_date', { dateToFind: this.today() });
     }
