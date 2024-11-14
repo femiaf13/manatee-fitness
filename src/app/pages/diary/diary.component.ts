@@ -1,5 +1,4 @@
 import { Component, effect, inject, untracked } from '@angular/core';
-import { invoke } from '@tauri-apps/api/core';
 import { lastValueFrom } from 'rxjs';
 
 import { MatButtonModule } from '@angular/material/button';
@@ -50,7 +49,7 @@ export class DiaryComponent {
         });
         const newMeal: MealDTO | undefined = await lastValueFrom(dialogRef.afterClosed());
         if (newMeal !== undefined) {
-            const success = await invoke<boolean>('create_meal', { meal: newMeal });
+            const success = await this.databaseService.createMeal(newMeal);
             if (!success) {
                 console.error('Failed to add meal: ' + JSON.stringify(newMeal));
             }
