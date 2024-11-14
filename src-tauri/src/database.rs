@@ -159,9 +159,6 @@ pub fn find_calories_by_date(app_handle: tauri::AppHandle, date_to_find: Date) -
         .ok()
         .unwrap();
 
-    let pretty_json = serde_json::to_string_pretty(&summed_day).ok().unwrap();
-    println!("{}", pretty_json);
-
     summed_day
 }
 
