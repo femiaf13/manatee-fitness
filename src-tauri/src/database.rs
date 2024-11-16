@@ -48,18 +48,15 @@ pub fn find_food_by_id(app_handle: tauri::AppHandle, food_id: &str) -> Food {
 }
 
 #[tauri::command]
-pub fn find_foods_by_description(
-    app_handle: tauri::AppHandle,
-    food_description: &str,
-) -> Vec<Food> {
+pub fn find_foods_by_search(app_handle: tauri::AppHandle, food_description: &str) -> Vec<Food> {
     let database_url = app_handle.state::<AppState>().database_url.clone();
+    let connection = &mut establish_connection(database_url);
     let pattern = format!("%{}%", food_description);
     use crate::schema::foods::dsl::*;
 
-    let connection = &mut establish_connection(database_url);
-
     foods
-        .filter(description.like(pattern))
+        .filter(description.like(&pattern))
+        .or_filter(brand.like(&pattern))
         .load::<Food>(connection)
         .expect("Error loading food")
 }
