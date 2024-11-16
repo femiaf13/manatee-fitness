@@ -146,7 +146,8 @@ pub fn find_calories_by_date(app_handle: tauri::AppHandle, date_to_find: Date) -
 	            ifnull(SUM(MF.quantity_grams * F.carbs / 100), 0) AS protein,
 	            ifnull(SUM(MF.quantity_grams * F.protein / 100), 0) AS carbs,
 	            ifnull(SUM(MF.quantity_grams * F.cholesterol / 100), 0) AS cholesterol,
-	            ifnull(SUM(MF.quantity_grams * F.fiber / 100), 0) AS fiber
+	            ifnull(SUM(MF.quantity_grams * F.fiber / 100), 0) AS fiber,
+                ifnull(SUM(MF.quantity_grams * F.sodium / 100), 0) AS sodium
             FROM meals M 
 	            JOIN meal_foods MF ON M.id = MF.meal_id
 	            JOIN foods F ON MF.food_id = F.id
@@ -177,7 +178,8 @@ pub fn find_calories_by_date_and_meal(
 	            ifnull(SUM(MF.quantity_grams * F.carbs / 100), 0) AS protein,
 	            ifnull(SUM(MF.quantity_grams * F.protein / 100), 0) AS carbs,
 	            ifnull(SUM(MF.quantity_grams * F.cholesterol / 100), 0) AS cholesterol,
-	            ifnull(SUM(MF.quantity_grams * F.fiber / 100), 0) AS fiber
+	            ifnull(SUM(MF.quantity_grams * F.fiber / 100), 0) AS fiber,
+                ifnull(SUM(MF.quantity_grams * F.sodium / 100), 0) AS sodium
             FROM meals M 
 	            JOIN meal_foods MF ON M.id = MF.meal_id
 	            JOIN foods F ON MF.food_id = F.id

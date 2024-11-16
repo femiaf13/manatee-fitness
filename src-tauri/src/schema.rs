@@ -3,7 +3,9 @@
 diesel::table! {
     foods (id) {
         id -> Integer,
+        barcode -> Text,
         description -> Text,
+        brand -> Text,
         calories_per_100g -> Float,
         grams_per_serving -> Float,
         serving_text -> Text,
@@ -13,6 +15,7 @@ diesel::table! {
         protein -> Float,
         cholesterol -> Float,
         fiber -> Float,
+        sodium -> Float,
     }
 }
 
@@ -35,4 +38,8 @@ diesel::table! {
 diesel::joinable!(meal_foods -> foods (food_id));
 diesel::joinable!(meal_foods -> meals (meal_id));
 
-diesel::allow_tables_to_appear_in_same_query!(foods, meal_foods, meals,);
+diesel::allow_tables_to_appear_in_same_query!(
+    foods,
+    meal_foods,
+    meals,
+);

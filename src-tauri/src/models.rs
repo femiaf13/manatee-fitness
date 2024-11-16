@@ -8,7 +8,9 @@ use diesel::sql_types::*;
 #[diesel(check_for_backend(diesel::sqlite::Sqlite))]
 pub struct Food {
     pub id: i32,
+    pub barcode: String,
     pub description: String,
+    pub brand: String,
     pub calories_per_100g: f32,
     pub grams_per_serving: f32,
     pub serving_text: String,
@@ -18,13 +20,16 @@ pub struct Food {
     pub protein: f32,
     pub cholesterol: f32,
     pub fiber: f32,
+    pub sodium: f32,
 }
 
 #[derive(Deserialize, Insertable)]
 #[diesel(table_name = crate::schema::foods)]
 #[diesel(check_for_backend(diesel::sqlite::Sqlite))]
 pub struct FoodDTO {
+    pub barcode: String,
     pub description: String,
+    pub brand: String,
     pub calories_per_100g: f32,
     pub grams_per_serving: f32,
     pub serving_text: String,
@@ -33,6 +38,7 @@ pub struct FoodDTO {
     pub protein: f32,
     pub cholesterol: f32,
     pub fiber: f32,
+    pub sodium: f32,
 }
 
 #[derive(Identifiable, Queryable, Selectable, PartialEq, Clone, Serialize)]
@@ -89,4 +95,6 @@ pub struct SummedFood {
     pub cholesterol: f32,
     #[diesel(sql_type = Float)]
     pub fiber: f32,
+    #[diesel(sql_type = Float)]
+    pub sodium: f32,
 }
