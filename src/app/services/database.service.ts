@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { SummedFood } from '@models/food.model';
+import { Food, SummedFood } from '@models/food.model';
 import { Meal, MealDTO } from '@models/meal.model';
 import { invoke } from '@tauri-apps/api/core';
 
@@ -14,6 +14,10 @@ export class DatabaseService {
      */
     public async createMeal(meal: MealDTO): Promise<boolean> {
         return await invoke<boolean>('create_meal', { meal: meal });
+    }
+
+    public async getFoodsBySearch(searchTerm: string): Promise<Array<Food>> {
+        return await invoke<Array<Food>>('find_foods_by_search', { searchTerm: searchTerm });
     }
 
     /**
