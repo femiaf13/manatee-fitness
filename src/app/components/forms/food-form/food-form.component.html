@@ -76,9 +76,9 @@
             </mat-form-field>
         </mat-grid-tile>
 
-        <button mat-flat-button style="float: right" type="submit" [disabled]="!foodForm.valid" (click)="onSubmit()">
-            Submit
-        </button>
-        <button mat-flat-button style="float: right" (click)="onCancel()">Cancel</button>
+        <div class="bottom-right">
+            <button mat-flat-button (click)="onCancel()">Cancel</button>
+            <button mat-flat-button type="submit" [disabled]="!foodForm.valid" (click)="onSubmit()">Submit</button>
+        </div>
     </form>
 </mat-grid-list>
