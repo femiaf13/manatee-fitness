@@ -1,61 +1,84 @@
-<form [formGroup]="foodForm">
-    <mat-form-field>
-        <mat-label>Barcode</mat-label>
-        <input matInput placeholder="Barcode..." formControlName="barcode" />
-    </mat-form-field>
-    <br />
-    <mat-form-field>
-        <mat-label>Description</mat-label>
-        <input matInput placeholder="Description..." formControlName="description" />
-    </mat-form-field>
-    <br />
-    <mat-form-field>
-        <mat-label>Brand</mat-label>
-        <input matInput placeholder="Brand..." formControlName="brand" />
-    </mat-form-field>
-    <br />
-    <mat-form-field>
-        <mat-label>Calories per 100g</mat-label>
-        <input matInput type="number" placeholder="Calories per 100g" formControlName="caloriesPer100g" />
-    </mat-form-field>
-    <br />
-    <mat-form-field>
-        <mat-label>Enter serving amount</mat-label>
-        <input matInput type="number" placeholder="Quantity of a serving" formControlName="servingText" />
-    </mat-form-field>
-    <br />
-    <mat-form-field>
-        <mat-label>Fat in grams</mat-label>
-        <input matInput type="number" placeholder="Fat content..." formControlName="fat" />
-    </mat-form-field>
-    <br />
-    <mat-form-field>
-        <mat-label>Carbs in grams</mat-label>
-        <input matInput type="number" placeholder="Carb content..." formControlName="carbs" />
-    </mat-form-field>
-    <br />
-    <mat-form-field>
-        <mat-label>Protein in grams</mat-label>
-        <input matInput type="number" placeholder="Protein content..." formControlName="protein" />
-    </mat-form-field>
-    <br />
-    <mat-form-field>
-        <mat-label>Cholesterol in milligrams</mat-label>
-        <input matInput type="number" placeholder="Cholesterol content..." formControlName="cholesterol" />
-    </mat-form-field>
-    <br />
-    <mat-form-field>
-        <mat-label>Fiber in grams</mat-label>
-        <input matInput type="number" placeholder="Fiber content..." formControlName="fiber" />
-    </mat-form-field>
-    <br />
-    <mat-form-field>
-        <mat-label>Sodium in milligrams</mat-label>
-        <input matInput type="number" placeholder="Sodium content..." formControlName="sodium" />
-    </mat-form-field>
-    <br />
-    <button mat-flat-button style="float: right" type="submit" [disabled]="!foodForm.valid" (click)="onSubmit()">
-        Submit
-    </button>
-    <button mat-flat-button style="float: right" (click)="onCancel()">Cancel</button>
-</form>
+<mat-grid-list cols="2" rowHeight="2:1">
+    <form [formGroup]="foodForm">
+        <mat-grid-tile>
+            <mat-form-field>
+                <mat-label>Barcode</mat-label>
+                <input matInput placeholder="Barcode..." formControlName="barcode" />
+            </mat-form-field>
+        </mat-grid-tile>
+        <mat-grid-tile>
+            <mat-form-field>
+                <mat-label>Description</mat-label>
+                <input matInput placeholder="Description..." formControlName="description" />
+            </mat-form-field>
+        </mat-grid-tile>
+
+        <mat-grid-tile
+            ><mat-form-field>
+                <mat-label>Brand</mat-label>
+                <input matInput placeholder="Brand..." formControlName="brand" />
+            </mat-form-field>
+        </mat-grid-tile>
+
+        <mat-grid-tile
+            ><mat-form-field>
+                <mat-label>Calories per 100g</mat-label>
+                <input matInput type="number" placeholder="Calories per 100g" formControlName="caloriesPer100g" />
+            </mat-form-field>
+        </mat-grid-tile>
+
+        <mat-grid-tile
+            ><mat-form-field>
+                <mat-label>Enter serving amount</mat-label>
+                <input matInput placeholder="Quantity of a serving" formControlName="servingText" />
+            </mat-form-field>
+        </mat-grid-tile>
+
+        <mat-grid-tile
+            ><mat-form-field>
+                <mat-label>Fat in grams</mat-label>
+                <input matInput type="number" placeholder="Fat content..." formControlName="fat" />
+            </mat-form-field>
+        </mat-grid-tile>
+
+        <mat-grid-tile
+            ><mat-form-field>
+                <mat-label>Carbs in grams</mat-label>
+                <input matInput type="number" placeholder="Carb content..." formControlName="carbs" />
+            </mat-form-field>
+        </mat-grid-tile>
+
+        <mat-grid-tile
+            ><mat-form-field>
+                <mat-label>Protein in grams</mat-label>
+                <input matInput type="number" placeholder="Protein content..." formControlName="protein" />
+            </mat-form-field>
+        </mat-grid-tile>
+
+        <mat-grid-tile
+            ><mat-form-field>
+                <mat-label>Cholesterol in milligrams</mat-label>
+                <input matInput type="number" placeholder="Cholesterol content..." formControlName="cholesterol" />
+            </mat-form-field>
+        </mat-grid-tile>
+
+        <mat-grid-tile
+            ><mat-form-field>
+                <mat-label>Fiber in grams</mat-label>
+                <input matInput type="number" placeholder="Fiber content..." formControlName="fiber" />
+            </mat-form-field>
+        </mat-grid-tile>
+
+        <mat-grid-tile
+            ><mat-form-field>
+                <mat-label>Sodium in milligrams</mat-label>
+                <input matInput type="number" placeholder="Sodium content..." formControlName="sodium" />
+            </mat-form-field>
+        </mat-grid-tile>
+
+        <button mat-flat-button style="float: right" type="submit" [disabled]="!foodForm.valid" (click)="onSubmit()">
+            Submit
+        </button>
+        <button mat-flat-button style="float: right" (click)="onCancel()">Cancel</button>
+    </form>
+</mat-grid-list>
