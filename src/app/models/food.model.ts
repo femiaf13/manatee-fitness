@@ -13,29 +13,43 @@ export class FoodDTO {
     protein: number;
     // Cholesterol in mg per 100g
     cholesterol: number;
-    // Fiber in _ per 100g
+    // Fiber in g per 100g
     fiber: number;
     // Sodium in mg per 100g
     sodium: number;
 
-    constructor() {
-        this.barcode = '';
-        this.description = '';
-        this.brand = '';
-        this.calories_per_100g = 0;
-        this.grams_per_serving = 0;
-        this.serving_text = '';
-        this.fat = 0;
-        this.carbs = 0;
-        this.protein = 0;
-        this.cholesterol = 0;
-        this.fiber = 0;
-        this.sodium = 0;
+    constructor(
+        barcode: string = '',
+        description: string = '',
+        brand: string = '',
+        caloriesPer100g: number = 0,
+        gramsPerServing: number = 0,
+        servingText: string = '',
+        fat: number = 0,
+        carbs: number = 0,
+        protein: number = 0,
+        cholesterol: number = 0,
+        fiber: number = 0,
+        sodium: number = 0
+    ) {
+        this.barcode = barcode;
+        this.description = description;
+        this.brand = brand;
+        this.calories_per_100g = caloriesPer100g;
+        this.grams_per_serving = gramsPerServing;
+        this.serving_text = servingText;
+        this.fat = fat;
+        this.carbs = carbs;
+        this.protein = protein;
+        this.cholesterol = cholesterol;
+        this.fiber = fiber;
+        this.sodium = sodium;
     }
 }
 
 export class Food extends FoodDTO {
     id!: number;
+    calories_per_serving!: number;
 }
 
 export class SummedFood {
