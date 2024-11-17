@@ -1,0 +1,11 @@
+<h2 mat-dialog-title>{{ this.data.modify ? 'Edit' : 'Add' }} Food</h2>
+<mat-dialog-content>
+    @if (this.data.modify && this.data.food !== undefined) {
+        <app-food-form
+            [inputMeal]="this.data.food"
+            (cancel)="onCancel()"
+            (outputFood)="onSubmit($event)"></app-food-form>
+    } @else {
+        <app-food-form (cancel)="onCancel()" (outputFood)="onSubmit($event)"></app-food-form>
+    }
+</mat-dialog-content>

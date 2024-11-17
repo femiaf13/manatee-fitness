@@ -1,13 +1,16 @@
-import { Component, computed, effect, input, untracked } from '@angular/core';
+import { Component, computed, effect, inject, input, untracked } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
 import { invoke } from '@tauri-apps/api/core';
 
-import { Food, SummedFood } from '@models/food.model';
+import { Food, FoodDTO, SummedFood } from '@models/food.model';
 import { Meal } from '@models/meal.model';
 import { MealFormComponent } from '../forms/meal-form/meal-form.component';
 import { DateService } from '@services/date.service';
+import { MatDialog } from '@angular/material/dialog';
+import { FoodDialogComponent, FoodDialogData } from '@components/dialogs/food/food-dialog.component';
+import { lastValueFrom } from 'rxjs';
 
 @Component({
     selector: 'app-meal-card',
@@ -29,6 +32,7 @@ export class MealCardComponent {
     });
     foods: Array<Food> = [];
     summedMeal: SummedFood = new SummedFood();
+    dialog = inject(MatDialog);
 
     constructor() {
         // This effect will automatically re-run anytime the meal signal is changed,
@@ -48,5 +52,28 @@ export class MealCardComponent {
                 });
             });
         });
+    }
+
+    async addFood() {
+        const dialogData: FoodDialogData = {
+            modify: false,
+        };
+        const dialogRef = this.dialog.open(FoodDialogComponent, {
+            width: 'calc(100% - 30px)',
+            height: 'calc(100% - 30px)',
+            maxWidth: '100vw',
+            maxHeight: '100vh',
+            data: dialogData,
+            disableClose: true,
+        });
+        const newMeal: FoodDTO | undefined = await lastValueFrom(dialogRef.afterClosed());
+        if (newMeal !== undefined) {
+            // const success = await this.databaseService.createMeal(newMeal);
+            // if (!success) {
+            //     console.error('Failed to add meal: ' + JSON.stringify(newMeal));
+            // }
+            console.log(JSON.stringify(newMeal));
+        }
+        // this.meals = await this.databaseService.getMealsByDate(this.today());
     }
 }
