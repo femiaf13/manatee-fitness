@@ -31,6 +31,7 @@ diesel::table! {
     meals (id) {
         id -> Integer,
         meal_date -> Date,
+        meal_time -> Text,
         meal_name -> Text,
     }
 }

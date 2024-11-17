@@ -47,6 +47,7 @@ pub struct FoodDTO {
 pub struct Meal {
     pub id: i32,
     pub meal_date: time::Date,
+    pub meal_time: String,
     pub meal_name: String,
 }
 
@@ -55,6 +56,7 @@ pub struct Meal {
 #[diesel(check_for_backend(diesel::sqlite::Sqlite))]
 pub struct MealDTO {
     pub meal_date: time::Date,
+    pub meal_time: String,
     pub meal_name: String,
 }
 

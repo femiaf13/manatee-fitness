@@ -19,4 +19,21 @@ export class DateService {
     public set(newDate: Date) {
         this.selectedDate.set(newDate);
     }
+
+    public static formatTime(time: string): string {
+        const timeSplit = time.split(':');
+        if (timeSplit.length !== 2) {
+            return time;
+        }
+        let hours = Number(timeSplit[0]);
+        const minutes = timeSplit[1];
+        //it is pm if hours from 12 onwards
+        const suffix = hours >= 12 ? 'pm' : 'am';
+        //only -12 from hours if it is greater than 12 (if not back at mid night)
+        hours = hours > 12 ? hours - 12 : hours;
+        //if 00 then it is 12 am
+        hours = hours === 0 ? 12 : hours;
+
+        return `${hours}:${minutes} ${suffix}`;
+    }
 }

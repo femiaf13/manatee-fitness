@@ -73,6 +73,7 @@ pub fn find_foods_by_meal(app_handle: tauri::AppHandle, meal_id: i32) -> Vec<Foo
         .unwrap_or(Meal {
             id: -1,
             meal_date: date!(1970 - 1 - 1),
+            meal_time: String::from("00:00"),
             meal_name: String::from(""),
         });
 
@@ -112,6 +113,7 @@ pub fn find_meals_by_date(app_handle: tauri::AppHandle, date_to_find: Date) -> V
 
     meals
         .filter(meal_date.eq(date_to_find))
+        .order(meal_time.asc())
         .load::<Meal>(connection)
         .expect("Error loading meals")
 }

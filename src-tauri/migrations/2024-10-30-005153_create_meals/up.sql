@@ -1,5 +1,6 @@
 CREATE TABLE meals (
     id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
     meal_date DATE NOT NULL,
+    meal_time TEXT NOT NULL,
     meal_name TEXT NOT NULL
 );

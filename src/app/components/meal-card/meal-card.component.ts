@@ -7,6 +7,7 @@ import { invoke } from '@tauri-apps/api/core';
 import { Food, SummedFood } from '@models/food.model';
 import { Meal } from '@models/meal.model';
 import { MealFormComponent } from '../forms/meal-form/meal-form.component';
+import { DateService } from '@services/date.service';
 
 @Component({
     selector: 'app-meal-card',
@@ -18,6 +19,14 @@ import { MealFormComponent } from '../forms/meal-form/meal-form.component';
 export class MealCardComponent {
     meal = input.required<Meal>();
     mealName = computed(() => this.meal().meal_name.toUpperCase());
+    mealTime = computed(() => {
+        const time = DateService.formatTime(this.meal().meal_time);
+        if (time === '') {
+            return 'No Time Listed';
+        } else {
+            return time;
+        }
+    });
     foods: Array<Food> = [];
     summedMeal: SummedFood = new SummedFood();
 

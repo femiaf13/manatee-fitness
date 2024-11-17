@@ -11,6 +11,10 @@
         <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
         <mat-datepicker #picker></mat-datepicker>
     </mat-form-field>
+    <mat-form-field>
+        <mat-label>Time of this meal</mat-label>
+        <input matInput type="time" placeholder="Enter a Time..." formControlName="mealTime" />
+    </mat-form-field>
     <br />
     <button mat-flat-button style="float: right" type="submit" [disabled]="!mealForm.valid" (click)="onSubmit()">
         Submit
