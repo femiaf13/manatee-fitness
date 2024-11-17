@@ -2,6 +2,10 @@ mat-form-field {
     padding: 5px;
 }
 
+button {
+    margin: 10px;
+}
+
 .bottom-right {
     position: fixed;
     bottom: 30px;

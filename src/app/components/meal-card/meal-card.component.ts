@@ -59,8 +59,8 @@ export class MealCardComponent {
             modify: false,
         };
         const dialogRef = this.dialog.open(FoodDialogComponent, {
-            width: 'calc(100% - 30px)',
-            height: 'calc(100% - 30px)',
+            width: '100vw',
+            height: '100vh',
             maxWidth: '100vw',
             maxHeight: '100vh',
             data: dialogData,

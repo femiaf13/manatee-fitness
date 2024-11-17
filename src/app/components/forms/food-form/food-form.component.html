@@ -10,6 +10,9 @@
             <mat-form-field>
                 <mat-label>Description</mat-label>
                 <input matInput placeholder="Description..." formControlName="description" />
+                @if (foodForm.controls.description.invalid) {
+                    <mat-error>3+ characters required</mat-error>
+                }
             </mat-form-field>
         </mat-grid-tile>
 
@@ -29,7 +32,7 @@
 
         <mat-grid-tile
             ><mat-form-field>
-                <mat-label>Enter serving amount</mat-label>
+                <mat-label>Serving amount</mat-label>
                 <input matInput placeholder="Quantity of a serving" formControlName="servingText" />
             </mat-form-field>
         </mat-grid-tile>

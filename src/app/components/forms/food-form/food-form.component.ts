@@ -29,7 +29,7 @@ export class FoodFormComponent {
     private formBuilder = inject(NonNullableFormBuilder);
     foodForm = this.formBuilder.group({
         barcode: [''],
-        description: ['', Validators.required],
+        description: ['', [Validators.required, Validators.minLength(3)]],
         brand: [''],
         caloriesPer100g: [0, Validators.required],
         gramsPerServing: [0, Validators.required],
