@@ -97,7 +97,7 @@ pub fn create_meal(app_handle: tauri::AppHandle, meal: MealDTO) -> bool {
     let query_result = insert_into(meals).values(&meal).execute(connection);
 
     let result: bool = match query_result {
-        Ok(_numer_of_rows) => true,
+        Ok(_number_of_rows) => true,
         Err(_e) => false,
     };
 
@@ -116,6 +116,24 @@ pub fn find_meals_by_date(app_handle: tauri::AppHandle, date_to_find: Date) -> V
         .order(meal_time.asc())
         .load::<Meal>(connection)
         .expect("Error loading meals")
+}
+
+#[tauri::command]
+pub fn create_mealfood(app_handle: tauri::AppHandle, mealfood: MealFood) -> bool {
+    let database_url = app_handle.state::<AppState>().database_url.clone();
+    let connection = &mut establish_connection(database_url);
+    use crate::schema::meal_foods::dsl::*;
+
+    let query_result = insert_into(meal_foods)
+        .values(&mealfood)
+        .execute(connection);
+
+    let result: bool = match query_result {
+        Ok(_number_of_rows) => true,
+        Err(_e) => false,
+    };
+
+    result
 }
 
 #[tauri::command]
