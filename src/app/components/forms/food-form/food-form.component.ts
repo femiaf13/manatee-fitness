@@ -31,8 +31,8 @@ export class FoodFormComponent {
         barcode: [''],
         description: ['', [Validators.required, Validators.minLength(3)]],
         brand: [''],
-        caloriesPer100g: [0, Validators.required],
         gramsPerServing: [0, Validators.required],
+        caloriesPerServing: [0, Validators.required],
         servingText: [''],
         fat: [0],
         carbs: [0],
@@ -44,11 +44,12 @@ export class FoodFormComponent {
 
     onSubmit() {
         const rawFormValues = this.foodForm.getRawValue();
+        const caloriesPer100g = (rawFormValues.caloriesPerServing / rawFormValues.gramsPerServing) * 100;
         const foodDtoOutput: FoodDTO = new FoodDTO(
             rawFormValues.barcode,
             rawFormValues.description,
             rawFormValues.brand,
-            rawFormValues.caloriesPer100g,
+            +caloriesPer100g.toFixed(2),
             rawFormValues.gramsPerServing,
             rawFormValues.servingText,
             rawFormValues.fat,
