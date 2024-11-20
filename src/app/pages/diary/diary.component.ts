@@ -1,34 +1,20 @@
 import { Component, effect, inject, untracked } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { toSignal } from '@angular/core/rxjs-interop';
-import { debounceTime, distinctUntilChanged, lastValueFrom, switchMap } from 'rxjs';
+import { lastValueFrom } from 'rxjs';
 
 import { MatButtonModule } from '@angular/material/button';
 import { MatDialog } from '@angular/material/dialog';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { ReactiveFormsModule, FormControl } from '@angular/forms';
-import { MatInputModule } from '@angular/material/input';
 
 import { Meal, MealDTO } from '@models/meal.model';
 import { MealCardComponent } from '@components/meal-card/meal-card.component';
 import { DateService } from '@services/date.service';
 import { MealDialogComponent, MealDialogData } from '@components/dialogs/meal/meal-dialog.component';
 import { DatabaseService } from '@services/database.service';
-import { Food } from '@models/food.model';
-import { FoodListComponent } from '../../components/food-list/food-list.component';
 
 @Component({
     selector: 'app-page-diary',
     standalone: true,
-    imports: [
-        CommonModule,
-        MealCardComponent,
-        MatButtonModule,
-        MatFormFieldModule,
-        MatInputModule,
-        ReactiveFormsModule,
-        FoodListComponent,
-    ],
+    imports: [CommonModule, MealCardComponent, MatButtonModule],
     templateUrl: './diary.component.html',
     styleUrl: './diary.component.css',
 })
@@ -40,20 +26,6 @@ export class DiaryComponent {
     today = this.dateService.selectedDateFormatted;
     meals: Array<Meal> = [];
     totalCalories = 0;
-
-    searchText = new FormControl('', { nonNullable: true });
-    foods = toSignal(
-        this.searchText.valueChanges.pipe(
-            debounceTime(300),
-            distinctUntilChanged(),
-            switchMap(searchTerm => this.search(searchTerm))
-        ),
-        { initialValue: [] as Food[] }
-    );
-
-    async search(searchTerm: string): Promise<Array<Food>> {
-        return await this.databaseService.getFoodsBySearch(searchTerm);
-    }
 
     constructor() {
         effect(() => {
