@@ -16,6 +16,11 @@ export class DatabaseService {
         return await invoke<boolean>('create_meal', { meal: meal });
     }
 
+    /**
+     * Search foods' descriptions and brands
+     * @param searchTerm Term to search by
+     * @returns all foods that contain the search term
+     */
     public async getFoodsBySearch(searchTerm: string): Promise<Array<Food>> {
         return await invoke<Array<Food>>('find_foods_by_search', { searchTerm: searchTerm });
     }
