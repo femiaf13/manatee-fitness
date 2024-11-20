@@ -32,6 +32,13 @@
 
         <mat-grid-tile
             ><mat-form-field>
+                <mat-label>Grams per serving</mat-label>
+                <input matInput type="number" placeholder="Grams per serving" formControlName="gramsPerServing" />
+            </mat-form-field>
+        </mat-grid-tile>
+
+        <mat-grid-tile
+            ><mat-form-field>
                 <mat-label>Serving amount</mat-label>
                 <input matInput placeholder="Quantity of a serving" formControlName="servingText" />
             </mat-form-field>
@@ -79,9 +86,10 @@
             </mat-form-field>
         </mat-grid-tile>
 
-        <div class="bottom-right">
+        <mat-grid-tile></mat-grid-tile>
+        <mat-grid-tile>
             <button mat-flat-button (click)="onCancel()">Cancel</button>
             <button mat-flat-button type="submit" [disabled]="!foodForm.valid" (click)="onSubmit()">Submit</button>
-        </div>
+        </mat-grid-tile>
     </form>
 </mat-grid-list>
