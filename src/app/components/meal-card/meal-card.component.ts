@@ -1,21 +1,22 @@
 import { Component, computed, effect, inject, input, untracked } from '@angular/core';
+import { RouterLink } from '@angular/router';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
+import { lastValueFrom } from 'rxjs';
+
 import { invoke } from '@tauri-apps/api/core';
 
 import { Food, FoodDTO, SummedFood } from '@models/food.model';
 import { Meal } from '@models/meal.model';
-import { MealFormComponent } from '../forms/meal-form/meal-form.component';
 import { DateService } from '@services/date.service';
 import { MatDialog } from '@angular/material/dialog';
 import { FoodDialogComponent, FoodDialogData } from '@components/dialogs/food/food-dialog.component';
-import { lastValueFrom } from 'rxjs';
 
 @Component({
     selector: 'app-meal-card',
     standalone: true,
-    imports: [MatButtonModule, MatCardModule, MatIconModule, MealFormComponent],
+    imports: [MatButtonModule, MatCardModule, MatIconModule, RouterLink],
     templateUrl: './meal-card.component.html',
     styleUrl: './meal-card.component.css',
 })

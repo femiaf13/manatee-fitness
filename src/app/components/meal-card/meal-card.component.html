@@ -13,7 +13,7 @@
         </mat-card-content>
         <mat-card-actions align="end">
             {{ summedMeal.calories }} Calories
-            <button mat-button (click)="addFood()">
+            <button [routerLink]="['/food']" [queryParams]="{ meal: meal().id }" mat-button>
                 <mat-icon aria-hidden="false" aria-label="Example home icon" fontIcon="add"></mat-icon>
             </button>
         </mat-card-actions>

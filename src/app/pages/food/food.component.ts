@@ -1,6 +1,7 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { CommonModule } from '@angular/common';
+import { ActivatedRoute } from '@angular/router';
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
@@ -25,7 +26,8 @@ import { FoodListComponent } from '@components/food-list/food-list.component';
     templateUrl: './food.component.html',
     styleUrl: './food.component.css',
 })
-export class FoodPageComponent {
+export class FoodPageComponent implements OnInit {
+    route = inject(ActivatedRoute);
     databaseService = inject(DatabaseService);
     searchText = new FormControl('', { nonNullable: true });
     foods = toSignal(
@@ -36,8 +38,21 @@ export class FoodPageComponent {
         ),
         { initialValue: [] as Food[] }
     );
+    /**
+     * Optional input parameter telling us if we're looking for food for a specific meal
+     */
+    mealId: number | undefined = undefined;
 
     async search(searchTerm: string): Promise<Array<Food>> {
         return await this.databaseService.getFoodsBySearch(searchTerm);
+    }
+
+    constructor() {}
+
+    ngOnInit(): void {
+        const mealIdParam: string | undefined = this.route.snapshot.queryParams['meal'];
+        if (mealIdParam) {
+            this.mealId = Number(mealIdParam);
+        }
     }
 }
