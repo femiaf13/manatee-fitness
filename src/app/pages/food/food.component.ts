@@ -25,7 +25,7 @@ import { FoodListComponent } from '@components/food-list/food-list.component';
     templateUrl: './food.component.html',
     styleUrl: './food.component.css',
 })
-export class FoodComponent {
+export class FoodPageComponent {
     databaseService = inject(DatabaseService);
     searchText = new FormControl('', { nonNullable: true });
     foods = toSignal(
