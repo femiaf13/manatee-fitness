@@ -12,6 +12,7 @@ import { debounceTime, distinctUntilChanged, switchMap } from 'rxjs';
 
 import { Food } from '@models/food.model';
 import { DatabaseService } from '@services/database.service';
+import { FoodListComponent } from '@components/food-list/food-list.component';
 
 @Component({
     selector: 'app-page-food',
@@ -24,6 +25,7 @@ import { DatabaseService } from '@services/database.service';
         MatFormFieldModule,
         MatInputModule,
         ReactiveFormsModule,
+        FoodListComponent,
     ],
     templateUrl: './food.component.html',
     styleUrl: './food.component.css',
@@ -57,4 +59,7 @@ export class FoodPageComponent implements OnInit {
             this.mealId = Number(mealIdParam);
         }
     }
+
+    // TODO - Need to create a form array to add foods. First box is food autocomplete
+    // second box is quantity(probably as a multiple of servings)
 }

@@ -1,18 +1,22 @@
 <div class="main-content">
-    <!-- <mat-form-field>
-        <mat-label>Search Food</mat-label>
-        <input matInput type="text" [formControl]="searchText" placeholder="Search" />
-    </mat-form-field>
-    <app-food-list [foods]="foods()"></app-food-list> -->
-
-    <mat-form-field class="full-width">
-        <mat-label>Pick food</mat-label>
-        <input type="text" matInput [formControl]="searchText" [matAutocomplete]="auto" />
-        <mat-autocomplete #auto="matAutocomplete">
-            @for (food of foods(); track food) {
-                <mat-option [value]="food.description">{{ food.description }}</mat-option>
-                <mat-divider></mat-divider>
-            }
-        </mat-autocomplete>
-    </mat-form-field>
+    @if (mealId) {
+        <!-- We are entering this page to select food for a meal -->
+        <mat-form-field class="full-width">
+            <mat-label>Pick food</mat-label>
+            <input type="text" matInput [formControl]="searchText" [matAutocomplete]="auto" />
+            <mat-autocomplete #auto="matAutocomplete">
+                @for (food of foods(); track food) {
+                    <mat-option [value]="food.description">{{ food.description }}</mat-option>
+                    <mat-divider></mat-divider>
+                }
+            </mat-autocomplete>
+        </mat-form-field>
+    } @else {
+        <!-- No meal associated, probably have the food list? -->
+        <mat-form-field>
+            <mat-label>Search Food</mat-label>
+            <input matInput type="text" [formControl]="searchText" placeholder="Search" />
+        </mat-form-field>
+        <app-food-list [foods]="foods()"></app-food-list>
+    }
 </div>
