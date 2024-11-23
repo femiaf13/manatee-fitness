@@ -6,5 +6,6 @@
 }
 
 mat-form-field {
+    width: 90vw;
     padding: 10px;
 }
