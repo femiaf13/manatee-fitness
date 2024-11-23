@@ -1,4 +1,7 @@
-<mat-selection-list>
+@if (foodList.selectedOptions.selected.length >= 1) {
+    {{ foodList.selectedOptions.selected[0].getLabel() | json }}
+}
+<mat-selection-list #foodList>
     @for (food of foods(); track food) {
         <mat-list-option>{{ food.description }}</mat-list-option>
     }
