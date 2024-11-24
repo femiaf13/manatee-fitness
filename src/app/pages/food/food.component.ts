@@ -33,7 +33,7 @@ import { FoodListComponent } from '@components/food-list/food-list.component';
 export class FoodPageComponent implements OnInit {
     route = inject(ActivatedRoute);
     databaseService = inject(DatabaseService);
-    searchText = new FormControl('', { nonNullable: true });
+    searchText = new FormControl<string | Food>('', { nonNullable: true });
     foods = toSignal(
         this.searchText.valueChanges.pipe(
             debounceTime(300),
@@ -47,8 +47,14 @@ export class FoodPageComponent implements OnInit {
      */
     mealId: number | undefined = undefined;
 
-    async search(searchTerm: string): Promise<Array<Food>> {
-        return await this.databaseService.getFoodsBySearch(searchTerm);
+    displayFoods(food: string | Food): string {
+        return typeof food === 'string' ? food : food?.description;
+        // return food && food.description ? food.description : '';
+    }
+
+    async search(searchTerm: string | Food): Promise<Array<Food>> {
+        const searchTermParsed = typeof searchTerm === 'string' ? searchTerm : searchTerm?.description;
+        return await this.databaseService.getFoodsBySearch(searchTermParsed);
     }
 
     constructor() {}
@@ -59,7 +65,4 @@ export class FoodPageComponent implements OnInit {
             this.mealId = Number(mealIdParam);
         }
     }
-
-    // TODO - Need to create a form array to add foods. First box is food autocomplete
-    // second box is quantity(probably as a multiple of servings)
 }

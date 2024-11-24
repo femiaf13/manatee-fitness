@@ -4,13 +4,15 @@
         <mat-form-field class="full-width">
             <mat-label>Pick food</mat-label>
             <input type="text" matInput [formControl]="searchText" [matAutocomplete]="auto" />
-            <mat-autocomplete #auto="matAutocomplete">
+            <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFoods">
                 @for (food of foods(); track food) {
-                    <mat-option [value]="food.description">{{ food.description }}</mat-option>
+                    <mat-option [value]="food">{{ food.description }}</mat-option>
                     <mat-divider></mat-divider>
                 }
             </mat-autocomplete>
         </mat-form-field>
+
+        {{ searchText.value | json }}
     } @else {
         <!-- No meal associated, probably have the food list? -->
         <mat-form-field>
