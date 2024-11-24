@@ -1,0 +1,8 @@
+@if (caloriesForMealFood() !== -1) {
+    <mat-form-field>
+        <mat-label>Number of Servings</mat-label>
+        <input matInput type="number" placeholder="Enter Servings" [formControl]="servings" />
+    </mat-form-field>
+    <br />
+    {{ caloriesForMealFood() }}
+}

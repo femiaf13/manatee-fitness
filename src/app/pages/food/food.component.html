@@ -1,5 +1,5 @@
 <div class="main-content">
-    @if (mealId) {
+    @if (mealId && meal) {
         <!-- We are entering this page to select food for a meal -->
         <mat-form-field class="full-width">
             <mat-label>Pick food</mat-label>
@@ -12,7 +12,10 @@
             </mat-autocomplete>
         </mat-form-field>
 
-        {{ searchText.value | json }}
+        {{ searchText.value | json }} <br />
+        {{ meal | json }}
+
+        <app-mealfood-form [inputFood]="searchText.value" [inputMeal]="meal"></app-mealfood-form>
     } @else {
         <!-- No meal associated, probably have the food list? -->
         <mat-form-field>

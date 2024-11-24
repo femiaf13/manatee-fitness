@@ -50,6 +50,12 @@ export class FoodDTO {
 export class Food extends FoodDTO {
     id!: number;
     calories_per_serving!: number;
+
+    constructor() {
+        super();
+        this.id = 0;
+        this.calories_per_serving = 0;
+    }
 }
 
 export class SummedFood {

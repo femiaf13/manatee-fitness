@@ -105,6 +105,19 @@ pub fn create_meal(app_handle: tauri::AppHandle, meal: MealDTO) -> bool {
 }
 
 #[tauri::command]
+pub fn find_meal_by_id(app_handle: tauri::AppHandle, meal_id: i32) -> Meal {
+    let database_url = app_handle.state::<AppState>().database_url.clone();
+    use crate::schema::meals::dsl::*;
+
+    let connection = &mut establish_connection(database_url);
+
+    meals
+        .filter(id.eq(meal_id))
+        .first::<Meal>(connection)
+        .expect("Error loading meal")
+}
+
+#[tauri::command]
 pub fn find_meals_by_date(app_handle: tauri::AppHandle, date_to_find: Date) -> Vec<Meal> {
     let database_url = app_handle.state::<AppState>().database_url.clone();
     use crate::schema::meals::dsl::*;

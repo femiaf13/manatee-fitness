@@ -13,6 +13,8 @@ import { debounceTime, distinctUntilChanged, switchMap } from 'rxjs';
 import { Food } from '@models/food.model';
 import { DatabaseService } from '@services/database.service';
 import { FoodListComponent } from '@components/food-list/food-list.component';
+import { MealfoodFormComponent } from '@components/forms/mealfood-form/mealfood-form.component';
+import { Meal } from '@models/meal.model';
 
 @Component({
     selector: 'app-page-food',
@@ -26,6 +28,7 @@ import { FoodListComponent } from '@components/food-list/food-list.component';
         MatInputModule,
         ReactiveFormsModule,
         FoodListComponent,
+        MealfoodFormComponent,
     ],
     templateUrl: './food.component.html',
     styleUrl: './food.component.css',
@@ -46,10 +49,10 @@ export class FoodPageComponent implements OnInit {
      * Optional input parameter telling us if we're looking for food for a specific meal
      */
     mealId: number | undefined = undefined;
+    meal: Meal | undefined = undefined;
 
-    displayFoods(food: string | Food): string {
-        return typeof food === 'string' ? food : food?.description;
-        // return food && food.description ? food.description : '';
+    displayFoods(food: Food): string {
+        return food && food.description ? food.description : '';
     }
 
     async search(searchTerm: string | Food): Promise<Array<Food>> {
@@ -59,10 +62,11 @@ export class FoodPageComponent implements OnInit {
 
     constructor() {}
 
-    ngOnInit(): void {
+    async ngOnInit(): Promise<void> {
         const mealIdParam: string | undefined = this.route.snapshot.queryParams['meal'];
         if (mealIdParam) {
             this.mealId = Number(mealIdParam);
+            this.meal = await this.databaseService.getMealById(this.mealId);
         }
     }
 }

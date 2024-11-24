@@ -27,6 +27,15 @@ export class DatabaseService {
 
     /**
      *
+     * @param id id to retrieve
+     * @returns meal a the passed in ID
+     */
+    public async getMealById(id: number): Promise<Meal> {
+        return await invoke<Meal>('find_meal_by_id', { mealId: id });
+    }
+
+    /**
+     *
      * @param date date formatted as YYYY-MM-DD
      * @returns all meals for the passed in date
      */
