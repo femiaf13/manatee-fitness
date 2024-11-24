@@ -1,5 +1,7 @@
 <div class="main-content">
     @if (mealId && meal) {
+        <h1>Adding Food</h1>
+        <h2>{{ meal.meal_name }} on {{ meal.meal_date }}</h2>
         <!-- We are entering this page to select food for a meal -->
         <mat-form-field class="full-width">
             <mat-label>Pick food</mat-label>

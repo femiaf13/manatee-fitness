@@ -1,8 +1,15 @@
 @if (caloriesForMealFood() !== -1) {
-    <mat-form-field>
-        <mat-label>Number of Servings</mat-label>
-        <input matInput type="number" placeholder="Enter Servings" [formControl]="servings" />
-    </mat-form-field>
+    @if (actualFood()?.calories_per_serving !== 0) {
+        <mat-form-field>
+            <mat-label>Number of Servings</mat-label>
+            <input matInput type="number" placeholder="Enter Servings" [formControl]="servings" />
+        </mat-form-field>
+
+        <span>{{ actualFood()?.serving_text }}</span>
+    } @else {
+        <!-- TODO: Need to handle situations where servings aren't defined -->
+    }
+
     <br />
     {{ caloriesForMealFood() }}
 }

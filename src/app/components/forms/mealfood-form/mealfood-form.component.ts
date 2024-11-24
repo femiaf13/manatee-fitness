@@ -20,16 +20,30 @@ export class MealfoodFormComponent {
      * string | food is a quirk of how the autocomplete has to be wrangled
      */
     inputFood = input.required<string | Food>();
+    actualFood = computed(() => {
+        const food: string | Food = this.inputFood();
+        if (typeof food === 'string') {
+            return null;
+        }
+        return food;
+    });
     outputMealFood = output<MealFood>();
 
+    /**
+     * Input in servings
+     */
     servings = new FormControl(0, { nonNullable: true });
+    /**
+     * Input in grams
+     */
+    grams = new FormControl(0, { nonNullable: true });
     quantityInServings = toSignal(this.servings.valueChanges, { initialValue: 0 });
     quantityInGrams = computed(() => {
         const food: string | Food = this.inputFood();
         if (typeof food === 'string') {
             return 0;
         }
-        return this.quantityInServings() * food.calories_per_serving;
+        return this.quantityInServings() * food.grams_per_serving;
     });
     caloriesForMealFood = computed(() => {
         const food: string | Food = this.inputFood();
@@ -37,7 +51,7 @@ export class MealfoodFormComponent {
             return -1;
         }
 
-        return this.quantityInServings() * food.calories_per_serving;
+        return Math.round((this.quantityInGrams() / 100) * food.calories_per_100g);
     });
 
     constructor() {}
