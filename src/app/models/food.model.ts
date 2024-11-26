@@ -65,6 +65,7 @@ export class SummedFood {
     protein: number;
     cholesterol: number;
     fiber: number;
+    sodium: number;
 
     constructor() {
         this.calories = 0;
@@ -73,5 +74,6 @@ export class SummedFood {
         this.protein = 0;
         this.cholesterol = 0;
         this.fiber = 0;
+        this.sodium = 0;
     }
 }

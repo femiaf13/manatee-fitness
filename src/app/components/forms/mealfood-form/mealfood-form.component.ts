@@ -3,7 +3,7 @@ import { toSignal } from '@angular/core/rxjs-interop';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
-import { Food } from '@models/food.model';
+import { Food, SummedFood } from '@models/food.model';
 import { Meal } from '@models/meal.model';
 import { MealFood } from '@models/mealfood.model';
 
@@ -45,13 +45,24 @@ export class MealfoodFormComponent {
         }
         return this.quantityInServings() * food.grams_per_serving;
     });
-    caloriesForMealFood = computed(() => {
-        const food: string | Food = this.inputFood();
-        if (typeof food === 'string') {
-            return -1;
+    quantityIn100Grams = computed(() => {
+        return this.quantityInGrams() / 100;
+    });
+    summedMealFood = computed(() => {
+        const mealfood = new SummedFood();
+        const food = this.actualFood();
+        const quantityIn100Grams = this.quantityIn100Grams();
+        if (food) {
+            mealfood.calories = Math.round(quantityIn100Grams * food.calories_per_100g);
+            mealfood.carbs = Math.round(quantityIn100Grams * food.carbs);
+            mealfood.fat = Math.round(quantityIn100Grams * food.fat);
+            mealfood.protein = Math.round(quantityIn100Grams * food.protein);
+            mealfood.cholesterol = Math.round(quantityIn100Grams * food.cholesterol);
+            mealfood.fiber = Math.round(quantityIn100Grams * food.fiber);
+            mealfood.sodium = Math.round(quantityIn100Grams * food.sodium);
         }
 
-        return Math.round((this.quantityInGrams() / 100) * food.calories_per_100g);
+        return mealfood;
     });
 
     constructor() {}
