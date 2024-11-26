@@ -1,9 +1,11 @@
 import { Component, computed, input, output } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
+import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatGridListModule } from '@angular/material/grid-list';
 import { MatInputModule } from '@angular/material/input';
+import { RouterLink } from '@angular/router';
 import { Food, SummedFood } from '@models/food.model';
 import { Meal } from '@models/meal.model';
 import { MealFood } from '@models/mealfood.model';
@@ -11,7 +13,7 @@ import { MealFood } from '@models/mealfood.model';
 @Component({
     selector: 'app-mealfood-form',
     standalone: true,
-    imports: [ReactiveFormsModule, MatFormFieldModule, MatGridListModule, MatInputModule],
+    imports: [MatButtonModule, MatFormFieldModule, MatGridListModule, MatInputModule, ReactiveFormsModule, RouterLink],
     templateUrl: './mealfood-form.component.html',
     styleUrl: './mealfood-form.component.css',
 })
