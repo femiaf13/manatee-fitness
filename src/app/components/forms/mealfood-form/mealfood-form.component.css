@@ -2,3 +2,8 @@
     font-size: large;
     margin: 10px;
 }
+
+mat-grid-tile mat-form-field {
+    padding: 5px;
+    width: 100%;
+}

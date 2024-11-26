@@ -14,9 +14,6 @@
             </mat-autocomplete>
         </mat-form-field>
 
-        {{ searchText.value | json }} <br />
-        {{ meal | json }}
-
         <app-mealfood-form [inputFood]="searchText.value" [inputMeal]="meal"></app-mealfood-form>
     } @else {
         <!-- No meal associated, probably have the food list? -->

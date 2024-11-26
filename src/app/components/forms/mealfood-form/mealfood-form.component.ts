@@ -2,6 +2,7 @@ import { Component, computed, input, output } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatGridListModule } from '@angular/material/grid-list';
 import { MatInputModule } from '@angular/material/input';
 import { Food, SummedFood } from '@models/food.model';
 import { Meal } from '@models/meal.model';
@@ -10,7 +11,7 @@ import { MealFood } from '@models/mealfood.model';
 @Component({
     selector: 'app-mealfood-form',
     standalone: true,
-    imports: [ReactiveFormsModule, MatFormFieldModule, MatInputModule],
+    imports: [ReactiveFormsModule, MatFormFieldModule, MatGridListModule, MatInputModule],
     templateUrl: './mealfood-form.component.html',
     styleUrl: './mealfood-form.component.css',
 })
