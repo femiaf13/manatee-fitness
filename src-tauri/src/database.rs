@@ -171,18 +171,18 @@ pub fn find_calories_by_date(app_handle: tauri::AppHandle, date_to_find: Date) -
     // no matter what
     let query = sql_query(
         "SELECT 
-	            ifnull(SUM(MF.quantity_grams * F.calories_per_100g / 100), 0) AS calories,
-	            ifnull(SUM(MF.quantity_grams * F.fat / 100), 0) AS fat,
-	            ifnull(SUM(MF.quantity_grams * F.carbs / 100), 0) AS protein,
-	            ifnull(SUM(MF.quantity_grams * F.protein / 100), 0) AS carbs,
-	            ifnull(SUM(MF.quantity_grams * F.cholesterol / 100), 0) AS cholesterol,
-	            ifnull(SUM(MF.quantity_grams * F.fiber / 100), 0) AS fiber,
+                ifnull(SUM(MF.quantity_grams * F.calories_per_100g / 100), 0) AS calories,
+                ifnull(SUM(MF.quantity_grams * F.fat / 100), 0) AS fat,
+                ifnull(SUM(MF.quantity_grams * F.carbs / 100), 0) AS protein,
+                ifnull(SUM(MF.quantity_grams * F.protein / 100), 0) AS carbs,
+                ifnull(SUM(MF.quantity_grams * F.cholesterol / 100), 0) AS cholesterol,
+                ifnull(SUM(MF.quantity_grams * F.fiber / 100), 0) AS fiber,
                 ifnull(SUM(MF.quantity_grams * F.sodium / 100), 0) AS sodium
             FROM meals M 
-	            JOIN meal_foods MF ON M.id = MF.meal_id
-	            JOIN foods F ON MF.food_id = F.id
+                JOIN meal_foods MF ON M.id = MF.meal_id
+                JOIN foods F ON MF.food_id = F.id
             WHERE 
-	            M.meal_date = ?;",
+                M.meal_date = ?;",
     );
     let summed_day: SummedFood = query
         .bind::<Text, _>(date_to_find.to_string())
@@ -203,18 +203,18 @@ pub fn find_calories_by_date_and_meal(
     let connection = &mut establish_connection(database_url);
     let query = sql_query(
         "SELECT 
-	            ifnull(SUM(MF.quantity_grams * F.calories_per_100g / 100), 0) AS calories,
-	            ifnull(SUM(MF.quantity_grams * F.fat / 100), 0) AS fat,
-	            ifnull(SUM(MF.quantity_grams * F.carbs / 100), 0) AS protein,
-	            ifnull(SUM(MF.quantity_grams * F.protein / 100), 0) AS carbs,
-	            ifnull(SUM(MF.quantity_grams * F.cholesterol / 100), 0) AS cholesterol,
-	            ifnull(SUM(MF.quantity_grams * F.fiber / 100), 0) AS fiber,
+                ifnull(SUM(MF.quantity_grams * F.calories_per_100g / 100), 0) AS calories,
+                ifnull(SUM(MF.quantity_grams * F.fat / 100), 0) AS fat,
+                ifnull(SUM(MF.quantity_grams * F.carbs / 100), 0) AS protein,
+                ifnull(SUM(MF.quantity_grams * F.protein / 100), 0) AS carbs,
+                ifnull(SUM(MF.quantity_grams * F.cholesterol / 100), 0) AS cholesterol,
+                ifnull(SUM(MF.quantity_grams * F.fiber / 100), 0) AS fiber,
                 ifnull(SUM(MF.quantity_grams * F.sodium / 100), 0) AS sodium
             FROM meals M 
-	            JOIN meal_foods MF ON M.id = MF.meal_id
-	            JOIN foods F ON MF.food_id = F.id
+                JOIN meal_foods MF ON M.id = MF.meal_id
+                JOIN foods F ON MF.food_id = F.id
             WHERE 
-	            M.meal_date = ?
+                M.meal_date = ?
                 AND
                 M.meal_name = ?;",
     );
