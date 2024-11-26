@@ -8,7 +8,12 @@
             <input type="text" matInput [formControl]="searchText" [matAutocomplete]="auto" />
             <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFoods">
                 @for (food of foods(); track food) {
-                    <mat-option [value]="food">{{ food.description }}</mat-option>
+                    <mat-option [value]="food">
+                        {{ food.description }}
+                        <small>
+                            <i>{{ food.brand }}</i>
+                        </small>
+                    </mat-option>
                     <mat-divider></mat-divider>
                 }
             </mat-autocomplete>
