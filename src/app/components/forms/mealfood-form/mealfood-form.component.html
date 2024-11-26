@@ -3,9 +3,8 @@
         <mat-form-field>
             <mat-label>Number of Servings</mat-label>
             <input matInput type="number" placeholder="Enter Servings" [formControl]="servings" />
+            <span matTextSuffix>{{ actualFood()?.serving_text }}</span>
         </mat-form-field>
-
-        <span class="serving-text">{{ actualFood()?.serving_text }}</span>
     } @else {
         <!-- TODO: Need to handle situations where servings aren't defined -->
     }
