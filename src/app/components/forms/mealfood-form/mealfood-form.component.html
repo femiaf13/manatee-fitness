@@ -6,7 +6,12 @@
             <span matTextSuffix>{{ actualFood()?.serving_text }}</span>
         </mat-form-field>
     } @else {
-        <!-- TODO: Need to handle situations where servings aren't defined -->
+        <!-- Need to handle situations where servings aren't defined -->
+        <mat-form-field>
+            <mat-label>Number of Grams</mat-label>
+            <input matInput type="number" [formControl]="grams" />
+            <span matTextSuffix>g</span>
+        </mat-form-field>
     }
 
     <br />

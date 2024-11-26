@@ -23,6 +23,11 @@ export class MealfoodFormComponent {
     inputFood = input.required<string | Food>();
     actualFood = computed(() => {
         const food: string | Food = this.inputFood();
+        // !side effect!
+        // When the input food changes reset both form fields to 0
+        this.grams.setValue(0);
+        this.servings.setValue(0);
+        // !End side effect!
         if (typeof food === 'string') {
             return null;
         }
@@ -34,17 +39,23 @@ export class MealfoodFormComponent {
      * Input in servings
      */
     servings = new FormControl(0, { nonNullable: true });
+    quantityInServings = toSignal(this.servings.valueChanges, { initialValue: 0 });
     /**
      * Input in grams
      */
     grams = new FormControl(0, { nonNullable: true });
-    quantityInServings = toSignal(this.servings.valueChanges, { initialValue: 0 });
+    gramsSignal = toSignal(this.grams.valueChanges, { initialValue: 0 });
+
     quantityInGrams = computed(() => {
         const food: string | Food = this.inputFood();
         if (typeof food === 'string') {
             return 0;
         }
-        return this.quantityInServings() * food.grams_per_serving;
+        if (this.quantityInServings() > 0) {
+            return this.quantityInServings() * food.grams_per_serving;
+        } else {
+            return this.gramsSignal();
+        }
     });
     quantityIn100Grams = computed(() => {
         return this.quantityInGrams() / 100;
