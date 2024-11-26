@@ -57,6 +57,7 @@ pub fn find_foods_by_search(app_handle: tauri::AppHandle, search_term: &str) -> 
     foods
         .filter(description.like(&pattern))
         .or_filter(brand.like(&pattern))
+        .order(description.asc())
         .load::<Food>(connection)
         .expect("Error loading food")
 }
