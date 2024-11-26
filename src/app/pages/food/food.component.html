@@ -19,7 +19,10 @@
             </mat-autocomplete>
         </mat-form-field>
 
-        <app-mealfood-form [inputFood]="searchText.value" [inputMeal]="meal"></app-mealfood-form>
+        <app-mealfood-form
+            [inputFood]="searchText.value"
+            [inputMeal]="meal"
+            (outputMealFood)="onMealFoodSubmit($event)"></app-mealfood-form>
     } @else {
         <!-- No meal associated, probably have the food list? -->
         <mat-form-field>

@@ -15,6 +15,7 @@ import { DatabaseService } from '@services/database.service';
 import { FoodListComponent } from '@components/food-list/food-list.component';
 import { MealfoodFormComponent } from '@components/forms/mealfood-form/mealfood-form.component';
 import { Meal } from '@models/meal.model';
+import { MealFood } from '@models/mealfood.model';
 
 @Component({
     selector: 'app-page-food',
@@ -58,6 +59,15 @@ export class FoodPageComponent implements OnInit {
     async search(searchTerm: string | Food): Promise<Array<Food>> {
         const searchTermParsed = typeof searchTerm === 'string' ? searchTerm : searchTerm?.description;
         return await this.databaseService.getFoodsBySearch(searchTermParsed);
+    }
+
+    async onMealFoodSubmit(mealFood: MealFood) {
+        const result = await this.databaseService.createMealFood(mealFood);
+        // I'll be honest idk when this would ever happen
+        if (!result) {
+            console.error('Unable to add meal food!');
+        }
+        this.searchText.setValue('');
     }
 
     constructor() {}
