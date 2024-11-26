@@ -1,4 +1,4 @@
-import { Component, computed, input, output } from '@angular/core';
+import { Component, computed, inject, input, output } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
@@ -9,6 +9,7 @@ import { RouterLink } from '@angular/router';
 import { Food, SummedFood } from '@models/food.model';
 import { Meal } from '@models/meal.model';
 import { MealFood } from '@models/mealfood.model';
+import { DatabaseService } from '@services/database.service';
 
 @Component({
     selector: 'app-mealfood-form',
@@ -18,6 +19,7 @@ import { MealFood } from '@models/mealfood.model';
     styleUrl: './mealfood-form.component.css',
 })
 export class MealfoodFormComponent {
+    databaseService = inject(DatabaseService);
     inputMeal = input.required<Meal>();
     /**
      * string | food is a quirk of how the autocomplete has to be wrangled
@@ -26,9 +28,7 @@ export class MealfoodFormComponent {
     actualFood = computed(() => {
         const food: string | Food = this.inputFood();
         // !side effect!
-        // When the input food changes reset both form fields to 0
-        this.grams.setValue(0);
-        this.servings.setValue(0);
+        this.resetInputs();
         // !End side effect!
         if (typeof food === 'string') {
             return null;
@@ -80,4 +80,21 @@ export class MealfoodFormComponent {
     });
 
     constructor() {}
+
+    async onSubmit() {
+        const mealFood = new MealFood(this.inputMeal().id, this.actualFood()?.id, this.quantityInGrams());
+        const result = await this.databaseService.createMealFood(mealFood);
+
+        // I'll be honest idk when this would ever happen
+        if (!result) {
+            console.error('Unable to add meal food!');
+        }
+        this.resetInputs();
+    }
+
+    resetInputs() {
+        // When the input food changes reset both form fields to 0
+        this.grams.setValue(0);
+        this.servings.setValue(0);
+    }
 }
