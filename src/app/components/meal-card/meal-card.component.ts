@@ -77,7 +77,7 @@ export class MealCardComponent {
         // this.meals = await this.databaseService.getMealsByDate(this.today());
     }
 
-    onLongPress(event: Event) {
+    onLongPress(event: MouseEvent) {
         event.preventDefault();
         console.log('I was pressed!');
     }
