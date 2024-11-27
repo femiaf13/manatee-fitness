@@ -1,22 +1,21 @@
 import { Component, computed, effect, inject, input, untracked } from '@angular/core';
-import { RouterLink } from '@angular/router';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
+import { MatDialog } from '@angular/material/dialog';
 import { MatIconModule } from '@angular/material/icon';
-import { lastValueFrom } from 'rxjs';
-
-import { invoke } from '@tauri-apps/api/core';
-
+import { RouterLink } from '@angular/router';
+import { FoodDialogComponent, FoodDialogData } from '@components/dialogs/food/food-dialog.component';
+import { LongPressDirective } from '@directives/longpress.directive';
 import { Food, FoodDTO, SummedFood } from '@models/food.model';
 import { Meal } from '@models/meal.model';
 import { DateService } from '@services/date.service';
-import { MatDialog } from '@angular/material/dialog';
-import { FoodDialogComponent, FoodDialogData } from '@components/dialogs/food/food-dialog.component';
+import { invoke } from '@tauri-apps/api/core';
+import { lastValueFrom } from 'rxjs';
 
 @Component({
     selector: 'app-meal-card',
     standalone: true,
-    imports: [MatButtonModule, MatCardModule, MatIconModule, RouterLink],
+    imports: [LongPressDirective, MatButtonModule, MatCardModule, MatIconModule, RouterLink],
     templateUrl: './meal-card.component.html',
     styleUrl: './meal-card.component.css',
 })
@@ -76,5 +75,10 @@ export class MealCardComponent {
             console.log(JSON.stringify(newMeal));
         }
         // this.meals = await this.databaseService.getMealsByDate(this.today());
+    }
+
+    onLongPress(event: Event) {
+        event.preventDefault();
+        console.log('I was pressed!');
     }
 }
