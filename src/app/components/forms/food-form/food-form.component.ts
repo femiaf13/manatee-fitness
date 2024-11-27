@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, inject, input, output } from '@angular/core';
+import { Component, effect, inject, input, output, untracked } from '@angular/core';
 import { NonNullableFormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -22,7 +22,7 @@ import { FoodDTO } from '@models/food.model';
     styleUrl: './food-form.component.css',
 })
 export class FoodFormComponent {
-    inputMeal = input<FoodDTO>(new FoodDTO());
+    inputFood = input<FoodDTO>(new FoodDTO());
     outputFood = output<FoodDTO>();
     cancel = output<boolean>();
 
@@ -64,5 +64,25 @@ export class FoodFormComponent {
 
     onCancel() {
         this.cancel.emit(true);
+    }
+
+    constructor() {
+        effect(() => {
+            const inputFood = this.inputFood();
+
+            untracked(() => {
+                this.foodForm.controls.description.setValue(inputFood.description);
+                this.foodForm.controls.brand.setValue(inputFood.brand);
+                this.foodForm.controls.caloriesPerServing.setValue(inputFood.calories_per_100g);
+                this.foodForm.controls.gramsPerServing.setValue(inputFood.grams_per_serving);
+                this.foodForm.controls.servingText.setValue(inputFood.serving_text);
+                this.foodForm.controls.fat.setValue(inputFood.fat);
+                this.foodForm.controls.carbs.setValue(inputFood.carbs);
+                this.foodForm.controls.protein.setValue(inputFood.protein);
+                this.foodForm.controls.cholesterol.setValue(inputFood.cholesterol);
+                this.foodForm.controls.fiber.setValue(inputFood.fiber);
+                this.foodForm.controls.sodium.setValue(inputFood.sodium);
+            });
+        });
     }
 }

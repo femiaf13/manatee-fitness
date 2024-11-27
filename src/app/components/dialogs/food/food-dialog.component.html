@@ -2,7 +2,7 @@
 <mat-dialog-content>
     @if (this.data.modify && this.data.food !== undefined) {
         <app-food-form
-            [inputMeal]="this.data.food"
+            [inputFood]="this.data.food"
             (cancel)="onCancel()"
             (outputFood)="onSubmit($event)"></app-food-form>
     } @else {
