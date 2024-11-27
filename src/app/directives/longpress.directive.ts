@@ -1,11 +1,11 @@
-import { Directive, EventEmitter, HostListener, Output } from '@angular/core';
+import { Directive, HostListener, output } from '@angular/core';
 
 @Directive({
     standalone: true,
     selector: '[appLongPress]',
 })
 export class LongPressDirective {
-    @Output() longPress = new EventEmitter<MouseEvent>();
+    longPress = output<MouseEvent>();
     private longPressTimeout: number | null = null;
     /**  Timeout in milliseconds */
     private readonly pressTime = 500;
