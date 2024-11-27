@@ -3,6 +3,11 @@
 }
 <mat-selection-list #foodList>
     @for (food of foods(); track food) {
-        <mat-list-option>{{ food.description }}</mat-list-option>
+        <mat-list-option>
+            <span matListItemTitle>{{ food.description }}</span>
+            <span matListItemLine>
+                <i>{{ food.brand }}</i>
+            </span>
+        </mat-list-option>
     }
 </mat-selection-list>
