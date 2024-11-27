@@ -1,16 +1,37 @@
 <mat-toolbar>
     <mat-toolbar-row>
-        <button mat-icon-button>
+        <button mat-icon-button [matMenuTriggerFor]="appMenu">
             <mat-icon>menu</mat-icon>
         </button>
+        <mat-menu #appMenu="matMenu">
+            <button mat-menu-item [routerLink]="['/diary']">
+                <mat-icon>book</mat-icon>
+                <span>Diary</span>
+            </button>
+
+            <button mat-menu-item [routerLink]="['/food']">
+                <mat-icon>kitchen</mat-icon>
+                <span>Food</span>
+            </button>
+
+            <button mat-menu-item>
+                <mat-icon>self_improvement</mat-icon>
+                <span>Goals</span>
+            </button>
+
+            <button mat-menu-item>
+                <mat-icon>menu_book</mat-icon>
+                <span>Recipes</span>
+            </button>
+        </mat-menu>
         <!-- <span>Manatee Fitness</span> -->
         <span class="spacer"></span>
 
-        <button mat-button [matMenuTriggerFor]="appMenu">
+        <button mat-button [matMenuTriggerFor]="calenderMenu">
             <span>{{ dateString() }}</span>
             <mat-icon>calendar_today</mat-icon>
         </button>
-        <mat-menu #appMenu="matMenu">
+        <mat-menu #calenderMenu="matMenu">
             <mat-calendar
                 style="width: 17rem"
                 touchUi
