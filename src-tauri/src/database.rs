@@ -90,11 +90,7 @@ pub fn find_foods_by_meal(app_handle: tauri::AppHandle, meal_id: i32) -> Vec<Foo
 }
 
 #[tauri::command]
-pub fn update_food_by_description(
-    app_handle: tauri::AppHandle,
-    food_id: i32,
-    food: FoodDTO,
-) -> bool {
+pub fn update_food_by_dto(app_handle: tauri::AppHandle, food_id: i32, food_dto: FoodDTO) -> bool {
     let database_url = app_handle.state::<AppState>().database_url.clone();
     let connection = &mut establish_connection(database_url);
     use crate::schema::foods::dsl::*;
@@ -102,18 +98,18 @@ pub fn update_food_by_description(
     let query_result = diesel::update(foods)
         .filter(id.eq(food_id))
         .set((
-            barcode.eq(food.barcode),
-            description.eq(food.description),
-            brand.eq(food.brand),
-            calories_per_100g.eq(food.calories_per_100g),
-            grams_per_serving.eq(food.grams_per_serving),
-            serving_text.eq(food.serving_text),
-            fat.eq(food.fat),
-            carbs.eq(food.carbs),
-            protein.eq(food.protein),
-            cholesterol.eq(food.cholesterol),
-            fiber.eq(food.fiber),
-            sodium.eq(food.sodium),
+            barcode.eq(food_dto.barcode),
+            description.eq(food_dto.description),
+            brand.eq(food_dto.brand),
+            calories_per_100g.eq(food_dto.calories_per_100g),
+            grams_per_serving.eq(food_dto.grams_per_serving),
+            serving_text.eq(food_dto.serving_text),
+            fat.eq(food_dto.fat),
+            carbs.eq(food_dto.carbs),
+            protein.eq(food_dto.protein),
+            cholesterol.eq(food_dto.cholesterol),
+            fiber.eq(food_dto.fiber),
+            sodium.eq(food_dto.sodium),
         ))
         .execute(connection);
 
@@ -166,6 +162,29 @@ pub fn find_meals_by_date(app_handle: tauri::AppHandle, date_to_find: Date) -> V
         .order(meal_time.asc())
         .load::<Meal>(connection)
         .expect("Error loading meals")
+}
+
+#[tauri::command]
+pub fn update_meal_by_dto(app_handle: tauri::AppHandle, meal_id: i32, meal_dto: MealDTO) -> bool {
+    let database_url = app_handle.state::<AppState>().database_url.clone();
+    let connection = &mut establish_connection(database_url);
+    use crate::schema::meals::dsl::*;
+
+    let query_result = diesel::update(meals)
+        .filter(id.eq(meal_id))
+        .set((
+            meal_date.eq(meal_dto.meal_date),
+            meal_name.eq(meal_dto.meal_name),
+            meal_time.eq(meal_dto.meal_time),
+        ))
+        .execute(connection);
+
+    let result: bool = match query_result {
+        Ok(_number_of_rows) => true,
+        Err(_e) => false,
+    };
+
+    result
 }
 
 #[tauri::command]

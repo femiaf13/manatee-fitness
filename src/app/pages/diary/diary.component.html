@@ -1,7 +1,7 @@
 <div class="main-content">
     <h4>Total Calories: {{ totalCalories }}</h4>
     @for (item of meals; track $index) {
-        <app-meal-card [meal]="item"></app-meal-card>
+        <app-meal-card [meal]="item" (mealChanged)="refreshMeals()"></app-meal-card>
         <br />
     }
 </div>

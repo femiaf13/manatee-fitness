@@ -55,6 +55,11 @@ export class DiaryComponent {
                 console.error('Failed to add meal: ' + JSON.stringify(newMeal));
             }
         }
+        // this.meals = await this.databaseService.getMealsByDate(this.today());
+        this.refreshMeals();
+    }
+
+    async refreshMeals() {
         this.meals = await this.databaseService.getMealsByDate(this.today());
     }
 }

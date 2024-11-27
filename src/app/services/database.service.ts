@@ -79,10 +79,23 @@ export class DatabaseService {
      * @param food DTO post-modification of the food
      * @returns true on success, false on error
      */
-    public async updateFoodByDescription(foodId: number, food: FoodDTO): Promise<boolean> {
-        return await invoke<boolean>('update_food_by_description', {
+    public async updateFoodByDto(foodId: number, food: FoodDTO): Promise<boolean> {
+        return await invoke<boolean>('update_food_by_dto', {
             foodId: foodId,
-            food: food,
+            foodDto: food,
+        });
+    }
+
+    /**
+     *
+     * @param foodId ID for the meal that will be updated
+     * @param meal DTO post-modification of the meal
+     * @returns true on success, false on error
+     */
+    public async updateMealByDto(mealId: number, meal: MealDTO): Promise<boolean> {
+        return await invoke<boolean>('update_meal_by_dto', {
+            mealId: mealId,
+            mealDto: meal,
         });
     }
 }

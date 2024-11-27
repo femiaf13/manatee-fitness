@@ -34,7 +34,7 @@ export class FoodListComponent {
         });
         const newFood: FoodDTO | undefined = await lastValueFrom(dialogRef.afterClosed());
         if (newFood !== undefined) {
-            const success = await this.databaseService.updateFoodByDescription(food.id, newFood);
+            const success = await this.databaseService.updateFoodByDto(food.id, newFood);
             if (!success) {
                 console.error('Failed to add meal: ' + JSON.stringify(newFood));
             }

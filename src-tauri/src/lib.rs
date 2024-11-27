@@ -45,10 +45,11 @@ pub fn run() {
             find_food_by_id,
             find_foods_by_search,
             find_foods_by_meal,
-            update_food_by_description,
+            update_food_by_dto,
             create_meal,
             find_meal_by_id,
             find_meals_by_date,
+            update_meal_by_dto,
             create_mealfood,
             find_calories_by_date,
             find_calories_by_date_and_meal
