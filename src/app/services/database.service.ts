@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Food, SummedFood } from '@models/food.model';
+import { Food, FoodDTO, SummedFood } from '@models/food.model';
 import { Meal, MealDTO } from '@models/meal.model';
 import { MealFood } from '@models/mealfood.model';
 import { invoke } from '@tauri-apps/api/core';
@@ -8,6 +8,15 @@ import { invoke } from '@tauri-apps/api/core';
     providedIn: 'root',
 })
 export class DatabaseService {
+    /**
+     *
+     * @param food food to create
+     * @returns true on success, false on error
+     */
+    public async createFood(food: FoodDTO): Promise<boolean> {
+        return await invoke<boolean>('create_food', { food: food });
+    }
+
     /**
      *
      * @param meal meal to create
@@ -61,6 +70,19 @@ export class DatabaseService {
     public async getSummedFoodForDate(date: string): Promise<SummedFood> {
         return await invoke<SummedFood>('find_calories_by_date', {
             dateToFind: date,
+        });
+    }
+
+    /**
+     *
+     * @param foodId ID for the food that will be updated
+     * @param food DTO post-modification of the food
+     * @returns true on success, false on error
+     */
+    public async updateFoodByDescription(foodId: number, food: FoodDTO): Promise<boolean> {
+        return await invoke<boolean>('update_food_by_description', {
+            foodId: foodId,
+            food: food,
         });
     }
 }

@@ -90,6 +90,42 @@ pub fn find_foods_by_meal(app_handle: tauri::AppHandle, meal_id: i32) -> Vec<Foo
 }
 
 #[tauri::command]
+pub fn update_food_by_description(
+    app_handle: tauri::AppHandle,
+    food_id: i32,
+    food: FoodDTO,
+) -> bool {
+    let database_url = app_handle.state::<AppState>().database_url.clone();
+    let connection = &mut establish_connection(database_url);
+    use crate::schema::foods::dsl::*;
+
+    let query_result = diesel::update(foods)
+        .filter(id.eq(food_id))
+        .set((
+            barcode.eq(food.barcode),
+            description.eq(food.description),
+            brand.eq(food.brand),
+            calories_per_100g.eq(food.calories_per_100g),
+            grams_per_serving.eq(food.grams_per_serving),
+            serving_text.eq(food.serving_text),
+            fat.eq(food.fat),
+            carbs.eq(food.carbs),
+            protein.eq(food.protein),
+            cholesterol.eq(food.cholesterol),
+            fiber.eq(food.fiber),
+            sodium.eq(food.sodium),
+        ))
+        .execute(connection);
+
+    let result: bool = match query_result {
+        Ok(_number_of_rows) => true,
+        Err(_e) => false,
+    };
+
+    result
+}
+
+#[tauri::command]
 pub fn create_meal(app_handle: tauri::AppHandle, meal: MealDTO) -> bool {
     let database_url = app_handle.state::<AppState>().database_url.clone();
     let connection = &mut establish_connection(database_url);
