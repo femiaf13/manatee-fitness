@@ -4,6 +4,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { MatListModule } from '@angular/material/list';
 import { FoodDialogData, FoodDialogComponent } from '@components/dialogs/food/food-dialog.component';
 import { Food, FoodDTO } from '@models/food.model';
+import { DatabaseService } from '@services/database.service';
 import { lastValueFrom } from 'rxjs';
 
 @Component({
@@ -15,6 +16,7 @@ import { lastValueFrom } from 'rxjs';
 })
 export class FoodListComponent {
     dialog = inject(MatDialog);
+    databaseService = inject(DatabaseService);
     foods = input.required<Array<Food>>();
 
     async modifyFood(food: Food) {
@@ -30,14 +32,12 @@ export class FoodListComponent {
             data: dialogData,
             disableClose: true,
         });
-        const newMeal: FoodDTO | undefined = await lastValueFrom(dialogRef.afterClosed());
-        if (newMeal !== undefined) {
-            // const success = await this.databaseService.createMeal(newMeal);
-            // if (!success) {
-            //     console.error('Failed to add meal: ' + JSON.stringify(newMeal));
-            // }
-            console.log(JSON.stringify(newMeal));
+        const newFood: FoodDTO | undefined = await lastValueFrom(dialogRef.afterClosed());
+        if (newFood !== undefined) {
+            const success = await this.databaseService.updateFoodByDescription(food.id, newFood);
+            if (!success) {
+                console.error('Failed to add meal: ' + JSON.stringify(newFood));
+            }
         }
-        // this.meals = await this.databaseService.getMealsByDate(this.today());
     }
 }

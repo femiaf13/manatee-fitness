@@ -71,10 +71,11 @@ export class FoodFormComponent {
             const inputFood = this.inputFood();
 
             untracked(() => {
+                const caloriesServing = (inputFood.grams_per_serving / 100) * inputFood.calories_per_100g;
                 this.foodForm.controls.barcode.setValue(inputFood.barcode);
                 this.foodForm.controls.description.setValue(inputFood.description);
                 this.foodForm.controls.brand.setValue(inputFood.brand);
-                this.foodForm.controls.caloriesPerServing.setValue(inputFood.calories_per_100g);
+                this.foodForm.controls.caloriesPerServing.setValue(+caloriesServing.toFixed(2));
                 this.foodForm.controls.gramsPerServing.setValue(inputFood.grams_per_serving);
                 this.foodForm.controls.servingText.setValue(inputFood.serving_text);
                 this.foodForm.controls.fat.setValue(inputFood.fat);
