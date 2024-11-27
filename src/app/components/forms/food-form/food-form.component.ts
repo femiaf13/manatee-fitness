@@ -71,6 +71,7 @@ export class FoodFormComponent {
             const inputFood = this.inputFood();
 
             untracked(() => {
+                this.foodForm.controls.barcode.setValue(inputFood.barcode);
                 this.foodForm.controls.description.setValue(inputFood.description);
                 this.foodForm.controls.brand.setValue(inputFood.brand);
                 this.foodForm.controls.caloriesPerServing.setValue(inputFood.calories_per_100g);
