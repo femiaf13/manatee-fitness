@@ -1,5 +1,10 @@
 <div>
-    <mat-card appLongPress (longPress)="onLongPress($event)">
+    <mat-card
+        appLongPress
+        (longPress)="onLongPress($event)"
+        appSwipe
+        (swipeNext)="dateService.setTomorrow()"
+        (swipePrevious)="dateService.setYesterday()">
         <mat-card-header>
             <mat-card-title>{{ mealName() }}</mat-card-title>
             <mat-card-subtitle>{{ mealTime() }}</mat-card-subtitle>

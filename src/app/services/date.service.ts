@@ -1,5 +1,5 @@
 import { computed, Injectable, signal } from '@angular/core';
-import { format } from 'date-fns';
+import { addDays, format } from 'date-fns';
 
 @Injectable({
     providedIn: 'root',
@@ -18,6 +18,20 @@ export class DateService {
      */
     public set(newDate: Date) {
         this.selectedDate.set(newDate);
+    }
+
+    /**
+     * Helper to make moving to tomorrow easier
+     */
+    public setTomorrow() {
+        this.selectedDate.set(addDays(this.selectedDate(), 1));
+    }
+
+    /**
+     * Helper to make moving to yesterday easier
+     */
+    public setYesterday() {
+        this.selectedDate.set(addDays(this.selectedDate(), -1));
     }
 
     public static formatTime(time: string): string {

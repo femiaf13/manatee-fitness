@@ -1,20 +1,19 @@
-import { Component, effect, inject, untracked } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { lastValueFrom } from 'rxjs';
-
+import { Component, effect, inject, untracked } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDialog } from '@angular/material/dialog';
-
-import { Meal, MealDTO } from '@models/meal.model';
-import { MealCardComponent } from '@components/meal-card/meal-card.component';
-import { DateService } from '@services/date.service';
 import { MealDialogComponent, MealDialogData } from '@components/dialogs/meal/meal-dialog.component';
+import { MealCardComponent } from '@components/meal-card/meal-card.component';
+import { SwipeDirective } from '@directives/swipe.directive';
+import { Meal, MealDTO } from '@models/meal.model';
 import { DatabaseService } from '@services/database.service';
+import { DateService } from '@services/date.service';
+import { lastValueFrom } from 'rxjs';
 
 @Component({
     selector: 'app-page-diary',
     standalone: true,
-    imports: [CommonModule, MealCardComponent, MatButtonModule],
+    imports: [CommonModule, MealCardComponent, MatButtonModule, SwipeDirective],
     templateUrl: './diary.component.html',
     styleUrl: './diary.component.css',
 })

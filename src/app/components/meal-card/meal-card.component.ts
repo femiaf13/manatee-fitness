@@ -6,6 +6,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { RouterLink } from '@angular/router';
 import { MealDialogData, MealDialogComponent } from '@components/dialogs/meal/meal-dialog.component';
 import { LongPressDirective } from '@directives/longpress.directive';
+import { SwipeDirective } from '@directives/swipe.directive';
 import { Food, SummedFood } from '@models/food.model';
 import { Meal, MealDTO } from '@models/meal.model';
 import { DatabaseService } from '@services/database.service';
@@ -16,12 +17,13 @@ import { lastValueFrom } from 'rxjs';
 @Component({
     selector: 'app-meal-card',
     standalone: true,
-    imports: [LongPressDirective, MatButtonModule, MatCardModule, MatIconModule, RouterLink],
+    imports: [LongPressDirective, MatButtonModule, MatCardModule, MatIconModule, RouterLink, SwipeDirective],
     templateUrl: './meal-card.component.html',
     styleUrl: './meal-card.component.css',
 })
 export class MealCardComponent {
     databaseService = inject(DatabaseService);
+    dateService = inject(DateService);
     dialog = inject(MatDialog);
     meal = input.required<Meal>();
     mealChanged = output<boolean>();
