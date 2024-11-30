@@ -14,7 +14,18 @@
                 @for (mealfood of foods; track $index) {
                     <mat-list-item (click)="openMealFoodDialog($event, mealfood)">
                         <span matListItemTitle>{{ mealfood.food.description }}</span>
-                        <span matListItemLine>{{ mealfood.food.brand }}</span>
+                        @if (mealfood.food.brand) {
+                            <span matListItemLine>{{ mealfood.food.brand }}</span>
+                        }
+                        @if (mealfood.quantity_servings === 0 && mealfood.quantity_grams > 0) {
+                            <span matListItemLine>
+                                <i>{{ mealfood.quantity_grams }}g</i>
+                            </span>
+                        } @else {
+                            <span matListItemLine>
+                                <i>{{ mealfood.quantity_servings }} x {{ mealfood.food.serving_text }}</i>
+                            </span>
+                        }
                         <span matListItemMeta>
                             <i>{{ mealfood.summed_food.calories }} kcal</i>
                         </span>
