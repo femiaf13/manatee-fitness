@@ -1,6 +1,7 @@
 use diesel::insert_into;
 use diesel::prelude::*;
 use diesel::sql_query;
+use diesel::sql_types::Integer;
 use diesel::sql_types::Text;
 use diesel::sqlite::SqliteConnection;
 use tauri::Manager;
@@ -33,16 +34,16 @@ pub fn create_food(app_handle: tauri::AppHandle, food: FoodDTO) -> bool {
 }
 
 #[tauri::command]
-pub fn find_food_by_id(app_handle: tauri::AppHandle, food_id: &str) -> Food {
+pub fn find_food_by_id(app_handle: tauri::AppHandle, food_id: i32) -> Food {
     let database_url = app_handle.state::<AppState>().database_url.clone();
     use crate::schema::foods::dsl::*;
 
     let connection = &mut establish_connection(database_url);
 
-    let food_id_int: i32 = food_id.parse().unwrap_or(1);
+    // let food_id_int: i32 = food_id.parse().unwrap_or(1);
 
     foods
-        .filter(id.eq(food_id_int))
+        .filter(id.eq(food_id))
         .first::<Food>(connection)
         .expect("Error loading food")
 }
@@ -206,6 +207,52 @@ pub fn create_mealfood(app_handle: tauri::AppHandle, mealfood: MealFood) -> bool
 }
 
 #[tauri::command]
+pub fn find_mealfood_by_meal(app_handle: tauri::AppHandle, meal_id: i32) -> Vec<MealFood> {
+    let database_url = app_handle.state::<AppState>().database_url.clone();
+    let connection = &mut establish_connection(database_url);
+    // use crate::schema::meal_foods::dsl::*;
+
+    meal_foods::table
+        .filter(meal_foods::meal_id.eq(meal_id))
+        .load::<MealFood>(connection)
+        .unwrap_or(vec![])
+}
+
+#[tauri::command]
+/// Calculate the summed nutrional info for each food in a meal
+pub fn find_summed_mealfood_by_meal(
+    app_handle: tauri::AppHandle,
+    meal_id: i32,
+) -> Vec<SummedMealFood> {
+    let database_url = app_handle.state::<AppState>().database_url.clone();
+    let connection = &mut establish_connection(database_url);
+    let mut answer: Vec<SummedMealFood> = vec![];
+
+    let meal_foods_found = meal_foods::table
+        .filter(meal_foods::meal_id.eq(meal_id))
+        .load::<MealFood>(connection)
+        .unwrap_or(vec![]);
+
+    for item in meal_foods_found.iter() {
+        let food = find_food_by_id(app_handle.clone(), item.food_id);
+        let summed_food = find_calories_by_mealfood(app_handle.clone(), item.food_id, meal_id);
+        let mut quantity_servings = 0.0;
+        if food.grams_per_serving != 0.0 {
+            quantity_servings = item.quantity_grams / food.grams_per_serving
+        }
+        let summed_meal_food = SummedMealFood {
+            quantity_grams: item.quantity_grams,
+            quantity_servings,
+            food,
+            summed_food,
+        };
+        answer.push(summed_meal_food);
+    }
+
+    answer
+}
+
+#[tauri::command]
 pub fn find_calories_by_date(app_handle: tauri::AppHandle, date_to_find: Date) -> SummedFood {
     let database_url = app_handle.state::<AppState>().database_url.clone();
     let connection = &mut establish_connection(database_url);
@@ -282,4 +329,38 @@ pub fn find_calories_by_date_and_meal(
         .unwrap();
 
     summed_meal
+}
+
+fn find_calories_by_mealfood(
+    app_handle: tauri::AppHandle,
+    food_id: i32,
+    meal_id: i32,
+) -> SummedFood {
+    let database_url = app_handle.state::<AppState>().database_url.clone();
+    let connection = &mut establish_connection(database_url);
+    let query = sql_query(
+        "SELECT 
+                round(ifnull(SUM(MF.quantity_grams * F.calories_per_100g / 100), 0)) AS calories,
+                ifnull(SUM(MF.quantity_grams * F.fat / 100), 0) AS fat,
+                ifnull(SUM(MF.quantity_grams * F.carbs / 100), 0) AS protein,
+                ifnull(SUM(MF.quantity_grams * F.protein / 100), 0) AS carbs,
+                ifnull(SUM(MF.quantity_grams * F.cholesterol / 100), 0) AS cholesterol,
+                ifnull(SUM(MF.quantity_grams * F.fiber / 100), 0) AS fiber,
+                ifnull(SUM(MF.quantity_grams * F.sodium / 100), 0) AS sodium
+            FROM meals M 
+                JOIN meal_foods MF ON M.id = MF.meal_id
+                JOIN foods F ON MF.food_id = F.id
+            WHERE 
+                F.id = ?
+                AND
+                M.id = ?;",
+    );
+    let summed_food: SummedFood = query
+        .bind::<Integer, _>(food_id)
+        .bind::<Integer, _>(meal_id)
+        .get_result(connection)
+        .ok()
+        .unwrap();
+
+    summed_food
 }

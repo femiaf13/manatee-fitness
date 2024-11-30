@@ -7,8 +7,9 @@ import { RouterLink } from '@angular/router';
 import { MealDialogData, MealDialogComponent } from '@components/dialogs/meal/meal-dialog.component';
 import { LongPressDirective } from '@directives/longpress.directive';
 import { SwipeDirective } from '@directives/swipe.directive';
-import { Food, SummedFood } from '@models/food.model';
+import { SummedFood } from '@models/food.model';
 import { Meal, MealDTO } from '@models/meal.model';
+import { SummedMealFood } from '@models/mealfood.model';
 import { DatabaseService } from '@services/database.service';
 import { DateService } from '@services/date.service';
 import { invoke } from '@tauri-apps/api/core';
@@ -36,8 +37,11 @@ export class MealCardComponent {
             return time;
         }
     });
-    foods: Array<Food> = [];
+    foods: Array<SummedMealFood> = [];
     summedMeal: SummedFood = new SummedFood();
+
+    // TODO: Should grab mealfoods so we have access to quantity, and the ability to
+    // modify the mealfood. This will likely come with a re-org of how the mealfoods are displayed
 
     constructor() {
         // This effect will automatically re-run anytime the meal signal is changed,
@@ -46,14 +50,17 @@ export class MealCardComponent {
             const meal = this.meal();
 
             untracked(() => {
-                invoke<Array<Food>>('find_foods_by_meal', { mealId: meal.id }).then(foods => {
-                    this.foods = foods;
-                });
+                // invoke<Array<Food>>('find_foods_by_meal', { mealId: meal.id }).then(foods => {
+                //     this.foods = foods;
+                // });
                 invoke<SummedFood>('find_calories_by_date_and_meal', {
                     dateToFind: meal.meal_date,
                     mealToFind: meal.meal_name,
                 }).then(summedFood => {
                     this.summedMeal = summedFood;
+                });
+                this.databaseService.getSummedFoodByMeal(meal.id).then(mealFoods => {
+                    this.foods = mealFoods;
                 });
             });
         });

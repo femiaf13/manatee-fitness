@@ -11,8 +11,8 @@
         </mat-card-header>
         <mat-card-content>
             <ul>
-                @for (food of foods; track $index) {
-                    <li>{{ food.description }}</li>
+                @for (mealfood of foods; track $index) {
+                    <li>{{ mealfood.food.description }}</li>
                 }
             </ul>
         </mat-card-content>

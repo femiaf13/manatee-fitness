@@ -51,6 +51,8 @@ pub fn run() {
             find_meals_by_date,
             update_meal_by_dto,
             create_mealfood,
+            find_mealfood_by_meal,
+            find_summed_mealfood_by_meal,
             find_calories_by_date,
             find_calories_by_date_and_meal
         ])

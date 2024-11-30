@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Food, FoodDTO, SummedFood } from '@models/food.model';
 import { Meal, MealDTO } from '@models/meal.model';
-import { MealFood } from '@models/mealfood.model';
+import { MealFood, SummedMealFood } from '@models/mealfood.model';
 import { invoke } from '@tauri-apps/api/core';
 
 @Injectable({
@@ -60,6 +60,15 @@ export class DatabaseService {
      */
     public async getMealsByDate(date: string): Promise<Array<Meal>> {
         return await invoke<Array<Meal>>('find_meals_by_date', { dateToFind: date });
+    }
+
+    /**
+     *
+     * @param mealId ID of the meal
+     * @returns summed nutritional info for each food in the meal
+     */
+    public async getSummedFoodByMeal(mealId: number): Promise<Array<SummedMealFood>> {
+        return await invoke<Array<SummedMealFood>>('find_summed_mealfood_by_meal', { mealId: mealId });
     }
 
     /**
