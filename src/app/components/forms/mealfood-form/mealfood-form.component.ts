@@ -1,4 +1,4 @@
-import { Component, computed, input, output } from '@angular/core';
+import { Component, computed, effect, input, output } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
@@ -23,6 +23,9 @@ export class MealfoodFormComponent {
      * string | food is a quirk of how the autocomplete has to be wrangled
      */
     inputFood = input.required<string | Food>();
+    initialQuantityGrams = input<number>(0);
+    initialQuantityServings = input<number>(0.0);
+
     actualFood = computed(() => {
         const food: string | Food = this.inputFood();
         // !side effect!
@@ -34,17 +37,18 @@ export class MealfoodFormComponent {
         return food;
     });
     outputMealFood = output<MealFood>();
+    cancel = output<boolean>();
 
     /**
      * Input in servings
      */
-    servings = new FormControl(0, { nonNullable: true });
-    quantityInServings = toSignal(this.servings.valueChanges, { initialValue: 0 });
+    servings = new FormControl(this.initialQuantityServings(), { nonNullable: true });
+    quantityInServings = toSignal(this.servings.valueChanges, { initialValue: this.servings.value });
     /**
      * Input in grams
      */
-    grams = new FormControl(0, { nonNullable: true });
-    gramsSignal = toSignal(this.grams.valueChanges, { initialValue: 0 });
+    grams = new FormControl(this.initialQuantityGrams(), { nonNullable: true });
+    gramsSignal = toSignal(this.grams.valueChanges, { initialValue: this.grams.value });
 
     quantityInGrams = computed(() => {
         const food: string | Food = this.inputFood();
@@ -77,7 +81,12 @@ export class MealfoodFormComponent {
         return mealfood;
     });
 
-    constructor() {}
+    constructor() {
+        effect(() => {
+            this.servings.setValue(this.initialQuantityServings());
+            this.grams.setValue(this.initialQuantityGrams());
+        });
+    }
 
     async onSubmit() {
         const mealFood = new MealFood(this.inputMeal().id, this.actualFood()?.id, this.quantityInGrams());

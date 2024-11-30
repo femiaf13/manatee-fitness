@@ -6,11 +6,12 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatListModule } from '@angular/material/list';
 import { RouterLink } from '@angular/router';
 import { MealDialogData, MealDialogComponent } from '@components/dialogs/meal/meal-dialog.component';
+import { MealfoodDialogComponent, MealFoodDialogData } from '@components/dialogs/mealfood/mealfood-dialog.component';
 import { LongPressDirective } from '@directives/longpress.directive';
 import { SwipeDirective } from '@directives/swipe.directive';
 import { SummedFood } from '@models/food.model';
 import { Meal, MealDTO } from '@models/meal.model';
-import { SummedMealFood } from '@models/mealfood.model';
+import { MealFood, SummedMealFood } from '@models/mealfood.model';
 import { DatabaseService } from '@services/database.service';
 import { DateService } from '@services/date.service';
 import { invoke } from '@tauri-apps/api/core';
@@ -93,5 +94,30 @@ export class MealCardComponent {
         }
 
         this.mealChanged.emit(true);
+    }
+
+    async openMealFoodDialog(event: Event, food: SummedMealFood) {
+        // event.preventDefault();
+
+        const dialogData: MealFoodDialogData = {
+            meal: this.meal(),
+            summedMealFood: food,
+        };
+        const dialogRef = this.dialog.open(MealfoodDialogComponent, {
+            data: dialogData,
+            disableClose: true,
+            width: '100vw',
+            height: '100vh',
+            maxWidth: '100vw',
+            maxHeight: '100vh',
+        });
+        const newMealFood: MealFood | undefined = await lastValueFrom(dialogRef.afterClosed());
+        if (newMealFood !== undefined) {
+            // const success = await this.databaseService.updateMealByDto(this.meal().id, newMeal);
+            // if (!success) {
+            // console.error('Failed to update meal: ' + JSON.stringify(newMeal));
+            // }
+            console.log(JSON.stringify(newMealFood));
+        }
     }
 }
