@@ -92,7 +92,6 @@ export class MealCardComponent {
                 console.error('Failed to update meal: ' + JSON.stringify(newMeal));
             }
         }
-
         this.mealChanged.emit(true);
     }
 
@@ -113,11 +112,11 @@ export class MealCardComponent {
         });
         const newMealFood: MealFood | undefined = await lastValueFrom(dialogRef.afterClosed());
         if (newMealFood !== undefined) {
-            // const success = await this.databaseService.updateMealByDto(this.meal().id, newMeal);
-            // if (!success) {
-            // console.error('Failed to update meal: ' + JSON.stringify(newMeal));
-            // }
-            console.log(JSON.stringify(newMealFood));
+            const success = await this.databaseService.updateMealFood(newMealFood);
+            if (!success) {
+                console.error('Failed to update meal food: ' + JSON.stringify(newMealFood));
+            }
         }
+        this.mealChanged.emit(true);
     }
 }

@@ -60,5 +60,6 @@ export class DiaryComponent {
 
     async refreshMeals() {
         this.meals = await this.databaseService.getMealsByDate(this.today());
+        this.totalCalories = (await this.databaseService.getSummedFoodForDate(this.today())).calories;
     }
 }

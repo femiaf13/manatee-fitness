@@ -55,7 +55,7 @@ export class MealfoodFormComponent {
         if (typeof food === 'string') {
             return 0;
         }
-        if (this.quantityInServings() > 0) {
+        if (food.grams_per_serving > 0) {
             return this.quantityInServings() * food.grams_per_serving;
         } else {
             return this.gramsSignal();

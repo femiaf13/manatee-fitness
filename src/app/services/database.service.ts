@@ -97,7 +97,7 @@ export class DatabaseService {
 
     /**
      *
-     * @param foodId ID for the meal that will be updated
+     * @param mealId ID for the meal that will be updated
      * @param meal DTO post-modification of the meal
      * @returns true on success, false on error
      */
@@ -105,6 +105,17 @@ export class DatabaseService {
         return await invoke<boolean>('update_meal_by_dto', {
             mealId: mealId,
             mealDto: meal,
+        });
+    }
+
+    /**
+     *
+     * @param mealFood Meal food post modification
+     * @returns true on success, false on error
+     */
+    public async updateMealFood(mealFood: MealFood): Promise<boolean> {
+        return await invoke<boolean>('update_mealfood', {
+            mealfood: mealFood,
         });
     }
 }

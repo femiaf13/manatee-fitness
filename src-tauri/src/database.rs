@@ -219,6 +219,26 @@ pub fn find_mealfood_by_meal(app_handle: tauri::AppHandle, meal_id: i32) -> Vec<
 }
 
 #[tauri::command]
+pub fn update_mealfood(app_handle: tauri::AppHandle, mealfood: MealFood) -> bool {
+    let database_url = app_handle.state::<AppState>().database_url.clone();
+    let connection = &mut establish_connection(database_url);
+    use crate::schema::meal_foods::dsl::*;
+
+    let query_result = diesel::update(meal_foods)
+        .filter(food_id.eq(mealfood.food_id))
+        .filter(meal_id.eq(mealfood.meal_id))
+        .set(quantity_grams.eq(mealfood.quantity_grams))
+        .execute(connection);
+
+    let result: bool = match query_result {
+        Ok(_number_of_rows) => true,
+        Err(_e) => false,
+    };
+
+    result
+}
+
+#[tauri::command]
 /// Calculate the summed nutrional info for each food in a meal
 pub fn find_summed_mealfood_by_meal(
     app_handle: tauri::AppHandle,
