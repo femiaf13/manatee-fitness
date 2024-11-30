@@ -3,6 +3,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatDialog } from '@angular/material/dialog';
 import { MatIconModule } from '@angular/material/icon';
+import { MatListModule } from '@angular/material/list';
 import { RouterLink } from '@angular/router';
 import { MealDialogData, MealDialogComponent } from '@components/dialogs/meal/meal-dialog.component';
 import { LongPressDirective } from '@directives/longpress.directive';
@@ -18,7 +19,15 @@ import { lastValueFrom } from 'rxjs';
 @Component({
     selector: 'app-meal-card',
     standalone: true,
-    imports: [LongPressDirective, MatButtonModule, MatCardModule, MatIconModule, RouterLink, SwipeDirective],
+    imports: [
+        LongPressDirective,
+        MatButtonModule,
+        MatCardModule,
+        MatIconModule,
+        MatListModule,
+        RouterLink,
+        SwipeDirective,
+    ],
     templateUrl: './meal-card.component.html',
     styleUrl: './meal-card.component.css',
 })
@@ -63,7 +72,7 @@ export class MealCardComponent {
         });
     }
 
-    async onLongPress(event: MouseEvent) {
+    async onLongPressMealCard(event: MouseEvent) {
         event.preventDefault();
 
         // Pop up the meal dialog and handle its return here

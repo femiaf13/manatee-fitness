@@ -1,7 +1,7 @@
 <div>
     <mat-card
         appLongPress
-        (longPress)="onLongPress($event)"
+        (longPress)="onLongPressMealCard($event)"
         appSwipe
         (swipeNext)="dateService.setTomorrow()"
         (swipePrevious)="dateService.setYesterday()">
@@ -10,13 +10,17 @@
             <mat-card-subtitle>{{ mealTime() }}</mat-card-subtitle>
         </mat-card-header>
         <mat-card-content>
-            <ul>
+            <mat-action-list>
                 @for (mealfood of foods; track $index) {
-                    <li>
-                        {{ mealfood.food.description }} <i>{{ mealfood.summed_food.calories }}</i>
-                    </li>
+                    <mat-list-item>
+                        <span matListItemTitle>{{ mealfood.food.description }}</span>
+                        <span matListItemLine>{{ mealfood.food.brand }}</span>
+                        <span matListItemMeta>
+                            <i>{{ mealfood.summed_food.calories }} kcal</i>
+                        </span>
+                    </mat-list-item>
                 }
-            </ul>
+            </mat-action-list>
         </mat-card-content>
         <mat-card-actions align="end">
             {{ summedMeal.calories }} Calories
