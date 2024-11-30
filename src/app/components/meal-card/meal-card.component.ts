@@ -50,17 +50,14 @@ export class MealCardComponent {
             const meal = this.meal();
 
             untracked(() => {
-                // invoke<Array<Food>>('find_foods_by_meal', { mealId: meal.id }).then(foods => {
-                //     this.foods = foods;
-                // });
+                this.databaseService.getSummedFoodByMeal(meal.id).then(mealFoods => {
+                    this.foods = mealFoods;
+                });
                 invoke<SummedFood>('find_calories_by_date_and_meal', {
                     dateToFind: meal.meal_date,
                     mealToFind: meal.meal_name,
                 }).then(summedFood => {
                     this.summedMeal = summedFood;
-                });
-                this.databaseService.getSummedFoodByMeal(meal.id).then(mealFoods => {
-                    this.foods = mealFoods;
                 });
             });
         });

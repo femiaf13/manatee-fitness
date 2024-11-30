@@ -12,7 +12,9 @@
         <mat-card-content>
             <ul>
                 @for (mealfood of foods; track $index) {
-                    <li>{{ mealfood.food.description }}</li>
+                    <li>
+                        {{ mealfood.food.description }} <i>{{ mealfood.summed_food.calories }}</i>
+                    </li>
                 }
             </ul>
         </mat-card-content>

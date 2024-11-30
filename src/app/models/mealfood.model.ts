@@ -16,12 +16,12 @@ export class SummedMealFood {
     quantity_grams: number;
     quantity_servings: number;
     food: Food;
-    summedFood: SummedFood;
+    summed_food: SummedFood;
 
     constructor() {
         this.quantity_grams = 0;
         this.quantity_servings = 0;
         this.food = new Food();
-        this.summedFood = new SummedFood();
+        this.summed_food = new SummedFood();
     }
 }
