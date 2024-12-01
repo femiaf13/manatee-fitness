@@ -15,6 +15,9 @@ export class LongPressDirective {
     @HostListener('mousedown', ['$event'])
     @HostListener('touchstart', ['$event'])
     onMouseDown(event: MouseEvent) {
+        // This will stop this from hitting long press handlers on
+        // parent comnponents
+        event.stopPropagation();
         this.longPressTimeout = window.setTimeout(() => {
             this.longPress.emit(event);
         }, this.pressTime);
