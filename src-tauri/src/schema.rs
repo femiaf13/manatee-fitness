@@ -39,8 +39,4 @@ diesel::table! {
 diesel::joinable!(meal_foods -> foods (food_id));
 diesel::joinable!(meal_foods -> meals (meal_id));
 
-diesel::allow_tables_to_appear_in_same_query!(
-    foods,
-    meal_foods,
-    meals,
-);
+diesel::allow_tables_to_appear_in_same_query!(foods, meal_foods, meals,);

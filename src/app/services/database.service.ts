@@ -1,13 +1,38 @@
 import { Injectable } from '@angular/core';
 import { Food, FoodDTO, SummedFood } from '@models/food.model';
+import { Goal } from '@models/goal.model';
 import { Meal, MealDTO } from '@models/meal.model';
 import { MealFood, SummedMealFood } from '@models/mealfood.model';
 import { invoke } from '@tauri-apps/api/core';
+import { load, Store } from '@tauri-apps/plugin-store';
 
 @Injectable({
     providedIn: 'root',
 })
 export class DatabaseService {
+    readonly APP_STORE = 'store.json';
+    goalStore: Store | undefined;
+
+    private async loadGoalStore(): Promise<Store> {
+        return await load(this.APP_STORE, { autoSave: 100 });
+    }
+
+    public async getGoal(): Promise<Goal | undefined> {
+        if (this.goalStore === undefined) {
+            this.goalStore = await this.loadGoalStore();
+        }
+        return await this.goalStore.get<Goal>('goal');
+    }
+
+    public async setGoal(goal: Goal) {
+        if (this.goalStore === undefined) {
+            this.goalStore = await this.loadGoalStore();
+        }
+        await this.goalStore.set('goal', goal);
+    }
+
+    /** SQL DATA BELOW */
+
     /**
      *
      * @param food food to create
