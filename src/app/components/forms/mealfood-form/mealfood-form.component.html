@@ -73,9 +73,7 @@
         </mat-grid-tile>
     </mat-grid-list>
     <div class="bottom-right">
-        <button mat-flat-button (click)="cancel.emit(true)" style="margin-right: 10px" [routerLink]="['/diary']">
-            Cancel
-        </button>
+        <a mat-flat-button (click)="cancel.emit(true)" style="margin-right: 10px" [routerLink]="['/diary']"> Cancel </a>
         <button mat-flat-button (click)="onSubmit()">Submit</button>
     </div>
 }
