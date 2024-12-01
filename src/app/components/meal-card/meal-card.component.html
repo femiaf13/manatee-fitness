@@ -12,7 +12,10 @@
         <mat-card-content>
             <mat-action-list>
                 @for (mealfood of foods; track $index) {
-                    <mat-list-item (click)="openMealFoodDialog($event, mealfood)">
+                    <mat-list-item
+                        appLongPress
+                        (longPress)="onMealFoodLongPress($event, mealfood)"
+                        (click)="openMealFoodDialog($event, mealfood)">
                         <span matListItemTitle>{{ mealfood.food.description }}</span>
                         @if (mealfood.food.brand) {
                             <span matListItemLine>{{ mealfood.food.brand }}</span>

@@ -36,6 +36,25 @@ export class DatabaseService {
     }
 
     /**
+     *
+     * @param mealId meal to delete
+     * @returns true on success, false on error
+     */
+    public async deleteMeal(mealId: number): Promise<boolean> {
+        return await invoke<boolean>('delete_meal', { mealId: mealId });
+    }
+
+    /**
+     *
+     * @param mealId mealfood meal id to delete
+     * @param foodId mealfood food id to delete
+     * @returns true on success, false on error
+     */
+    public async deleteMealFood(mealId: number, foodId: number): Promise<boolean> {
+        return await invoke<boolean>('delete_mealfood', { mealId: mealId, foodId: foodId });
+    }
+
+    /**
      * Search foods' descriptions and brands
      * @param searchTerm Term to search by
      * @returns all foods that contain the search term

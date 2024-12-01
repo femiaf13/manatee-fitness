@@ -5,6 +5,10 @@ import { MatDialog } from '@angular/material/dialog';
 import { MatIconModule } from '@angular/material/icon';
 import { MatListModule } from '@angular/material/list';
 import { RouterLink } from '@angular/router';
+import {
+    ConfirmationDialogComponent,
+    ConfirmationDialogData,
+} from '@components/dialogs/confirmation-dialog/confirmation-dialog.component';
 import { MealDialogData, MealDialogComponent } from '@components/dialogs/meal/meal-dialog.component';
 import { MealfoodDialogComponent, MealFoodDialogData } from '@components/dialogs/mealfood/mealfood-dialog.component';
 import { LongPressDirective } from '@directives/longpress.directive';
@@ -115,6 +119,28 @@ export class MealCardComponent {
             const success = await this.databaseService.updateMealFood(newMealFood);
             if (!success) {
                 console.error('Failed to update meal food: ' + JSON.stringify(newMealFood));
+            }
+        }
+        this.mealChanged.emit(true);
+    }
+
+    async onMealFoodLongPress(event: Event, food: SummedMealFood) {
+        event.stopPropagation();
+        event.preventDefault();
+
+        const dialogData: ConfirmationDialogData = {
+            title: `Delete ${food.food.description}?`,
+            content: `Are you sure you want to delete this food from ${this.meal().meal_name}?`,
+            action: 'Delete',
+        };
+        const dialogRef = this.dialog.open(ConfirmationDialogComponent, {
+            data: dialogData,
+        });
+        const confirmed = await lastValueFrom(dialogRef.afterClosed());
+        if (confirmed) {
+            const success = await this.databaseService.deleteMealFood(this.meal().id, food.food.id);
+            if (!success) {
+                console.error('Failed to delete meal food: ' + JSON.stringify(food.food.description));
             }
         }
         this.mealChanged.emit(true);

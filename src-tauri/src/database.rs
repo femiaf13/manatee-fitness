@@ -189,6 +189,35 @@ pub fn update_meal_by_dto(app_handle: tauri::AppHandle, meal_id: i32, meal_dto: 
 }
 
 #[tauri::command]
+pub fn delete_meal(app_handle: tauri::AppHandle, meal_id: i32) -> bool {
+    let database_url = app_handle.state::<AppState>().database_url.clone();
+    let connection = &mut establish_connection(database_url);
+
+    // Delete all meal foods associated with this meal
+    let mut query_result =
+        diesel::delete(meal_foods::table.filter(meal_foods::meal_id.eq(meal_id)))
+            .execute(connection);
+
+    let mut result: bool = match query_result {
+        Ok(_number_of_rows) => true,
+        Err(_e) => false,
+    };
+
+    if !result {
+        return result;
+    }
+
+    query_result = diesel::delete(meals::table.filter(meals::id.eq(meal_id))).execute(connection);
+
+    result = match query_result {
+        Ok(_number_of_rows) => true,
+        Err(_e) => false,
+    };
+
+    result
+}
+
+#[tauri::command]
 pub fn create_mealfood(app_handle: tauri::AppHandle, mealfood: MealFood) -> bool {
     let database_url = app_handle.state::<AppState>().database_url.clone();
     let connection = &mut establish_connection(database_url);
@@ -229,6 +258,27 @@ pub fn update_mealfood(app_handle: tauri::AppHandle, mealfood: MealFood) -> bool
         .filter(meal_id.eq(mealfood.meal_id))
         .set(quantity_grams.eq(mealfood.quantity_grams))
         .execute(connection);
+
+    let result: bool = match query_result {
+        Ok(_number_of_rows) => true,
+        Err(_e) => false,
+    };
+
+    result
+}
+
+#[tauri::command]
+pub fn delete_mealfood(app_handle: tauri::AppHandle, meal_id: i32, food_id: i32) -> bool {
+    let database_url = app_handle.state::<AppState>().database_url.clone();
+    let connection = &mut establish_connection(database_url);
+    // use crate::schema::meal_foods::dsl::*;
+
+    let query_result = diesel::delete(
+        meal_foods::table
+            .filter(meal_foods::food_id.eq(food_id))
+            .filter(meal_foods::meal_id.eq(meal_id)),
+    )
+    .execute(connection);
 
     let result: bool = match query_result {
         Ok(_number_of_rows) => true,
