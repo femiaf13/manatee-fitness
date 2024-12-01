@@ -38,8 +38,11 @@
         </mat-card-content>
         <mat-card-actions align="end">
             {{ summedMeal.calories }} Calories
+            <button mat-button (click)="deleteMeal($event)">
+                <mat-icon aria-hidden="false" aria-label="Delete meal icon" fontIcon="delete"></mat-icon>
+            </button>
             <button [routerLink]="['/food']" [queryParams]="{ meal: meal().id }" mat-button>
-                <mat-icon aria-hidden="false" aria-label="Example home icon" fontIcon="add"></mat-icon>
+                <mat-icon aria-hidden="false" aria-label="Add food icon" fontIcon="add"></mat-icon>
             </button>
         </mat-card-actions>
     </mat-card>

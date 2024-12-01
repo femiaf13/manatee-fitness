@@ -99,6 +99,28 @@ export class MealCardComponent {
         this.mealChanged.emit(true);
     }
 
+    async deleteMeal(event: MouseEvent) {
+        event.stopPropagation();
+        event.preventDefault();
+
+        const dialogData: ConfirmationDialogData = {
+            title: `Delete ${this.meal().meal_name}?`,
+            content: `Are you sure you want to delete this meal?`,
+            action: 'Delete',
+        };
+        const dialogRef = this.dialog.open(ConfirmationDialogComponent, {
+            data: dialogData,
+        });
+        const confirmed = await lastValueFrom(dialogRef.afterClosed());
+        if (confirmed) {
+            const success = await this.databaseService.deleteMeal(this.meal().id);
+            if (!success) {
+                console.error('Failed to delete meal: ' + JSON.stringify(this.meal()));
+            }
+        }
+        this.mealChanged.emit(true);
+    }
+
     async openMealFoodDialog(event: Event, food: SummedMealFood) {
         // event.preventDefault();
 
