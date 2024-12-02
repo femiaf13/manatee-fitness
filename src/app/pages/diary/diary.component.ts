@@ -1,10 +1,11 @@
 import { CommonModule } from '@angular/common';
-import { Component, effect, inject, untracked } from '@angular/core';
+import { Component, effect, inject, OnInit, untracked } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDialog } from '@angular/material/dialog';
 import { MealDialogComponent, MealDialogData } from '@components/dialogs/meal/meal-dialog.component';
 import { MealCardComponent } from '@components/meal-card/meal-card.component';
 import { SwipeDirective } from '@directives/swipe.directive';
+import { Goal } from '@models/goal.model';
 import { Meal, MealDTO } from '@models/meal.model';
 import { DatabaseService } from '@services/database.service';
 import { DateService } from '@services/date.service';
@@ -17,7 +18,7 @@ import { lastValueFrom } from 'rxjs';
     templateUrl: './diary.component.html',
     styleUrl: './diary.component.css',
 })
-export class DiaryComponent {
+export class DiaryComponent implements OnInit {
     databaseService = inject(DatabaseService);
     dateService = inject(DateService);
     dialog = inject(MatDialog);
@@ -25,6 +26,7 @@ export class DiaryComponent {
     today = this.dateService.selectedDateFormatted;
     meals: Array<Meal> = [];
     totalCalories = 0;
+    goal: Goal | undefined = undefined;
 
     constructor() {
         effect(() => {
@@ -37,6 +39,10 @@ export class DiaryComponent {
                     .then(summedFood => (this.totalCalories = summedFood.calories));
             });
         });
+    }
+
+    async ngOnInit() {
+        this.goal = await this.databaseService.getGoal();
     }
 
     async addMeal() {
