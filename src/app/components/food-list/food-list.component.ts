@@ -7,6 +7,11 @@ import { Food, FoodDTO } from '@models/food.model';
 import { DatabaseService } from '@services/database.service';
 import { lastValueFrom } from 'rxjs';
 
+class BaseFoodListComponent {
+    dialog = inject(MatDialog);
+    databaseService = inject(DatabaseService);
+}
+
 @Component({
     selector: 'app-food-list',
     standalone: true,
@@ -14,9 +19,7 @@ import { lastValueFrom } from 'rxjs';
     templateUrl: './food-list.component.html',
     styleUrl: './food-list.component.css',
 })
-export class FoodListComponent {
-    dialog = inject(MatDialog);
-    databaseService = inject(DatabaseService);
+export class LocalFoodListComponent extends BaseFoodListComponent {
     foods = input.required<Array<Food>>();
 
     async modifyFood(food: Food) {
@@ -37,6 +40,39 @@ export class FoodListComponent {
             const success = await this.databaseService.updateFoodByDto(food.id, newFood);
             if (!success) {
                 console.error('Failed to add meal: ' + JSON.stringify(newFood));
+            }
+        }
+    }
+}
+
+@Component({
+    selector: 'app-off-food-list',
+    standalone: true,
+    imports: [CommonModule, MatListModule],
+    templateUrl: './food-list.component.html',
+    styleUrl: './food-list.component.css',
+})
+export class OpenFoodFactsFoodListComponent extends BaseFoodListComponent {
+    foods = input.required<Array<FoodDTO>>();
+
+    async modifyFood(food: FoodDTO) {
+        const dialogData: FoodDialogData = {
+            modify: true,
+            food: food,
+        };
+        const dialogRef = this.dialog.open(FoodDialogComponent, {
+            width: '100vw',
+            height: '100vh',
+            maxWidth: '100vw',
+            maxHeight: '100vh',
+            data: dialogData,
+            disableClose: true,
+        });
+        const newFood: FoodDTO | undefined = await lastValueFrom(dialogRef.afterClosed());
+        if (newFood !== undefined) {
+            const success = await this.databaseService.createFood(newFood);
+            if (!success) {
+                console.error('Failed to add food: ' + JSON.stringify(newFood));
             }
         }
     }

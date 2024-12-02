@@ -25,10 +25,17 @@
             (outputMealFood)="onMealFoodSubmit($event)"></app-mealfood-form>
     } @else {
         <!-- No meal associated, probably have the food list? -->
-        <mat-form-field>
-            <mat-label>Search Food</mat-label>
-            <input matInput type="text" [formControl]="searchText" placeholder="Search" />
-        </mat-form-field>
-        <app-food-list [foods]="foods()"></app-food-list>
+        <div>
+            <mat-form-field>
+                <mat-label>Search Food</mat-label>
+                <input matInput type="search" [formControl]="searchText" placeholder="Search" />
+            </mat-form-field>
+            <mat-checkbox [formControl]="onlineSearch">Online Search</mat-checkbox>
+        </div>
+        @if (!onlineSearch.value) {
+            <app-food-list [foods]="foods()"></app-food-list>
+        } @else {
+            <app-off-food-list [foods]="onlineFoods()"></app-off-food-list>
+        }
     }
 </div>

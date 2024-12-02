@@ -5,17 +5,19 @@ import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatButtonModule } from '@angular/material/button';
+import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { debounceTime, distinctUntilChanged, switchMap } from 'rxjs';
 
-import { Food } from '@models/food.model';
+import { Food, FoodDTO } from '@models/food.model';
 import { DatabaseService } from '@services/database.service';
-import { FoodListComponent } from '@components/food-list/food-list.component';
+import { LocalFoodListComponent, OpenFoodFactsFoodListComponent } from '@components/food-list/food-list.component';
 import { MealfoodFormComponent } from '@components/forms/mealfood-form/mealfood-form.component';
 import { Meal } from '@models/meal.model';
 import { MealFood } from '@models/mealfood.model';
+import { OpenFoodFactsService } from '@services/open-food-facts.service';
 
 @Component({
     selector: 'app-page-food',
@@ -23,13 +25,15 @@ import { MealFood } from '@models/mealfood.model';
     imports: [
         CommonModule,
         MatAutocompleteModule,
+        MatCheckboxModule,
         MatDividerModule,
         MatButtonModule,
         MatFormFieldModule,
         MatInputModule,
         ReactiveFormsModule,
-        FoodListComponent,
+        LocalFoodListComponent,
         MealfoodFormComponent,
+        OpenFoodFactsFoodListComponent,
     ],
     templateUrl: './food.component.html',
     styleUrl: './food.component.css',
@@ -37,14 +41,26 @@ import { MealFood } from '@models/mealfood.model';
 export class FoodPageComponent implements OnInit {
     route = inject(ActivatedRoute);
     databaseService = inject(DatabaseService);
+    openFoodFactsService = inject(OpenFoodFactsService);
+
+    onlineSearch = new FormControl<boolean>(false, { nonNullable: true });
     searchText = new FormControl<string | Food>('', { nonNullable: true });
+    // Only local search when checkbox isn't checked and vice versa
     foods = toSignal(
         this.searchText.valueChanges.pipe(
             debounceTime(300),
             distinctUntilChanged(),
-            switchMap(searchTerm => this.search(searchTerm))
+            switchMap(searchTerm => (this.onlineSearch.value ? [] : this.search(searchTerm)))
         ),
         { initialValue: [] as Food[] }
+    );
+    onlineFoods = toSignal(
+        this.searchText.valueChanges.pipe(
+            debounceTime(300),
+            distinctUntilChanged(),
+            switchMap(searchTerm => (this.onlineSearch.value ? this.searchOnline(searchTerm) : []))
+        ),
+        { initialValue: [] as FoodDTO[] }
     );
     /**
      * Optional input parameter telling us if we're looking for food for a specific meal
@@ -59,6 +75,11 @@ export class FoodPageComponent implements OnInit {
     async search(searchTerm: string | Food): Promise<Array<Food>> {
         const searchTermParsed = typeof searchTerm === 'string' ? searchTerm : searchTerm?.description;
         return await this.databaseService.getFoodsBySearch(searchTermParsed);
+    }
+
+    async searchOnline(searchTerm: string | Food): Promise<Array<FoodDTO>> {
+        const searchTermParsed = typeof searchTerm === 'string' ? searchTerm : searchTerm?.description;
+        return await this.openFoodFactsService.searchByText(searchTermParsed);
     }
 
     async onMealFoodSubmit(mealFood: MealFood) {
