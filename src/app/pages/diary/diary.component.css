@@ -24,3 +24,28 @@
     bottom: 15px;
     right: 15px;
 }
+
+.progress-bar-container {
+    position: relative;
+    width: 100%;
+    height: 20px;
+}
+
+mat-progress-bar {
+    /* height: 10px; */
+    margin-bottom: 10px;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+}
+
+.mat-mdc-progress-bar {
+    --mdc-linear-progress-track-height: 10px;
+    --mdc-linear-progress-active-indicator-height: 10px;
+}
+
+.excess-progress {
+    --mdc-linear-progress-active-indicator-color: red !important;
+}
+

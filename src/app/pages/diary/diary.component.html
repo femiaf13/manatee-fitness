@@ -4,9 +4,21 @@
     (swipePrevious)="dateService.setYesterday()"
     class="swipe-catcher"></div>
 <div class="main-content">
+    @if (goal !== undefined && goal.calories > 0) {
+        <div class="progress-bar-container">
+            @if (caloriePercentageEaten > 100) {
+                <mat-progress-bar class="excess-progress" mode="determinate" [value]="100"></mat-progress-bar>
+                <mat-progress-bar
+                    mode="determinate"
+                    [value]="100 - ((caloriePercentageEaten - 100) / caloriePercentageEaten) * 100"></mat-progress-bar>
+            } @else {
+                <mat-progress-bar mode="determinate" [value]="caloriePercentageEaten"></mat-progress-bar>
+            }
+        </div>
+    }
     <h4>Total Calories: {{ totalCalories }}/{{ goal === undefined ? '' : goal.calories }}</h4>
     @for (item of meals; track $index) {
-        <app-meal-card [meal]="item" (mealChanged)="refreshMeals()"></app-meal-card>
+        <app-meal-card [meal]="item" (mealChanged)="refreshMeals(today())"></app-meal-card>
         <br />
     }
     <button class="bottom-right" mat-flat-button (click)="addMeal()">Add Meal</button>

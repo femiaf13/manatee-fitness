@@ -2,6 +2,7 @@ import { CommonModule } from '@angular/common';
 import { Component, effect, inject, OnInit, untracked } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDialog } from '@angular/material/dialog';
+import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MealDialogComponent, MealDialogData } from '@components/dialogs/meal/meal-dialog.component';
 import { MealCardComponent } from '@components/meal-card/meal-card.component';
 import { SwipeDirective } from '@directives/swipe.directive';
@@ -14,7 +15,7 @@ import { lastValueFrom } from 'rxjs';
 @Component({
     selector: 'app-page-diary',
     standalone: true,
-    imports: [CommonModule, MealCardComponent, MatButtonModule, SwipeDirective],
+    imports: [CommonModule, MealCardComponent, MatButtonModule, MatProgressBarModule, SwipeDirective],
     templateUrl: './diary.component.html',
     styleUrl: './diary.component.css',
 })
@@ -27,16 +28,14 @@ export class DiaryComponent implements OnInit {
     meals: Array<Meal> = [];
     totalCalories = 0;
     goal: Goal | undefined = undefined;
+    caloriePercentageEaten: number = 0;
 
     constructor() {
         effect(() => {
             const todayFormatted = this.today();
 
             untracked(() => {
-                this.databaseService.getMealsByDate(todayFormatted).then(meals => (this.meals = meals));
-                this.databaseService
-                    .getSummedFoodForDate(todayFormatted)
-                    .then(summedFood => (this.totalCalories = summedFood.calories));
+                this.refreshMeals(todayFormatted);
             });
         });
     }
@@ -61,11 +60,14 @@ export class DiaryComponent implements OnInit {
             }
         }
         // this.meals = await this.databaseService.getMealsByDate(this.today());
-        this.refreshMeals();
+        this.refreshMeals(this.today());
     }
 
-    async refreshMeals() {
-        this.meals = await this.databaseService.getMealsByDate(this.today());
-        this.totalCalories = (await this.databaseService.getSummedFoodForDate(this.today())).calories;
+    async refreshMeals(dateString: string) {
+        this.meals = await this.databaseService.getMealsByDate(dateString);
+        this.totalCalories = (await this.databaseService.getSummedFoodForDate(dateString)).calories;
+        if (this.goal !== undefined && this.goal.calories !== 0) {
+            this.caloriePercentageEaten = Math.round((this.totalCalories / this.goal.calories) * 100);
+        }
     }
 }
