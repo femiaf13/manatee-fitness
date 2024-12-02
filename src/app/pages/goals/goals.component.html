@@ -1,0 +1,47 @@
+<div class="main-content">
+    <form [formGroup]="goalForm">
+        <mat-form-field>
+            <mat-label>Calories</mat-label>
+            <input matInput type="number" placeholder="Calories" formControlName="calories" />
+            <span matTextSuffix>kcal</span>
+        </mat-form-field>
+
+        <mat-form-field>
+            <mat-label>Fat</mat-label>
+            <input matInput type="number" placeholder="Fat" formControlName="fat" />
+            <span matTextSuffix>g</span>
+        </mat-form-field>
+
+        <mat-form-field>
+            <mat-label>Carbs</mat-label>
+            <input matInput type="number" placeholder="Carbs" formControlName="carbs" />
+            <span matTextSuffix>g</span>
+        </mat-form-field>
+
+        <mat-form-field>
+            <mat-label>Protein</mat-label>
+            <input matInput type="number" placeholder="Protein" formControlName="protein" />
+            <span matTextSuffix>g</span>
+        </mat-form-field>
+
+        <mat-form-field>
+            <mat-label>Cholesterol</mat-label>
+            <input matInput type="number" placeholder="Cholesterol" formControlName="cholesterol" />
+            <span matTextSuffix>mg</span>
+        </mat-form-field>
+
+        <mat-form-field>
+            <mat-label>Fiber</mat-label>
+            <input matInput type="number" placeholder="Fiber" formControlName="fiber" />
+            <span matTextSuffix>g</span>
+        </mat-form-field>
+
+        <mat-form-field>
+            <mat-label>Sodium</mat-label>
+            <input matInput type="number" placeholder="Sodium" formControlName="sodium" />
+            <span matTextSuffix>mg</span>
+        </mat-form-field>
+        <br />
+        <button mat-flat-button type="submit" [disabled]="!goalForm.valid" (click)="onSubmit()">Submit</button>
+    </form>
+</div>

@@ -4,20 +4,20 @@
             <mat-icon>menu</mat-icon>
         </button>
         <mat-menu #appMenu="matMenu">
-            <button mat-menu-item [routerLink]="['/diary']">
+            <a mat-menu-item [routerLink]="['/diary']">
                 <mat-icon>book</mat-icon>
                 <span>Diary</span>
-            </button>
+            </a>
 
-            <button mat-menu-item [routerLink]="['/food']">
+            <a mat-menu-item [routerLink]="['/food']">
                 <mat-icon>kitchen</mat-icon>
                 <span>Food</span>
-            </button>
+            </a>
 
-            <button mat-menu-item>
+            <a mat-menu-item [routerLink]="['/goals']">
                 <mat-icon>self_improvement</mat-icon>
                 <span>Goals</span>
-            </button>
+            </a>
 
             <button mat-menu-item>
                 <mat-icon>menu_book</mat-icon>
