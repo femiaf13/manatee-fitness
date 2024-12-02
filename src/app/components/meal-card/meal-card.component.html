@@ -26,7 +26,7 @@
                             </span>
                         } @else {
                             <span matListItemLine>
-                                <i>{{ mealfood.quantity_servings }} x {{ mealfood.food.serving_text }}</i>
+                                <i>{{ +mealfood.quantity_servings.toFixed(2) }} x {{ mealfood.food.serving_text }}</i>
                             </span>
                         }
                         <span matListItemMeta>

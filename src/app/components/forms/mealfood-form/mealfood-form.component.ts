@@ -83,7 +83,7 @@ export class MealfoodFormComponent {
 
     constructor() {
         effect(() => {
-            this.servings.setValue(this.initialQuantityServings());
+            this.servings.setValue(+this.initialQuantityServings().toFixed(3));
             this.grams.setValue(this.initialQuantityGrams());
         });
     }
