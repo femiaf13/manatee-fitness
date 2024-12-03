@@ -85,7 +85,7 @@ export class OpenFoodFactsService {
         const nutriments = product['nutriments'];
 
         if (!('energy-kcal_100g' in nutriments)) {
-            return null;
+            food.calories_per_100g = 0;
         } else {
             food.calories_per_100g = Number(nutriments['energy-kcal_100g']);
         }
@@ -122,7 +122,7 @@ export class OpenFoodFactsService {
 
         // Grams per serving
         if (!('serving_quantity' in product)) {
-            return null;
+            food.grams_per_serving = 100;
         } else {
             food.grams_per_serving = Number(product['serving_quantity']);
         }
