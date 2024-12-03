@@ -31,6 +31,7 @@ export class DiaryComponent implements OnInit {
     caloriePercentageEaten: number = 0;
 
     constructor() {
+        this.dateService.setTitle('Diary');
         effect(() => {
             const todayFormatted = this.today();
 

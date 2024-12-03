@@ -6,6 +6,7 @@ import { MatGridListModule } from '@angular/material/grid-list';
 import { MatInputModule } from '@angular/material/input';
 import { Goal } from '@models/goal.model';
 import { DatabaseService } from '@services/database.service';
+import { DateService } from '@services/date.service';
 
 @Component({
     selector: 'app-page-goals',
@@ -15,6 +16,7 @@ import { DatabaseService } from '@services/database.service';
     styleUrl: './goals.component.css',
 })
 export class GoalsComponent implements OnInit {
+    dateService = inject(DateService);
     databaseService = inject(DatabaseService);
 
     private formBuilder = inject(NonNullableFormBuilder);
@@ -54,5 +56,7 @@ export class GoalsComponent implements OnInit {
         }
     }
 
-    constructor() {}
+    constructor() {
+        this.dateService.setTitle('Goals');
+    }
 }

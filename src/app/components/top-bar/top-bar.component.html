@@ -24,6 +24,7 @@
                 <span>Recipes</span>
             </button>
         </mat-menu>
+        <span>{{ this.dateService.pageTitle() }}</span>
         <!-- <span>Manatee Fitness</span> -->
         <span class="spacer"></span>
 
@@ -37,7 +38,7 @@
                 touchUi
                 #calendar
                 (click)="$event.stopPropagation()"
-                (selectedChange)="this.dateService.set($event)">
+                (selectedChange)="this.dateService.setDate($event)">
             </mat-calendar>
         </mat-menu>
     </mat-toolbar-row>

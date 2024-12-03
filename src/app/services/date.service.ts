@@ -11,12 +11,21 @@ export class DateService {
     selectedDate = signal(new Date());
     selectedDateFormatted = computed(() => format(this.selectedDate(), DateService.DATE_FORMAT_STRING));
 
+    pageTitle = signal<string>('');
+
     constructor() {}
+
+    /**
+     * Sets the title for the application's top bar
+     */
+    public setTitle(title: string) {
+        this.pageTitle.set(title);
+    }
 
     /**
      * Sets the Date signal for the application
      */
-    public set(newDate: Date) {
+    public setDate(newDate: Date) {
         this.selectedDate.set(newDate);
     }
 

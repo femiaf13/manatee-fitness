@@ -23,6 +23,7 @@ import { OpenFoodFactsService } from '@services/open-food-facts.service';
 import { scan, Format } from '@tauri-apps/plugin-barcode-scanner';
 import { MatDialog } from '@angular/material/dialog';
 import { FoodDialogData, FoodDialogComponent } from '@components/dialogs/food/food-dialog.component';
+import { DateService } from '@services/date.service';
 
 @Component({
     selector: 'app-page-food',
@@ -49,6 +50,7 @@ export class FoodPageComponent implements OnInit {
     route = inject(ActivatedRoute);
     dialog = inject(MatDialog);
     databaseService = inject(DatabaseService);
+    dateService = inject(DateService);
     openFoodFactsService = inject(OpenFoodFactsService);
 
     searchText = new FormControl<string | Food>('', { nonNullable: true });
@@ -135,7 +137,9 @@ export class FoodPageComponent implements OnInit {
         }
     }
 
-    constructor() {}
+    constructor() {
+        this.dateService.setTitle('Food');
+    }
 
     async ngOnInit(): Promise<void> {
         const mealIdParam: string | undefined = this.route.snapshot.queryParams['meal'];
