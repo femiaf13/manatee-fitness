@@ -43,10 +43,15 @@
         } @else {
             <app-off-food-list [foods]="onlineFoods()"></app-off-food-list>
         }
-        @if (canScan()) {
-            <button mat-fab class="bottom-right" (click)="scan()">
-                <mat-icon aria-hidden="false" aria-label="Barcode reader" fontIcon="barcode_reader"></mat-icon>
+        <div class="bottom-right">
+            <button mat-fab (click)="addFood()">
+                <mat-icon aria-hidden="false" aria-label="Plus sign" fontIcon="add"></mat-icon>
             </button>
-        }
+            @if (canScan()) {
+                <button mat-fab style="margin-left: 8px" (click)="scan()">
+                    <mat-icon aria-hidden="false" aria-label="Barcode reader" fontIcon="barcode_reader"></mat-icon>
+                </button>
+            }
+        </div>
     }
 </div>

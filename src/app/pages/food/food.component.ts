@@ -87,26 +87,7 @@ export class FoodPageComponent implements OnInit {
         });
         const barcode = tempScanResult.content;
         const scanDto = await this.openFoodFactsService.searchByBarcode(barcode);
-
-        const dialogData: FoodDialogData = {
-            modify: false,
-            food: scanDto,
-        };
-        const dialogRef = this.dialog.open(FoodDialogComponent, {
-            width: '100vw',
-            height: '100vh',
-            maxWidth: '100vw',
-            maxHeight: '100vh',
-            data: dialogData,
-            disableClose: true,
-        });
-        const newFood: FoodDTO | undefined = await lastValueFrom(dialogRef.afterClosed());
-        if (newFood !== undefined) {
-            const success = await this.databaseService.createFood(newFood);
-            if (!success) {
-                console.error('Failed to add food: ' + JSON.stringify(newFood));
-            }
-        }
+        this.addFood(scanDto);
     }
 
     async search(searchTerm: string | Food): Promise<Array<Food>> {
@@ -130,6 +111,28 @@ export class FoodPageComponent implements OnInit {
             console.error('Unable to add meal food!');
         }
         this.searchText.setValue('');
+    }
+
+    async addFood(existingData?: FoodDTO) {
+        const dialogData: FoodDialogData = {
+            modify: false,
+            food: existingData,
+        };
+        const dialogRef = this.dialog.open(FoodDialogComponent, {
+            width: '100vw',
+            height: '100vh',
+            maxWidth: '100vw',
+            maxHeight: '100vh',
+            data: dialogData,
+            disableClose: true,
+        });
+        const newFood: FoodDTO | undefined = await lastValueFrom(dialogRef.afterClosed());
+        if (newFood !== undefined) {
+            const success = await this.databaseService.createFood(newFood);
+            if (!success) {
+                console.error('Failed to add food: ' + JSON.stringify(newFood));
+            }
+        }
     }
 
     constructor() {}
