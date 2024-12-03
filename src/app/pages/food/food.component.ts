@@ -73,12 +73,18 @@ export class FoodPageComponent implements OnInit {
 
     canScan = signal<boolean>(this.databaseService.isMobilePlatform());
 
+    tempScanResult = signal<string>('');
+
     displayFoods(food: Food): string {
         return food && food.description ? food.description : '';
     }
 
     async scan() {
-        scan({ windowed: true, formats: [Format.QRCode] });
+        const tempScanResult = await scan({
+            windowed: false,
+            formats: [Format.EAN13, Format.EAN8, Format.UPC_A, Format.UPC_E],
+        });
+        this.tempScanResult.set(tempScanResult.content);
     }
 
     async search(searchTerm: string | Food): Promise<Array<Food>> {
