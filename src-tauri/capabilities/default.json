@@ -9,6 +9,9 @@
     "core:default",
     "shell:allow-open",
     "store:default",
-    "store:default"
+    {
+      "identifier": "http:default",
+      "allow": [{ "url": "https://*.openfoodfacts.org" }]
+    }
   ]
 }

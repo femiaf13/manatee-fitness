@@ -30,6 +30,9 @@
                 <mat-label>Search Food</mat-label>
                 <input matInput type="search" [formControl]="searchText" placeholder="Search" />
             </mat-form-field>
+            @if (onlineSearch.value) {
+                <button mat-flat-button (click)="searchOnline(searchText.value)">Search</button>
+            }
             <mat-checkbox [formControl]="onlineSearch">Online Search</mat-checkbox>
         </div>
         @if (!onlineSearch.value) {

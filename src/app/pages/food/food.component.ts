@@ -1,4 +1,4 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject, OnInit, signal } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { CommonModule } from '@angular/common';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
@@ -25,9 +25,9 @@ import { OpenFoodFactsService } from '@services/open-food-facts.service';
     imports: [
         CommonModule,
         MatAutocompleteModule,
+        MatButtonModule,
         MatCheckboxModule,
         MatDividerModule,
-        MatButtonModule,
         MatFormFieldModule,
         MatInputModule,
         ReactiveFormsModule,
@@ -54,14 +54,15 @@ export class FoodPageComponent implements OnInit {
         ),
         { initialValue: [] as Food[] }
     );
-    onlineFoods = toSignal(
-        this.searchText.valueChanges.pipe(
-            debounceTime(300),
-            distinctUntilChanged(),
-            switchMap(searchTerm => (this.onlineSearch.value ? this.searchOnline(searchTerm) : []))
-        ),
-        { initialValue: [] as FoodDTO[] }
-    );
+    // onlineFoods = toSignal(
+    //     this.searchText.valueChanges.pipe(
+    //         debounceTime(300),
+    //         distinctUntilChanged(),
+    //         switchMap(searchTerm => (this.onlineSearch.value ? this.searchOnline(searchTerm) : []))
+    //     ),
+    //     { initialValue: [] as FoodDTO[] }
+    // );
+    onlineFoods = signal<Array<FoodDTO>>([]);
     /**
      * Optional input parameter telling us if we're looking for food for a specific meal
      */
@@ -77,9 +78,10 @@ export class FoodPageComponent implements OnInit {
         return await this.databaseService.getFoodsBySearch(searchTermParsed);
     }
 
-    async searchOnline(searchTerm: string | Food): Promise<Array<FoodDTO>> {
+    async searchOnline(searchTerm: string | Food) {
         const searchTermParsed = typeof searchTerm === 'string' ? searchTerm : searchTerm?.description;
-        return await this.openFoodFactsService.searchByText(searchTermParsed);
+        const foods = await this.openFoodFactsService.searchByText(searchTermParsed);
+        this.onlineFoods.set(foods);
     }
 
     async onMealFoodSubmit(mealFood: MealFood) {

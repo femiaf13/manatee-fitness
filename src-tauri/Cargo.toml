@@ -29,3 +29,4 @@ diesel_migrations = {version = "2.0.0", features = ["sqlite"] }
 libsqlite3-sys = { version = "0.30", features = ["bundled"] }
 time = { version = "0.3.36", features = ["macros", "serde-human-readable"] }
 tauri-plugin-store = "2"
+tauri-plugin-http = "2"
