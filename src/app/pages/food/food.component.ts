@@ -11,7 +11,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
-import { debounceTime, distinctUntilChanged, switchMap } from 'rxjs';
+import { debounceTime, distinctUntilChanged, lastValueFrom, switchMap } from 'rxjs';
 
 import { Food, FoodDTO } from '@models/food.model';
 import { DatabaseService } from '@services/database.service';
@@ -21,6 +21,8 @@ import { Meal } from '@models/meal.model';
 import { MealFood } from '@models/mealfood.model';
 import { OpenFoodFactsService } from '@services/open-food-facts.service';
 import { scan, Format } from '@tauri-apps/plugin-barcode-scanner';
+import { MatDialog } from '@angular/material/dialog';
+import { FoodDialogData, FoodDialogComponent } from '@components/dialogs/food/food-dialog.component';
 
 @Component({
     selector: 'app-page-food',
@@ -45,6 +47,7 @@ import { scan, Format } from '@tauri-apps/plugin-barcode-scanner';
 })
 export class FoodPageComponent implements OnInit {
     route = inject(ActivatedRoute);
+    dialog = inject(MatDialog);
     databaseService = inject(DatabaseService);
     openFoodFactsService = inject(OpenFoodFactsService);
 
@@ -73,8 +76,6 @@ export class FoodPageComponent implements OnInit {
 
     canScan = signal<boolean>(this.databaseService.isMobilePlatform());
 
-    tempScanResult = signal<string>('');
-
     displayFoods(food: Food): string {
         return food && food.description ? food.description : '';
     }
@@ -84,7 +85,28 @@ export class FoodPageComponent implements OnInit {
             windowed: false,
             formats: [Format.EAN13, Format.EAN8, Format.UPC_A, Format.UPC_E],
         });
-        this.tempScanResult.set(tempScanResult.content);
+        const barcode = tempScanResult.content;
+        const scanDto = await this.openFoodFactsService.searchByBarcode(barcode);
+
+        const dialogData: FoodDialogData = {
+            modify: false,
+            food: scanDto,
+        };
+        const dialogRef = this.dialog.open(FoodDialogComponent, {
+            width: '100vw',
+            height: '100vh',
+            maxWidth: '100vw',
+            maxHeight: '100vh',
+            data: dialogData,
+            disableClose: true,
+        });
+        const newFood: FoodDTO | undefined = await lastValueFrom(dialogRef.afterClosed());
+        if (newFood !== undefined) {
+            const success = await this.databaseService.createFood(newFood);
+            if (!success) {
+                console.error('Failed to add food: ' + JSON.stringify(newFood));
+            }
+        }
     }
 
     async search(searchTerm: string | Food): Promise<Array<Food>> {
