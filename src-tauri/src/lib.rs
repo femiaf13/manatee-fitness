@@ -20,7 +20,7 @@ pub fn run() {
         .plugin(tauri_plugin_store::Builder::new().build())
         .setup(|app| {
             #[cfg(mobile)]
-            app.handle().plugin(tauri_plugin_barcode_scanner::init());
+            let _ = app.handle().plugin(tauri_plugin_barcode_scanner::init());
 
             let path = app
                 .path()
