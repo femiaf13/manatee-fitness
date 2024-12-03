@@ -20,6 +20,7 @@ import { MealfoodFormComponent } from '@components/forms/mealfood-form/mealfood-
 import { Meal } from '@models/meal.model';
 import { MealFood } from '@models/mealfood.model';
 import { OpenFoodFactsService } from '@services/open-food-facts.service';
+import { scan, Format } from '@tauri-apps/plugin-barcode-scanner';
 
 @Component({
     selector: 'app-page-food',
@@ -47,7 +48,6 @@ export class FoodPageComponent implements OnInit {
     databaseService = inject(DatabaseService);
     openFoodFactsService = inject(OpenFoodFactsService);
 
-    onlineSearch = new FormControl<boolean>(false, { nonNullable: true });
     searchText = new FormControl<string | Food>('', { nonNullable: true });
     // Only local search when checkbox isn't checked and vice versa
     foods = toSignal(
@@ -58,19 +58,27 @@ export class FoodPageComponent implements OnInit {
         ),
         { initialValue: [] as Food[] }
     );
+    onlineSearch = new FormControl<boolean>(false, { nonNullable: true });
     onlineFoods = signal<Array<FoodDTO>>([]);
     /**
      * Boolean to track whether an online search is in progress
      */
     searching = signal<boolean>(false);
+
     /**
      * Optional input parameter telling us if we're looking for food for a specific meal
      */
     mealId: number | undefined = undefined;
     meal: Meal | undefined = undefined;
 
+    canScan = signal<boolean>(this.databaseService.isMobilePlatform());
+
     displayFoods(food: Food): string {
         return food && food.description ? food.description : '';
+    }
+
+    async scan() {
+        scan({ windowed: true, formats: [Format.QRCode] });
     }
 
     async search(searchTerm: string | Food): Promise<Array<Food>> {

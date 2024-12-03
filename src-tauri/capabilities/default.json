@@ -11,7 +11,12 @@
     "store:default",
     {
       "identifier": "http:default",
-      "allow": [{ "url": "https://*.openfoodfacts.org" }]
-    }
+      "allow": [
+        {
+          "url": "https://*.openfoodfacts.org"
+        }
+      ]
+    },
+    "os:default"
   ]
 }

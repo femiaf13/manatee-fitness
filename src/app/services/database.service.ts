@@ -5,6 +5,7 @@ import { Meal, MealDTO } from '@models/meal.model';
 import { MealFood, SummedMealFood } from '@models/mealfood.model';
 import { invoke } from '@tauri-apps/api/core';
 import { load, Store } from '@tauri-apps/plugin-store';
+import { platform } from '@tauri-apps/plugin-os';
 
 @Injectable({
     providedIn: 'root',
@@ -12,6 +13,7 @@ import { load, Store } from '@tauri-apps/plugin-store';
 export class DatabaseService {
     readonly APP_STORE = 'store.json';
     goalStore: Store | undefined;
+    readonly PLATFORM = platform();
 
     private async loadGoalStore(): Promise<Store> {
         return await load(this.APP_STORE, { autoSave: 100 });
@@ -29,6 +31,10 @@ export class DatabaseService {
             this.goalStore = await this.loadGoalStore();
         }
         await this.goalStore.set('goal', goal);
+    }
+
+    public isMobilePlatform(): boolean {
+        return this.PLATFORM == 'android' || this.PLATFORM == 'ios';
     }
 
     /** SQL DATA BELOW */
