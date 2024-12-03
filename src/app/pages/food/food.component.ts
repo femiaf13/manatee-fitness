@@ -9,6 +9,7 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { debounceTime, distinctUntilChanged, switchMap } from 'rxjs';
 
 import { Food, FoodDTO } from '@models/food.model';
@@ -30,6 +31,7 @@ import { OpenFoodFactsService } from '@services/open-food-facts.service';
         MatDividerModule,
         MatFormFieldModule,
         MatInputModule,
+        MatProgressSpinnerModule,
         ReactiveFormsModule,
         LocalFoodListComponent,
         MealfoodFormComponent,
@@ -54,15 +56,8 @@ export class FoodPageComponent implements OnInit {
         ),
         { initialValue: [] as Food[] }
     );
-    // onlineFoods = toSignal(
-    //     this.searchText.valueChanges.pipe(
-    //         debounceTime(300),
-    //         distinctUntilChanged(),
-    //         switchMap(searchTerm => (this.onlineSearch.value ? this.searchOnline(searchTerm) : []))
-    //     ),
-    //     { initialValue: [] as FoodDTO[] }
-    // );
     onlineFoods = signal<Array<FoodDTO>>([]);
+    searching = signal<boolean>(false);
     /**
      * Optional input parameter telling us if we're looking for food for a specific meal
      */
@@ -79,9 +74,12 @@ export class FoodPageComponent implements OnInit {
     }
 
     async searchOnline(searchTerm: string | Food) {
+        this.onlineFoods.set([]);
+        this.searching.set(true);
         const searchTermParsed = typeof searchTerm === 'string' ? searchTerm : searchTerm?.description;
         const foods = await this.openFoodFactsService.searchByText(searchTermParsed);
         this.onlineFoods.set(foods);
+        this.searching.set(false);
     }
 
     async onMealFoodSubmit(mealFood: MealFood) {

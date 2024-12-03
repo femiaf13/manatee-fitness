@@ -35,6 +35,9 @@
             }
             <mat-checkbox [formControl]="onlineSearch">Online Search</mat-checkbox>
         </div>
+        @if (searching()) {
+            <div class="center-spinner"><mat-spinner></mat-spinner></div>
+        }
         @if (!onlineSearch.value) {
             <app-food-list [foods]="foods()"></app-food-list>
         } @else {
