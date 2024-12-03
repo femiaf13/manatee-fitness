@@ -1,29 +1,28 @@
+import { CommonModule } from '@angular/common';
 import { Component, inject, OnInit, signal } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
-import { CommonModule } from '@angular/common';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
-import { ActivatedRoute } from '@angular/router';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatDialog } from '@angular/material/dialog';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
-import { debounceTime, distinctUntilChanged, lastValueFrom, switchMap } from 'rxjs';
-
-import { Food, FoodDTO } from '@models/food.model';
-import { DatabaseService } from '@services/database.service';
+import { ActivatedRoute } from '@angular/router';
+import { FoodDialogComponent, FoodDialogData } from '@components/dialogs/food/food-dialog.component';
 import { LocalFoodListComponent, OpenFoodFactsFoodListComponent } from '@components/food-list/food-list.component';
 import { MealfoodFormComponent } from '@components/forms/mealfood-form/mealfood-form.component';
+import { Food, FoodDTO } from '@models/food.model';
 import { Meal } from '@models/meal.model';
 import { MealFood } from '@models/mealfood.model';
-import { OpenFoodFactsService } from '@services/open-food-facts.service';
-import { scan, Format } from '@tauri-apps/plugin-barcode-scanner';
-import { MatDialog } from '@angular/material/dialog';
-import { FoodDialogData, FoodDialogComponent } from '@components/dialogs/food/food-dialog.component';
+import { DatabaseService } from '@services/database.service';
 import { DateService } from '@services/date.service';
+import { OpenFoodFactsService } from '@services/open-food-facts.service';
+import { Format, scan } from '@tauri-apps/plugin-barcode-scanner';
+import { debounceTime, distinctUntilChanged, lastValueFrom, switchMap } from 'rxjs';
 
 @Component({
     selector: 'app-page-food',
