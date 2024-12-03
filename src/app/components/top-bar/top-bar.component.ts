@@ -1,5 +1,4 @@
-import { Component, computed, inject } from '@angular/core';
-import { RouterLink } from '@angular/router';
+import { Component, computed, inject, output } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatMenuModule } from '@angular/material/menu';
@@ -12,11 +11,12 @@ import { DateService } from '@services/date.service';
     selector: 'app-top-bar',
     standalone: true,
     providers: [provideNativeDateAdapter()],
-    imports: [MatButtonModule, MatDatepickerModule, MatIconModule, MatMenuModule, MatToolbarModule, RouterLink],
+    imports: [MatButtonModule, MatDatepickerModule, MatIconModule, MatMenuModule, MatToolbarModule],
     templateUrl: './top-bar.component.html',
     styleUrl: './top-bar.component.css',
 })
 export class TopBarComponent {
+    toggleSideNav = output<boolean>();
     dateService = inject(DateService);
 
     dateString = computed(() => {

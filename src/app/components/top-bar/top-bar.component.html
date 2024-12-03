@@ -1,29 +1,8 @@
 <mat-toolbar>
     <mat-toolbar-row class="always-clickable">
-        <button mat-icon-button [matMenuTriggerFor]="appMenu">
+        <button mat-icon-button (click)="toggleSideNav.emit(true)">
             <mat-icon>menu</mat-icon>
         </button>
-        <mat-menu #appMenu="matMenu">
-            <a mat-menu-item [routerLink]="['/diary']">
-                <mat-icon>book</mat-icon>
-                <span>Diary</span>
-            </a>
-
-            <a mat-menu-item [routerLink]="['/food']">
-                <mat-icon>kitchen</mat-icon>
-                <span>Food</span>
-            </a>
-
-            <a mat-menu-item [routerLink]="['/goals']">
-                <mat-icon>self_improvement</mat-icon>
-                <span>Goals</span>
-            </a>
-
-            <button mat-menu-item>
-                <mat-icon>menu_book</mat-icon>
-                <span>Recipes</span>
-            </button>
-        </mat-menu>
         <span>{{ this.dateService.pageTitle() }}</span>
         <!-- <span>Manatee Fitness</span> -->
         <span class="spacer"></span>

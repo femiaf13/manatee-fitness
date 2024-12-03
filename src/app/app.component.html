@@ -1,4 +1,35 @@
-<app-top-bar></app-top-bar>
-<main class="container">
+<div class="container">
+    <app-top-bar (toggleSideNav)="drawer.toggle()"></app-top-bar>
+    <mat-drawer-container class="content">
+        <mat-drawer [mode]="'over'" #drawer>
+            <mat-nav-list>
+                <a mat-list-item [routerLink]="['/diary']">
+                    <mat-icon matListItemIcon>book</mat-icon>
+                    <span matListItemTitle>Diary</span>
+                </a>
+
+                <a mat-list-item [routerLink]="['/food']">
+                    <mat-icon matListItemIcon>kitchen</mat-icon>
+                    <span matListItemTitle>Food</span>
+                </a>
+
+                <a mat-list-item [routerLink]="['/goals']">
+                    <mat-icon matListItemIcon>self_improvement</mat-icon>
+                    <span matListItemTitle>Goals</span>
+                </a>
+
+                <a mat-list-item>
+                    <mat-icon matListItemIcon>menu_book</mat-icon>
+                    <span matListItemTitle>Recipes</span>
+                </a>
+            </mat-nav-list>
+        </mat-drawer>
+        <mat-drawer-content>
+            <router-outlet></router-outlet>
+        </mat-drawer-content>
+    </mat-drawer-container>
+</div>
+
+<!-- <main class="container">
     <router-outlet></router-outlet>
-</main>
+</main> -->
