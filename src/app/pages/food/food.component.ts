@@ -21,7 +21,7 @@ import { MealFood } from '@models/mealfood.model';
 import { DatabaseService } from '@services/database.service';
 import { DateService } from '@services/date.service';
 import { OpenFoodFactsService } from '@services/open-food-facts.service';
-import { Format, scan } from '@tauri-apps/plugin-barcode-scanner';
+import { cancel, checkPermissions, Format, requestPermissions, scan } from '@tauri-apps/plugin-barcode-scanner';
 import { debounceTime, distinctUntilChanged, lastValueFrom, switchMap } from 'rxjs';
 
 @Component({
@@ -82,13 +82,28 @@ export class FoodPageComponent implements OnInit {
     }
 
     async scan() {
+        const permission = await checkPermissions();
+        if (permission !== 'granted') {
+            if ((await requestPermissions()) !== 'granted') {
+                return;
+            }
+        }
+        // Close the scanner after 10 seconds
+        let scanTimeout: number | null = window.setTimeout(() => {
+            scanTimeout = null;
+            cancel();
+        }, 10000);
         const tempScanResult = await scan({
             windowed: false,
             formats: [Format.EAN13, Format.EAN8, Format.UPC_A, Format.UPC_E],
         });
-        const barcode = tempScanResult.content;
-        const scanDto = await this.openFoodFactsService.searchByBarcode(barcode);
-        this.addFood(scanDto);
+        // If the timeout isn't null then we got a scan instead of a timeout
+        if (scanTimeout) {
+            clearTimeout(scanTimeout);
+            const barcode = tempScanResult.content;
+            const scanDto = await this.openFoodFactsService.searchByBarcode(barcode);
+            this.addFood(scanDto);
+        }
     }
 
     async search(searchTerm: string | Food): Promise<Array<Food>> {
