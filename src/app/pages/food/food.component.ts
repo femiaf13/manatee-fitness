@@ -8,6 +8,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { debounceTime, distinctUntilChanged, switchMap } from 'rxjs';
@@ -31,6 +32,7 @@ import { OpenFoodFactsService } from '@services/open-food-facts.service';
         MatDividerModule,
         MatFormFieldModule,
         MatInputModule,
+        MatIconModule,
         MatProgressSpinnerModule,
         ReactiveFormsModule,
         LocalFoodListComponent,
@@ -57,6 +59,9 @@ export class FoodPageComponent implements OnInit {
         { initialValue: [] as Food[] }
     );
     onlineFoods = signal<Array<FoodDTO>>([]);
+    /**
+     * Boolean to track whether an online search is in progress
+     */
     searching = signal<boolean>(false);
     /**
      * Optional input parameter telling us if we're looking for food for a specific meal

@@ -43,5 +43,9 @@
         } @else {
             <app-off-food-list [foods]="onlineFoods()"></app-off-food-list>
         }
+        <!-- TODO: Thing that only shows this if it's allowed -->
+        <button mat-fab class="bottom-right">
+            <mat-icon aria-hidden="false" aria-label="Barcode reader" fontIcon="barcode_reader"></mat-icon>
+        </button>
     }
 </div>

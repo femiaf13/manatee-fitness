@@ -14,3 +14,9 @@ mat-form-field {
     display: flex;
     justify-content: center;
 }
+
+.bottom-right {
+    position: fixed;
+    bottom: 15px;
+    right: 15px;
+}
