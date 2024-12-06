@@ -49,6 +49,7 @@ pub fn run() {
         .invoke_handler(tauri::generate_handler![
             create_food,
             find_food_by_id,
+            find_foods_by_barcode,
             find_foods_by_search,
             find_foods_by_meal,
             update_food_by_dto,

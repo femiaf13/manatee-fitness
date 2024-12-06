@@ -49,6 +49,25 @@ pub fn find_food_by_id(app_handle: tauri::AppHandle, food_id: i32) -> Food {
 }
 
 #[tauri::command]
+pub fn find_foods_by_barcode(app_handle: tauri::AppHandle, food_barcode: &str) -> Vec<Food> {
+    let database_url = app_handle.state::<AppState>().database_url.clone();
+    let connection = &mut establish_connection(database_url);
+    use crate::schema::foods::dsl::*;
+
+    // UPC barcodes are 12 characters and sometimes OFF
+    // adds a 0 to the start to make it conform to EAN-13.
+    // Wildcard the beginning makes it slower to search but covers both
+    // situations.
+    let pattern = format!("%{}", food_barcode);
+
+    foods
+        .filter(barcode.like(pattern))
+        .order(description.asc())
+        .load::<Food>(connection)
+        .unwrap_or(vec![])
+}
+
+#[tauri::command]
 pub fn find_foods_by_search(app_handle: tauri::AppHandle, search_term: &str) -> Vec<Food> {
     let database_url = app_handle.state::<AppState>().database_url.clone();
     let connection = &mut establish_connection(database_url);

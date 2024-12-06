@@ -87,6 +87,15 @@ export class DatabaseService {
 
     /**
      * Search foods' descriptions and brands
+     * @param barcode Barcode to search by
+     * @returns all foods that match the barcode
+     */
+    public async getFoodsByBarcode(barcode: string): Promise<Array<Food>> {
+        return await invoke<Array<Food>>('find_foods_by_barcode', { foodBarcode: barcode });
+    }
+
+    /**
+     * Search foods' descriptions and brands
      * @param searchTerm Term to search by
      * @returns all foods that contain the search term
      */
