@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, inject, input } from '@angular/core';
+import { Component, inject, input, output } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatListModule } from '@angular/material/list';
 import { FoodDialogData, FoodDialogComponent } from '@components/dialogs/food/food-dialog.component';
@@ -21,6 +21,7 @@ class BaseFoodListComponent {
 })
 export class LocalFoodListComponent extends BaseFoodListComponent {
     foods = input.required<Array<Food>>();
+    foodChanged = output<void>();
 
     async modifyFood(food: Food) {
         const dialogData: FoodDialogData = {
@@ -41,6 +42,7 @@ export class LocalFoodListComponent extends BaseFoodListComponent {
             if (!success) {
                 console.error('Failed to add meal: ' + JSON.stringify(newFood));
             }
+            this.foodChanged.emit();
         }
     }
 }
