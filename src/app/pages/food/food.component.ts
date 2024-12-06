@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, inject, OnInit, signal } from '@angular/core';
+import { Component, computed, inject, OnInit, signal } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
@@ -53,6 +53,12 @@ export class FoodPageComponent implements OnInit {
     openFoodFactsService = inject(OpenFoodFactsService);
 
     searchText = new FormControl<string | Food>('', { nonNullable: true });
+    // Signal equivalent of the exact search at all times
+    searchTextSignal = toSignal(this.searchText.valueChanges, { initialValue: '' });
+    // How we can check if we have a string or a food
+    searchTextIsFood = computed(() => {
+        return typeof this.searchTextSignal() === 'string' ? false : true;
+    });
     // Only local search when checkbox isn't checked and vice versa
     foods = toSignal(
         this.searchText.valueChanges.pipe(
@@ -101,8 +107,25 @@ export class FoodPageComponent implements OnInit {
         if (scanTimeout) {
             clearTimeout(scanTimeout);
             const barcode = tempScanResult.content;
-            const scanDto = await this.openFoodFactsService.searchByBarcode(barcode);
-            this.addFood(scanDto);
+            if (this.onlineSearch.value) {
+                // Online scan adds a new food
+                const scanDto = await this.openFoodFactsService.searchByBarcode(barcode);
+                this.addFood(scanDto);
+            } else {
+                //  Offline scans searches the DB
+                const foods = await this.databaseService.getFoodsByBarcode(barcode);
+                if (foods.length >= 1) {
+                    // We find something in the DB
+                    if (this.meal !== undefined) {
+                        this.searchText.setValue(foods[0]);
+                    } else {
+                        this.searchText.setValue(foods[0].description);
+                    }
+                } else {
+                    // We don't find the barcode, so we need to add it
+                    // which means now we do the online scan path. This needs a refactor
+                }
+            }
         }
     }
 
