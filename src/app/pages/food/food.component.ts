@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, computed, inject, OnInit, signal } from '@angular/core';
+import { Component, inject, OnInit, signal } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
@@ -52,34 +52,35 @@ export class FoodPageComponent implements OnInit {
     dateService = inject(DateService);
     openFoodFactsService = inject(OpenFoodFactsService);
 
-    searchText = new FormControl<string | Food>('', { nonNullable: true });
-    // Signal equivalent of the exact search at all times
-    searchTextSignal = toSignal(this.searchText.valueChanges, { initialValue: '' });
-    // How we can check if we have a string or a food
-    searchTextIsFood = computed(() => {
-        return typeof this.searchTextSignal() === 'string' ? false : true;
-    });
-    // Only local search when checkbox isn't checked and vice versa
+    /** Form control for local DB search */
+    searchText = new FormControl<string>('', { nonNullable: true });
+    /** Foods found after a local DB search */
     foods = toSignal(
         this.searchText.valueChanges.pipe(
             debounceTime(300),
             distinctUntilChanged(),
+            // Only local search when checkbox isn't checked and vice versa
             switchMap(searchTerm => (this.onlineSearch.value ? [] : this.search(searchTerm)))
         ),
         { initialValue: [] as Food[] }
     );
+    /** Form control for online DB search */
     onlineSearch = new FormControl<boolean>(false, { nonNullable: true });
+    /** Foods found after an online DB search */
     onlineFoods = signal<Array<FoodDTO>>([]);
-    /**
-     * Boolean to track whether an online search is in progress
-     */
+
+    /** Boolean to track whether an online search is in progress */
     searching = signal<boolean>(false);
 
     /**
      * Optional input parameter telling us if we're looking for food for a specific meal
+     *
+     * This comes across as query parameter!
      */
     mealId: number | undefined = undefined;
     meal: Meal | undefined = undefined;
+
+    foodToAdd = signal<Food>(new Food());
 
     canScan = signal<boolean>(this.databaseService.isMobilePlatform());
 
@@ -116,11 +117,7 @@ export class FoodPageComponent implements OnInit {
                 const foods = await this.databaseService.getFoodsByBarcode(barcode);
                 if (foods.length >= 1) {
                     // We find something in the DB
-                    if (this.meal !== undefined) {
-                        this.searchText.setValue(foods[0]);
-                    } else {
-                        this.searchText.setValue(foods[0].description);
-                    }
+                    this.searchText.setValue(foods[0].description);
                 } else {
                     // We don't find the barcode, so we need to add it
                     // which means now we do the online scan path. This needs a refactor
@@ -129,16 +126,14 @@ export class FoodPageComponent implements OnInit {
         }
     }
 
-    async search(searchTerm: string | Food): Promise<Array<Food>> {
-        const searchTermParsed = typeof searchTerm === 'string' ? searchTerm : searchTerm?.description;
-        return await this.databaseService.getFoodsBySearch(searchTermParsed);
+    async search(searchTerm: string): Promise<Array<Food>> {
+        return await this.databaseService.getFoodsBySearch(searchTerm);
     }
 
-    async searchOnline(searchTerm: string | Food) {
+    async searchOnline(searchTerm: string) {
         this.onlineFoods.set([]);
         this.searching.set(true);
-        const searchTermParsed = typeof searchTerm === 'string' ? searchTerm : searchTerm?.description;
-        const foods = await this.openFoodFactsService.searchByText(searchTermParsed);
+        const foods = await this.openFoodFactsService.searchByText(searchTerm);
         this.onlineFoods.set(foods);
         this.searching.set(false);
     }
@@ -150,9 +145,17 @@ export class FoodPageComponent implements OnInit {
             console.error('Unable to add meal food!');
         }
         this.searchText.setValue('');
+        this.foodToAdd.set(new Food());
     }
 
-    async addFood(existingData?: FoodDTO) {
+    /**
+     *
+     * @param existingData If present, pre-fill form with this data
+     * @returns TODO: Food that is created or undefined if nothing is created
+     */
+    async addFood(existingData?: FoodDTO): Promise<Food | undefined> {
+        // Re-search after modifying a food so we show accurate data
+        // this.searchText.setValue('');
         const dialogData: FoodDialogData = {
             modify: false,
             food: existingData,
@@ -165,12 +168,60 @@ export class FoodPageComponent implements OnInit {
             data: dialogData,
             disableClose: true,
         });
+        const newFoodDto: FoodDTO | undefined = await lastValueFrom(dialogRef.afterClosed());
+        if (newFoodDto !== undefined) {
+            const success = await this.databaseService.createFood(newFoodDto);
+            if (!success) {
+                console.error('Failed to add food: ' + JSON.stringify(newFoodDto));
+                return undefined;
+            }
+            // return newfood;
+        }
+        return undefined;
+    }
+
+    async modifyFood(food: Food) {
+        // Re-search after modifying a food so we show accurate data
+        // this.searchText.setValue('');
+        const dialogData: FoodDialogData = {
+            modify: true,
+            food: food,
+        };
+        const dialogRef = this.dialog.open(FoodDialogComponent, {
+            width: '100vw',
+            height: '100vh',
+            maxWidth: '100vw',
+            maxHeight: '100vh',
+            data: dialogData,
+            disableClose: true,
+        });
         const newFood: FoodDTO | undefined = await lastValueFrom(dialogRef.afterClosed());
         if (newFood !== undefined) {
-            const success = await this.databaseService.createFood(newFood);
+            const success = await this.databaseService.updateFoodByDto(food.id, newFood);
             if (!success) {
-                console.error('Failed to add food: ' + JSON.stringify(newFood));
+                console.error('Failed to update food: ' + JSON.stringify(newFood));
             }
+        }
+    }
+
+    handleFoodListSelection(food: Food) {
+        // Re-search after modifying a food so we show accurate data
+        this.searchText.setValue('');
+
+        if (this.mealId && this.meal) {
+            this.foodToAdd.set(food);
+        } else {
+            this.modifyFood(food);
+        }
+    }
+
+    async handleOnlineFoodListSelection(food: FoodDTO) {
+        // Re-search after modifying a food so we show accurate data
+        this.searchText.setValue('');
+
+        const newfood = await this.addFood(food);
+        if (newfood !== undefined && this.mealId && this.meal) {
+            this.foodToAdd.set(newfood);
         }
     }
 

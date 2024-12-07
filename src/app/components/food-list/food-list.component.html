@@ -1,6 +1,6 @@
 <mat-action-list #foodList>
     @for (food of foods(); track food) {
-        <mat-list-item (click)="modifyFood(food)">
+        <mat-list-item (click)="foodSelected.emit(food)">
             <span matListItemTitle>{{ food.description }}</span>
             @if (food.brand) {
                 <span matListItemLine>

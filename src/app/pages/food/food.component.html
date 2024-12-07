@@ -1,31 +1,17 @@
 <div class="main-content">
     @if (mealId && meal) {
-        <h1>Adding Food</h1>
-        <h2>{{ meal.meal_name }} on {{ meal.meal_date }}</h2>
         <!-- We are entering this page to select food for a meal -->
-        <!-- Search text can handle a string or a food -->
-        <mat-form-field style="width: 90vw">
-            <mat-label>Pick food</mat-label>
-            <input type="text" matInput [formControl]="searchText" [matAutocomplete]="auto" />
-            <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFoods">
-                @for (food of foods(); track food) {
-                    <mat-option [value]="food">
-                        {{ food.description }}
-                        <small>
-                            <i>{{ food.brand }}</i>
-                        </small>
-                    </mat-option>
-                    <mat-divider></mat-divider>
-                }
-            </mat-autocomplete>
-        </mat-form-field>
-
+        <h2>Adding Food</h2>
+        <h3>{{ meal.meal_name }} on {{ meal.meal_date }}</h3>
+    }
+    @if (mealId && meal && foodToAdd().id !== 0) {
+        <!-- A food was selected, display the mealfood form -->
         <app-mealfood-form
-            [inputFood]="searchText.value"
+            [inputFood]="foodToAdd()"
             [inputMeal]="meal"
             (outputMealFood)="onMealFoodSubmit($event)"></app-mealfood-form>
     } @else {
-        <!-- No meal associated, search text expects only strings -->
+        <!-- Display the search bar if we aren't displaying the form -->
         <div>
             <mat-form-field>
                 <mat-label>Search Food</mat-label>
@@ -40,13 +26,15 @@
             <div class="center-spinner"><mat-spinner></mat-spinner></div>
         }
         @if (!onlineSearch.value) {
-            <!-- Re-search after modifying a food so we show accurate data -->
-            <app-food-list [foods]="foods()" (foodChanged)="searchText.setValue('')"></app-food-list>
+            <app-food-list [foods]="foods()" (foodSelected)="handleFoodListSelection($event)"></app-food-list>
         } @else {
-            <app-off-food-list [foods]="onlineFoods()"></app-off-food-list>
+            <app-off-food-list
+                [foods]="onlineFoods()"
+                (foodSelected)="handleOnlineFoodListSelection($event)"></app-off-food-list>
         }
     }
-    @if (!searchTextIsFood()) {
+
+    @if (foodToAdd().id === 0) {
         <div class="bottom-right">
             <button mat-fab (click)="addFood()">
                 <mat-icon aria-hidden="false" aria-label="Plus sign" fontIcon="add"></mat-icon>

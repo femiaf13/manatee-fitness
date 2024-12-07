@@ -10,6 +10,10 @@ mat-form-field {
     padding-right: 10px;
 }
 
+app-mealfood-form {
+    width: 90vw;
+}
+
 .center-spinner {
     display: flex;
     justify-content: center;
