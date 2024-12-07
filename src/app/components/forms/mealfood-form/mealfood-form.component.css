@@ -9,7 +9,7 @@ mat-grid-tile mat-form-field {
 }
 
 .bottom-right {
-    position: fixed;
+    position: absolute;
     bottom: 15px;
     right: 15px;
 }

@@ -131,10 +131,10 @@ export class MealCardComponent {
         const dialogRef = this.dialog.open(MealfoodDialogComponent, {
             data: dialogData,
             disableClose: true,
-            width: '100vw',
-            height: '100vh',
-            maxWidth: '100vw',
-            maxHeight: '100vh',
+            width: '90vw',
+            height: '90vh',
+            maxWidth: '90vw',
+            maxHeight: '90vh',
         });
         const newMealFood: MealFood | undefined = await lastValueFrom(dialogRef.afterClosed());
         if (newMealFood !== undefined) {
