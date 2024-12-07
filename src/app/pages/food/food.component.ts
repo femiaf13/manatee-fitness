@@ -88,6 +88,8 @@ export class FoodPageComponent implements OnInit {
         return food && food.description ? food.description : '';
     }
 
+    // TODO: Need to setup a scan service that's responisble for most of
+    // this beginning stuff
     async scan() {
         const permission = await checkPermissions();
         if (permission !== 'granted') {
@@ -204,6 +206,11 @@ export class FoodPageComponent implements OnInit {
         }
     }
 
+    /**
+     * Reset the search bar, then either mondify selected food xor
+     * activate the mealfood form
+     * @param food food chosen from list
+     */
     handleFoodListSelection(food: Food) {
         // Re-search after modifying a food so we show accurate data
         this.searchText.setValue('');
@@ -215,6 +222,11 @@ export class FoodPageComponent implements OnInit {
         }
     }
 
+    /**
+     * Reset the search bar, add the food selected, then activate
+     * mealfood form if applicable
+     * @param food food chosen from list
+     */
     async handleOnlineFoodListSelection(food: FoodDTO) {
         // Re-search after modifying a food so we show accurate data
         this.searchText.setValue('');
