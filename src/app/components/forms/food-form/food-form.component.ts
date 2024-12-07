@@ -31,15 +31,15 @@ export class FoodFormComponent {
         barcode: [''],
         description: ['', [Validators.required, Validators.minLength(3)]],
         brand: [''],
-        gramsPerServing: [0, Validators.required],
-        caloriesPerServing: [0, Validators.required],
+        gramsPerServing: [0, [Validators.required, Validators.min(0)]],
+        caloriesPerServing: [0, [Validators.required, Validators.min(0)]],
         servingText: [''],
-        fatPerServing: [0],
-        carbsPerServing: [0],
-        proteinPerServing: [0],
-        cholesterolPerServing: [0],
-        fiberPerServing: [0],
-        sodiumPerServing: [0],
+        fatPerServing: [0, Validators.min(0)],
+        carbsPerServing: [0, Validators.min(0)],
+        proteinPerServing: [0, Validators.min(0)],
+        cholesterolPerServing: [0, Validators.min(0)],
+        fiberPerServing: [0, Validators.min(0)],
+        sodiumPerServing: [0, Validators.min(0)],
     });
 
     gramsPerServing$ = this.foodForm.controls.gramsPerServing.valueChanges;
