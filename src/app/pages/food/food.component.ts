@@ -11,6 +11,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute } from '@angular/router';
 import { FoodDialogComponent, FoodDialogData } from '@components/dialogs/food/food-dialog.component';
 import { LocalFoodListComponent, OpenFoodFactsFoodListComponent } from '@components/food-list/food-list.component';
@@ -46,8 +47,11 @@ import { debounceTime, distinctUntilChanged, lastValueFrom, switchMap } from 'rx
     styleUrl: './food.component.css',
 })
 export class FoodPageComponent implements OnInit {
+    // Stuff from outside this project
     route = inject(ActivatedRoute);
     dialog = inject(MatDialog);
+    snackBar = inject(MatSnackBar);
+    // Stuff form this project
     databaseService = inject(DatabaseService);
     dateService = inject(DateService);
     openFoodFactsService = inject(OpenFoodFactsService);
@@ -111,6 +115,7 @@ export class FoodPageComponent implements OnInit {
         if (scanTimeout) {
             clearTimeout(scanTimeout);
             const barcode = tempScanResult.content;
+            this.openSnackBar(`Scanned ${barcode}`, 'Dismiss', 5000);
             if (this.onlineSearch.value) {
                 // Online scan adds a new food
                 const scanDto = await this.openFoodFactsService.searchByBarcode(barcode);
@@ -143,9 +148,9 @@ export class FoodPageComponent implements OnInit {
 
     async onMealFoodSubmit(mealFood: MealFood) {
         const result = await this.databaseService.createMealFood(mealFood);
-        // I'll be honest idk when this would ever happen
         if (!result) {
             console.error('Unable to add meal food!');
+            this.openSnackBar('Meal cannot have duplicate foods');
         }
         this.searchText.setValue('');
         this.foodToAdd.set(new Food());
@@ -177,6 +182,7 @@ export class FoodPageComponent implements OnInit {
             if (typeof createResult === 'string') {
                 console.error('Failed to add food: ' + JSON.stringify(newFoodDto));
                 console.error(createResult);
+                this.openSnackBar('Failed to add food!');
                 return undefined;
             } else {
                 return createResult;
@@ -205,6 +211,7 @@ export class FoodPageComponent implements OnInit {
             const success = await this.databaseService.updateFoodByDto(food.id, newFood);
             if (!success) {
                 console.error('Failed to update food: ' + JSON.stringify(newFood));
+                this.openSnackBar('Failed to edit food!');
             }
         }
     }
@@ -238,6 +245,18 @@ export class FoodPageComponent implements OnInit {
         if (newfood !== undefined && this.addingToMeal()) {
             this.foodToAdd.set(newfood);
         }
+    }
+
+    /**
+     *
+     * @param message Notification message
+     * @param action Text used for the dismissal button
+     * @param duration Duration in ms before notification dismisses itself. Defaults to 15s
+     */
+    private openSnackBar(message: string, action: string = 'Dismiss', duration = 15000) {
+        this.snackBar.open(message, action, {
+            duration: duration,
+        });
     }
 
     constructor() {
