@@ -1,10 +1,10 @@
 <div class="main-content">
-    @if (mealId && meal) {
+    @if (addingToMeal() && meal) {
         <!-- We are entering this page to select food for a meal -->
         <h2>Adding Food</h2>
         <h3>{{ meal.meal_name }} on {{ meal.meal_date }}</h3>
     }
-    @if (mealId && meal && foodToAdd().id !== 0) {
+    @if (addingToMeal() && meal && foodToAdd().id !== 0) {
         <!-- A food was selected, display the mealfood form -->
         <app-mealfood-form
             [inputFood]="foodToAdd()"

@@ -79,6 +79,7 @@ export class FoodPageComponent implements OnInit {
      */
     mealId: number | undefined = undefined;
     meal: Meal | undefined = undefined;
+    addingToMeal = signal<boolean>(false);
 
     foodToAdd = signal<Food>(new Food());
 
@@ -215,7 +216,7 @@ export class FoodPageComponent implements OnInit {
         // Re-search after modifying a food so we show accurate data
         this.searchText.setValue('');
 
-        if (this.mealId && this.meal) {
+        if (this.addingToMeal()) {
             this.foodToAdd.set(food);
         } else {
             this.modifyFood(food);
@@ -232,7 +233,7 @@ export class FoodPageComponent implements OnInit {
         this.searchText.setValue('');
 
         const newfood = await this.addFood(food);
-        if (newfood !== undefined && this.mealId && this.meal) {
+        if (newfood !== undefined && this.addingToMeal()) {
             this.foodToAdd.set(newfood);
         }
     }
@@ -246,6 +247,7 @@ export class FoodPageComponent implements OnInit {
         if (mealIdParam) {
             this.mealId = Number(mealIdParam);
             this.meal = await this.databaseService.getMealById(this.mealId);
+            this.addingToMeal.set(true);
         }
     }
 }
