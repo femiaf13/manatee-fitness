@@ -42,10 +42,14 @@ export class DatabaseService {
     /**
      *
      * @param food food to create
-     * @returns true on success, false on error
+     * @returns created food on success, error message on error
      */
-    public async createFood(food: FoodDTO): Promise<boolean> {
-        return await invoke<boolean>('create_food', { food: food });
+    public async createFood(food: FoodDTO): Promise<Food | string> {
+        try {
+            return await invoke<Food>('create_food', { food: food });
+        } catch (error) {
+            return JSON.stringify(error);
+        }
     }
 
     /**

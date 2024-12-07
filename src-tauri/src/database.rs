@@ -6,7 +6,7 @@ use diesel::sql_types::Text;
 use diesel::sqlite::SqliteConnection;
 use tauri::Manager;
 use time::macros::date;
-use time::*;
+use time::Date;
 
 use crate::models::*;
 use crate::schema::*;
@@ -18,18 +18,17 @@ pub fn establish_connection(database_url: String) -> SqliteConnection {
 }
 
 #[tauri::command]
-pub fn create_food(app_handle: tauri::AppHandle, food: FoodDTO) -> bool {
+pub fn create_food(app_handle: tauri::AppHandle, food: FoodDTO) -> Result<Food, String> {
     let database_url = app_handle.state::<AppState>().database_url.clone();
     let connection = &mut establish_connection(database_url);
     use crate::schema::foods::dsl::*;
 
-    let query_result = insert_into(foods).values(&food).execute(connection);
+    let query_result = insert_into(foods)
+        .values(&food)
+        .get_result::<Food>(connection);
 
-    let result: bool = match query_result {
-        Ok(_numer_of_rows) => true,
-        Err(_e) => false,
-    };
-
+    // Error is not serializable so make it a string
+    let result = query_result.map_err(|err| err.to_string());
     result
 }
 

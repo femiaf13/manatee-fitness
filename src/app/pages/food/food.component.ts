@@ -173,12 +173,14 @@ export class FoodPageComponent implements OnInit {
         });
         const newFoodDto: FoodDTO | undefined = await lastValueFrom(dialogRef.afterClosed());
         if (newFoodDto !== undefined) {
-            const success = await this.databaseService.createFood(newFoodDto);
-            if (!success) {
+            const createResult = await this.databaseService.createFood(newFoodDto);
+            if (typeof createResult === 'string') {
                 console.error('Failed to add food: ' + JSON.stringify(newFoodDto));
+                console.error(createResult);
                 return undefined;
+            } else {
+                return createResult;
             }
-            // return newfood;
         }
         return undefined;
     }
