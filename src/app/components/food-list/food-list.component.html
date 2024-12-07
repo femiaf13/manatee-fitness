@@ -2,9 +2,12 @@
     @for (food of foods(); track food) {
         <mat-list-item (click)="modifyFood(food)">
             <span matListItemTitle>{{ food.description }}</span>
-            <span matListItemLine>
-                <i>{{ food.brand }}</i>
-            </span>
+            @if (food.brand) {
+                <span matListItemLine>
+                    <i>{{ food.brand }}</i>
+                </span>
+            }
         </mat-list-item>
+        <mat-divider></mat-divider>
     }
 </mat-action-list>

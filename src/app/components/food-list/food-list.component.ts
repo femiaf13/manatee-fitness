@@ -1,6 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, inject, input, output } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
+import { MatDividerModule } from '@angular/material/divider';
 import { MatListModule } from '@angular/material/list';
 import { FoodDialogData, FoodDialogComponent } from '@components/dialogs/food/food-dialog.component';
 import { Food, FoodDTO } from '@models/food.model';
@@ -15,7 +16,7 @@ class BaseFoodListComponent {
 @Component({
     selector: 'app-food-list',
     standalone: true,
-    imports: [CommonModule, MatListModule],
+    imports: [CommonModule, MatDividerModule, MatListModule],
     templateUrl: './food-list.component.html',
     styleUrl: './food-list.component.css',
 })
@@ -50,7 +51,7 @@ export class LocalFoodListComponent extends BaseFoodListComponent {
 @Component({
     selector: 'app-off-food-list',
     standalone: true,
-    imports: [CommonModule, MatListModule],
+    imports: [CommonModule, MatDividerModule, MatListModule],
     templateUrl: './food-list.component.html',
     styleUrl: './food-list.component.css',
 })
