@@ -22,7 +22,7 @@ import { MealFood } from '@models/mealfood.model';
 import { DatabaseService } from '@services/database.service';
 import { DateService } from '@services/date.service';
 import { OpenFoodFactsService } from '@services/open-food-facts.service';
-import { cancel, checkPermissions, Format, requestPermissions, scan } from '@tauri-apps/plugin-barcode-scanner';
+import { ScanService } from '@services/scan.service';
 import { debounceTime, distinctUntilChanged, lastValueFrom, switchMap } from 'rxjs';
 
 @Component({
@@ -55,6 +55,7 @@ export class FoodPageComponent implements OnInit {
     databaseService = inject(DatabaseService);
     dateService = inject(DateService);
     openFoodFactsService = inject(OpenFoodFactsService);
+    scanService = inject(ScanService);
 
     /** Form control for local DB search */
     searchText = new FormControl<string>('', { nonNullable: true });
@@ -96,39 +97,23 @@ export class FoodPageComponent implements OnInit {
     // TODO: Need to setup a scan service that's responisble for most of
     // this beginning stuff
     async scan() {
-        const permission = await checkPermissions();
-        if (permission !== 'granted') {
-            if ((await requestPermissions()) !== 'granted') {
-                return;
-            }
-        }
-        // Close the scanner after 10 seconds
-        let scanTimeout: number | null = window.setTimeout(() => {
-            scanTimeout = null;
-            cancel();
-        }, 10000);
-        const tempScanResult = await scan({
-            windowed: false,
-            formats: [Format.EAN13, Format.EAN8, Format.UPC_A, Format.UPC_E],
-        });
-        // If the timeout isn't null then we got a scan instead of a timeout
-        if (scanTimeout) {
-            clearTimeout(scanTimeout);
-            const barcode = tempScanResult.content;
-            this.openSnackBar(`Scanned ${barcode}`, 'Dismiss', 5000);
+        const barcode = await this.scanService.scan();
+        this.openSnackBar(`Scanned ${barcode}`, 'Dismiss', 5000);
+        if (barcode) {
             if (this.onlineSearch.value) {
                 // Online scan adds a new food
                 const scanDto = await this.openFoodFactsService.searchByBarcode(barcode);
-                this.addFood(scanDto);
+                this.handleOnlineFoodListSelection(scanDto);
             } else {
                 //  Offline scans searches the DB
                 const foods = await this.databaseService.getFoodsByBarcode(barcode);
                 if (foods.length >= 1) {
                     // We find something in the DB
-                    this.searchText.setValue(foods[0].description);
+                    this.handleFoodListSelection(foods[0]);
                 } else {
                     // We don't find the barcode, so we need to add it
-                    // which means now we do the online scan path. This needs a refactor
+                    const scanDto = await this.openFoodFactsService.searchByBarcode(barcode);
+                    this.handleOnlineFoodListSelection(scanDto);
                 }
             }
         }
