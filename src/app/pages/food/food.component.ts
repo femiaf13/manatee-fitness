@@ -100,21 +100,15 @@ export class FoodPageComponent implements OnInit {
         const barcode = await this.scanService.scan();
         this.openSnackBar(`Scanned ${barcode}`, 'Dismiss', 5000);
         if (barcode) {
-            if (this.onlineSearch.value) {
-                // Online scan adds a new food
+            //  Search the DB first
+            const foods = await this.databaseService.getFoodsByBarcode(barcode);
+            if (foods.length >= 1) {
+                // We find something in the DB
+                this.handleFoodListSelection(foods[0]);
+            } else {
+                // We don't find the barcode, so we need to add it
                 const scanDto = await this.openFoodFactsService.searchByBarcode(barcode);
                 this.handleOnlineFoodListSelection(scanDto);
-            } else {
-                //  Offline scans searches the DB
-                const foods = await this.databaseService.getFoodsByBarcode(barcode);
-                if (foods.length >= 1) {
-                    // We find something in the DB
-                    this.handleFoodListSelection(foods[0]);
-                } else {
-                    // We don't find the barcode, so we need to add it
-                    const scanDto = await this.openFoodFactsService.searchByBarcode(barcode);
-                    this.handleOnlineFoodListSelection(scanDto);
-                }
             }
         }
     }
