@@ -44,7 +44,7 @@ Thumbs.db
 # No SQL except migrations
 *.db
 *.sql
-**/migrations/*
+!**/migrations/**/*
 
 .nx/cache
 .nx/workspace-data

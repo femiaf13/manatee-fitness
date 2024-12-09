@@ -36,7 +36,30 @@ diesel::table! {
     }
 }
 
+diesel::table! {
+    recipe_foods (recipe_id, food_id) {
+        recipe_id -> Integer,
+        food_id -> Integer,
+        quantity_grams -> Float,
+    }
+}
+
+diesel::table! {
+    recipes (id) {
+        id -> Integer,
+        recipe_name -> Text,
+    }
+}
+
 diesel::joinable!(meal_foods -> foods (food_id));
 diesel::joinable!(meal_foods -> meals (meal_id));
+diesel::joinable!(recipe_foods -> foods (food_id));
+diesel::joinable!(recipe_foods -> recipes (recipe_id));
 
-diesel::allow_tables_to_appear_in_same_query!(foods, meal_foods, meals,);
+diesel::allow_tables_to_appear_in_same_query!(
+    foods,
+    meal_foods,
+    meals,
+    recipe_foods,
+    recipes,
+);

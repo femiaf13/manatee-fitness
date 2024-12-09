@@ -82,6 +82,36 @@ pub struct MealFood {
     pub quantity_grams: f32,
 }
 
+#[derive(Identifiable, Queryable, Selectable, PartialEq, Clone, Serialize)]
+#[diesel(table_name = crate::schema::recipes)]
+#[diesel(check_for_backend(diesel::sqlite::Sqlite))]
+pub struct Recipe {
+    pub id: i32,
+    pub recipe_name: String,
+}
+
+#[derive(
+    Identifiable,
+    Queryable,
+    Selectable,
+    Associations,
+    PartialEq,
+    Clone,
+    Serialize,
+    Deserialize,
+    Insertable,
+)]
+#[diesel(belongs_to(Food))]
+#[diesel(belongs_to(Recipe))]
+#[diesel(table_name = crate::schema::recipe_foods)]
+#[diesel(primary_key(recipe_id, food_id))]
+#[diesel(check_for_backend(diesel::sqlite::Sqlite))]
+pub struct RecipeFood {
+    pub recipe_id: i32,
+    pub food_id: i32,
+    pub quantity_grams: f32,
+}
+
 #[derive(Default, QueryableByName, Clone, Serialize)]
 #[diesel(check_for_backend(diesel::sqlite::Sqlite))]
 pub struct SummedFood {

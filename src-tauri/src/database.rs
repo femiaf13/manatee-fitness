@@ -307,6 +307,84 @@ pub fn delete_mealfood(app_handle: tauri::AppHandle, meal_id: i32, food_id: i32)
 }
 
 #[tauri::command]
+pub fn create_recipe(app_handle: tauri::AppHandle, recipe_name: &str) -> bool {
+    let database_url = app_handle.state::<AppState>().database_url.clone();
+    let connection = &mut establish_connection(database_url);
+
+    let query_result = insert_into(recipes::table)
+        .values(recipes::recipe_name.eq(recipe_name))
+        .execute(connection);
+
+    let result: bool = match query_result {
+        Ok(_number_of_rows) => true,
+        Err(_e) => false,
+    };
+
+    result
+}
+
+#[tauri::command]
+pub fn find_recipes(app_handle: tauri::AppHandle) -> Vec<Recipe> {
+    let database_url = app_handle.state::<AppState>().database_url.clone();
+    let connection = &mut establish_connection(database_url);
+    use crate::schema::recipes::dsl::*;
+
+    recipes
+        .order(recipe_name.asc())
+        .load::<Recipe>(connection)
+        .unwrap_or(vec![])
+}
+
+#[tauri::command]
+pub fn update_recipe(app_handle: tauri::AppHandle, recipe_id: i32, new_name: &str) -> bool {
+    let database_url = app_handle.state::<AppState>().database_url.clone();
+    let connection = &mut establish_connection(database_url);
+    use crate::schema::recipes::dsl::*;
+
+    let query_result = diesel::update(recipes)
+        .filter(id.eq(recipe_id))
+        .set(recipe_name.eq(new_name))
+        .execute(connection);
+
+    let result: bool = match query_result {
+        Ok(_number_of_rows) => true,
+        Err(_e) => false,
+    };
+
+    result
+}
+
+#[tauri::command]
+pub fn delete_recipe(app_handle: tauri::AppHandle, recipe_id: i32) -> bool {
+    let database_url = app_handle.state::<AppState>().database_url.clone();
+    let connection = &mut establish_connection(database_url);
+
+    // Delete all recipe foods associated with this recipe
+    let mut query_result =
+        diesel::delete(recipe_foods::table.filter(recipe_foods::recipe_id.eq(recipe_id)))
+            .execute(connection);
+
+    let mut result: bool = match query_result {
+        Ok(_number_of_rows) => true,
+        Err(_e) => false,
+    };
+
+    if !result {
+        return result;
+    }
+
+    query_result =
+        diesel::delete(recipes::table.filter(recipes::id.eq(recipe_id))).execute(connection);
+
+    result = match query_result {
+        Ok(_number_of_rows) => true,
+        Err(_e) => false,
+    };
+
+    result
+}
+
+#[tauri::command]
 /// Calculate the summed nutrional info for each food in a meal
 pub fn find_summed_mealfood_by_meal(
     app_handle: tauri::AppHandle,
