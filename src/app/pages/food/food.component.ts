@@ -90,10 +90,6 @@ export class FoodPageComponent implements OnInit {
 
     canScan = signal<boolean>(this.databaseService.isMobilePlatform());
 
-    displayFoods(food: Food): string {
-        return food && food.description ? food.description : '';
-    }
-
     /**
      * Attempt to scan a barcode, find the food associated with it,
      * and pass it on to the appropriate handler
