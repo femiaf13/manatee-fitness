@@ -94,8 +94,10 @@ export class FoodPageComponent implements OnInit {
         return food && food.description ? food.description : '';
     }
 
-    // TODO: Need to setup a scan service that's responisble for most of
-    // this beginning stuff
+    /**
+     * Attempt to scan a barcode, find the food associated with it,
+     * and pass it on to the appropriate handler
+     */
     async scan() {
         const barcode = await this.scanService.scan();
         this.openSnackBar(`Scanned ${barcode}`, 'Dismiss', 5000);
