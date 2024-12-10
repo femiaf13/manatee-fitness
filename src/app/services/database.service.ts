@@ -7,6 +7,7 @@ import { invoke } from '@tauri-apps/api/core';
 import { load, Store } from '@tauri-apps/plugin-store';
 import { platform } from '@tauri-apps/plugin-os';
 import { RecipeFood } from '@models/recipefood.model';
+import { Recipe } from '@models/recipe.model';
 
 @Injectable({
     providedIn: 'root',
@@ -183,9 +184,7 @@ export class DatabaseService {
         });
     }
 
-    /**
-     * Recipe Methods
-     */
+    /** Recipe Methods */
 
     /**
      *
@@ -197,8 +196,33 @@ export class DatabaseService {
     }
 
     /**
-     * Recipefood Methods
+     *
+     * @returns All recipes in the database
      */
+    public async getRecipes(): Promise<Array<Recipe>> {
+        return await invoke<Array<Recipe>>('find_recipes');
+    }
+
+    /**
+     * Update the name of a recipe
+     * @param recipeId ID of the recipe that will be changed
+     * @param recipeName New name for the recipe
+     * @returns true on success, false on error
+     */
+    public async updateRecipe(recipeId: number, recipeName: string): Promise<boolean> {
+        return await invoke<boolean>('update_recipe', { recipeId: recipeId, newName: recipeName });
+    }
+
+    /**
+     * Deletes a recipe and all recipe foods in it
+     * @param recipeId ID of the recipe that will be deleted
+     * @returns true on success, false on error
+     */
+    public async deleteRecipe(recipeId: number): Promise<boolean> {
+        return await invoke<boolean>('delete_recipe', { recipeId: recipeId });
+    }
+
+    /** Recipefood Methods */
 
     /**
      *
@@ -207,5 +231,24 @@ export class DatabaseService {
      */
     public async createRecipeFood(recipeFood: RecipeFood): Promise<boolean> {
         return await invoke<boolean>('create_recipefood', { recipeFood: recipeFood });
+    }
+
+    /**
+     * Update individual food in a recipe
+     * @param recipeFood Recipe Food post modification
+     * @returns true on success, false on error
+     */
+    public async updateRecipeFood(recipeFood: RecipeFood): Promise<boolean> {
+        return await invoke<boolean>('update_recipefood', { recipeFood: recipeFood });
+    }
+
+    /**
+     * Deletes a recipe food
+     * @param recipeId recipe food recipe id to delete
+     * @param foodId recipe food food id to delete
+     * @returns true on success, false on error
+     */
+    public async deleteRecipeFood(recipeId: number, foodId: number): Promise<boolean> {
+        return await invoke<boolean>('delete_recipefood', { recipeId: recipeId, foodId: foodId });
     }
 }
