@@ -6,6 +6,7 @@ import { MealFood, SummedMealFood } from '@models/mealfood.model';
 import { invoke } from '@tauri-apps/api/core';
 import { load, Store } from '@tauri-apps/plugin-store';
 import { platform } from '@tauri-apps/plugin-os';
+import { RecipeFood } from '@models/recipefood.model';
 
 @Injectable({
     providedIn: 'root',
@@ -180,5 +181,31 @@ export class DatabaseService {
         return await invoke<boolean>('update_mealfood', {
             mealfood: mealFood,
         });
+    }
+
+    /**
+     * Recipe Methods
+     */
+
+    /**
+     *
+     * @param recipeName Name for the recipe
+     * @returns true on success, false on error
+     */
+    public async createRecipe(recipeName: string): Promise<boolean> {
+        return await invoke<boolean>('create_recipe', { recipeName: recipeName });
+    }
+
+    /**
+     * Recipefood Methods
+     */
+
+    /**
+     *
+     * @param recipeFood recipefood to create
+     * @returns true on success, false on error
+     */
+    public async createRecipeFood(recipeFood: RecipeFood): Promise<boolean> {
+        return await invoke<boolean>('create_recipefood', { recipeFood: recipeFood });
     }
 }
