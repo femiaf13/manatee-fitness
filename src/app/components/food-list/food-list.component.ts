@@ -4,6 +4,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatListModule } from '@angular/material/list';
 import { Food, FoodDTO } from '@models/food.model';
+import { Recipe } from '@models/recipe.model';
 import { DatabaseService } from '@services/database.service';
 
 class BaseFoodListComponent {
@@ -15,12 +16,12 @@ class BaseFoodListComponent {
     selector: 'app-food-list',
     standalone: true,
     imports: [CommonModule, MatDividerModule, MatListModule],
-    templateUrl: './food-list.component.html',
+    templateUrl: './local-food-list.component.html',
     styleUrl: './food-list.component.css',
 })
 export class LocalFoodListComponent extends BaseFoodListComponent {
-    foods = input.required<Array<Food>>();
-    foodSelected = output<Food>();
+    foods = input.required<Array<Food | Recipe>>();
+    foodSelected = output<Food | Recipe>();
 }
 
 @Component({

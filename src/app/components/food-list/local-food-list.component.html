@@ -1,0 +1,20 @@
+<mat-action-list #foodList>
+    @for (food of foods(); track food) {
+        <mat-list-item (click)="foodSelected.emit(food)">
+            <span matListItemTitle>{{
+                $any(food)?.description ? $any(food).description : $any(food).recipe_name
+            }}</span>
+            @if ($any(food).brand) {
+                <span matListItemLine>
+                    <i>{{ $any(food).brand }}</i>
+                </span>
+            }
+            @if ($any(food).recipe_name) {
+                <span matListItemLine>
+                    <i>Your Recipe</i>
+                </span>
+            }
+        </mat-list-item>
+        <mat-divider></mat-divider>
+    }
+</mat-action-list>

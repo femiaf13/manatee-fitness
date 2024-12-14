@@ -19,6 +19,7 @@ import { MealfoodFormComponent } from '@components/forms/mealfood-form/mealfood-
 import { Food, FoodDTO } from '@models/food.model';
 import { Meal } from '@models/meal.model';
 import { MealFood } from '@models/mealfood.model';
+import { isRecipe, Recipe } from '@models/recipe.model';
 import { DatabaseService } from '@services/database.service';
 import { DateService } from '@services/date.service';
 import { OpenFoodFactsService } from '@services/open-food-facts.service';
@@ -67,7 +68,7 @@ export class FoodPageComponent implements OnInit {
             // Only local search when checkbox isn't checked and vice versa
             switchMap(searchTerm => (this.onlineSearch.value ? [] : this.search(searchTerm)))
         ),
-        { initialValue: [] as Food[] }
+        { initialValue: [] as Array<Food | Recipe> }
     );
     /** Form control for online DB search */
     onlineSearch = new FormControl<boolean>(false, { nonNullable: true });
@@ -111,8 +112,14 @@ export class FoodPageComponent implements OnInit {
         }
     }
 
-    async search(searchTerm: string): Promise<Array<Food>> {
-        return await this.databaseService.getFoodsBySearch(searchTerm);
+    async search(searchTerm: string): Promise<Array<Food | Recipe>> {
+        let searchResult = [];
+        searchResult = await this.databaseService.getFoodsBySearch(searchTerm);
+        if (this.addingToMeal()) {
+            const recipeSearchResult = await this.databaseService.getRecipes();
+            return [...recipeSearchResult, ...searchResult];
+        }
+        return searchResult;
     }
 
     async searchOnline(searchTerm: string) {
@@ -198,14 +205,18 @@ export class FoodPageComponent implements OnInit {
      * activate the mealfood form
      * @param food food chosen from list
      */
-    handleFoodListSelection(food: Food) {
+    handleFoodListSelection(food: Food | Recipe) {
         // Re-search after modifying a food so we show accurate data
         this.searchText.setValue('');
 
-        if (this.addingToMeal()) {
-            this.foodToAdd.set(food);
+        if (!isRecipe(food)) {
+            if (this.addingToMeal()) {
+                this.foodToAdd.set(food);
+            } else {
+                this.modifyFood(food);
+            }
         } else {
-            this.modifyFood(food);
+            console.info('Clicked a recipe');
         }
     }
 
