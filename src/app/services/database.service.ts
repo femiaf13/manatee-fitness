@@ -74,6 +74,16 @@ export class DatabaseService {
 
     /**
      *
+     * @param mealId meal id to for the new mealfood
+     * @param recipeId recipe to pull recipefoods from
+     * @returns true on success, false on error
+     */
+    public async createMealFoodsFromRecipe(mealId: number, recipeId: number): Promise<boolean> {
+        return await invoke<boolean>('create_mealfoods_from_recipe', { mealId: mealId, recipeId: recipeId });
+    }
+
+    /**
+     *
      * @param mealId meal to delete
      * @returns true on success, false on error
      */

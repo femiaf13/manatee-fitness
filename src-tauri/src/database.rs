@@ -253,6 +253,45 @@ pub fn create_mealfood(app_handle: tauri::AppHandle, mealfood: MealFood) -> bool
     result
 }
 
+/// TODO: This should return a result so we can show an error if you try to stack the same food
+#[tauri::command]
+pub fn create_mealfoods_from_recipe(
+    app_handle: tauri::AppHandle,
+    meal_id: i32,
+    recipe_id: i32,
+) -> bool {
+    let database_url = app_handle.state::<AppState>().database_url.clone();
+    let connection = &mut establish_connection(database_url);
+    // use crate::schema::meal_foods::dsl::*;
+
+    let recipe_foods = find_recipefood_by_recipe(app_handle.clone(), recipe_id);
+    let mut mealfoods: Vec<MealFood> = vec![];
+    for recipe_food in recipe_foods.iter() {
+        let mealfood = MealFood {
+            meal_id,
+            food_id: recipe_food.food_id,
+            quantity_grams: recipe_food.quantity_grams,
+        };
+        mealfoods.push(mealfood);
+    }
+
+    // Don't bother trying to insert nothing
+    if mealfoods.len() == 0 {
+        return true;
+    }
+
+    let query_result = insert_into(meal_foods::table)
+        .values(&mealfoods)
+        .execute(connection);
+
+    let result: bool = match query_result {
+        Ok(_number_of_rows) => true,
+        Err(_e) => false,
+    };
+
+    result
+}
+
 #[tauri::command]
 pub fn find_mealfood_by_meal(app_handle: tauri::AppHandle, meal_id: i32) -> Vec<MealFood> {
     let database_url = app_handle.state::<AppState>().database_url.clone();

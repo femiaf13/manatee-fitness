@@ -217,6 +217,11 @@ export class FoodPageComponent implements OnInit {
             }
         } else {
             console.info('Clicked a recipe');
+            // TODO: Open a confirmation dialog asking if they want to add the food
+            // then add it via a database call on a yes. And move into different function
+            if (this.mealId) {
+                this.databaseService.createMealFoodsFromRecipe(this.mealId, food.id);
+            }
         }
     }
 

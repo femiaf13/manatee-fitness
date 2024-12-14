@@ -59,6 +59,7 @@ pub fn run() {
             update_meal_by_dto,
             delete_meal,
             create_mealfood,
+            create_mealfoods_from_recipe,
             find_mealfood_by_meal,
             update_mealfood,
             delete_mealfood,
