@@ -244,6 +244,15 @@ export class DatabaseService {
     }
 
     /**
+     *
+     * @param recipeId recipe id used to find recipefoods
+     * @returns true on success, false on error
+     */
+    public async getRecipeFoodsByRecipe(recipeId: number): Promise<Array<RecipeFood>> {
+        return await invoke<Array<RecipeFood>>('find_recipefood_by_recipe', { recipeId: recipeId });
+    }
+
+    /**
      * Update individual food in a recipe
      * @param recipeFood Recipe Food post modification
      * @returns true on success, false on error
