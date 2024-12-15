@@ -1,1 +1,20 @@
-<div class="main-content">{{ recipesWithRecipeFoods() | json }}</div>
+<div class="main-content">
+    <!-- {{ recipesWithRecipeFoods() | json }} -->
+    @for (recipesWithRecipeFood of recipesWithRecipeFoods(); track $index) {
+        <!-- TODO: This needs to be its own component -->
+        <mat-expansion-panel>
+            <mat-expansion-panel-header>
+                <mat-panel-title>
+                    {{ recipesWithRecipeFood.recipe.recipe_name }}
+                    <i style="padding-left: 0.5em">0 kcal</i>
+                </mat-panel-title>
+                <!-- <mat-panel-description> 0 kcal </mat-panel-description> -->
+            </mat-expansion-panel-header>
+            <p>{{ recipesWithRecipeFood.recipeFoods | json }}</p>
+            <mat-action-row>
+                <button mat-icon-button><mat-icon fontIcon="delete"></mat-icon></button>
+                <button mat-icon-button><mat-icon fontIcon="add"></mat-icon></button>
+            </mat-action-row>
+        </mat-expansion-panel>
+    }
+</div>
