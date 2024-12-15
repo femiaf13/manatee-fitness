@@ -13,6 +13,10 @@ import { MatInputModule } from '@angular/material/input';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute } from '@angular/router';
+import {
+    ConfirmationDialogData,
+    ConfirmationDialogComponent,
+} from '@components/dialogs/confirmation-dialog/confirmation-dialog.component';
 import { FoodDialogComponent, FoodDialogData } from '@components/dialogs/food/food-dialog.component';
 import { LocalFoodListComponent, OpenFoodFactsFoodListComponent } from '@components/food-list/food-list.component';
 import { MealfoodFormComponent } from '@components/forms/mealfood-form/mealfood-form.component';
@@ -201,8 +205,33 @@ export class FoodPageComponent implements OnInit {
     }
 
     /**
-     * Reset the search bar, then either mondify selected food xor
-     * activate the mealfood form
+     * When adding to a meal this function takes a recipe and creates mealfoods from it
+     * for the meal being added to
+     * @param recipe Recipe to add to mealfood
+     */
+    async addRecipe(recipe: Recipe) {
+        if (this.mealId && this.meal) {
+            const dialogData: ConfirmationDialogData = {
+                title: `Add ${recipe.recipe_name} to ${this.meal.meal_name}?`,
+                content: `Are you sure you want to add this recipe?`,
+                action: 'Add',
+            };
+            const dialogRef = this.dialog.open(ConfirmationDialogComponent, {
+                data: dialogData,
+            });
+            const confirmed = await lastValueFrom(dialogRef.afterClosed());
+            if (confirmed) {
+                const success = await this.databaseService.createMealFoodsFromRecipe(this.mealId, recipe.id);
+                if (!success) {
+                    this.openSnackBar('Unable to add recipe, it may result in a duplicate food');
+                }
+            }
+        }
+    }
+
+    /**
+     * Reset the search bar, then either modify selected food xor
+     * activate the mealfood form. If recipe add that to meal instead.
      * @param food food chosen from list
      */
     handleFoodListSelection(food: Food | Recipe) {
@@ -216,12 +245,7 @@ export class FoodPageComponent implements OnInit {
                 this.modifyFood(food);
             }
         } else {
-            console.info('Clicked a recipe');
-            // TODO: Open a confirmation dialog asking if they want to add the food
-            // then add it via a database call on a yes. And move into different function
-            if (this.mealId) {
-                this.databaseService.createMealFoodsFromRecipe(this.mealId, food.id);
-            }
+            this.addRecipe(food);
         }
     }
 
