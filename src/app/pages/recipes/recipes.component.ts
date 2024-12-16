@@ -1,23 +1,15 @@
 import { CommonModule } from '@angular/common';
 import { Component, effect, inject, OnInit, signal, untracked } from '@angular/core';
-import { MatButtonModule } from '@angular/material/button';
-import { MatExpansionModule } from '@angular/material/expansion';
-import { MatIconModule } from '@angular/material/icon';
-import { MatListModule } from '@angular/material/list';
+import { RecipeCardComponent } from '@components/recipe-card/recipe-card.component';
 import { Recipe } from '@models/recipe.model';
-import { RecipeFood } from '@models/recipefood.model';
+import { RecipeWithRecipeFoods } from '@models/recipefood.model';
 import { DatabaseService } from '@services/database.service';
 import { DateService } from '@services/date.service';
-
-interface RecipeWithRecipeFoods {
-    recipe: Recipe;
-    recipeFoods: Array<RecipeFood>;
-}
 
 @Component({
     selector: 'app-page-recipes',
     standalone: true,
-    imports: [CommonModule, MatButtonModule, MatExpansionModule, MatListModule, MatIconModule],
+    imports: [CommonModule, RecipeCardComponent],
     templateUrl: './recipes.component.html',
     styleUrl: './recipes.component.css',
 })

@@ -10,6 +10,8 @@ export class Recipe {
     }
 }
 
+// TODO: Need equivalent of SummedMealFood
+
 /**
  * This is a type predicate
  * https://www.typescriptlang.org/docs/handbook/2/narrowing.html#using-type-predicates
