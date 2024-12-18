@@ -1,0 +1,10 @@
+<form [formGroup]="recipeForm">
+    <mat-form-field>
+        <mat-label>Name of this meal</mat-label>
+        <input matInput placeholder="Enter a name..." formControlName="recipeName" />
+    </mat-form-field>
+    <button mat-flat-button style="float: right" type="submit" [disabled]="!recipeForm.valid" (click)="onSubmit()">
+        Submit
+    </button>
+    <button mat-flat-button style="float: right" (click)="onCancel()">Cancel</button>
+</form>

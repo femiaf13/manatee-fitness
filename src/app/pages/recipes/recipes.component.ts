@@ -1,12 +1,15 @@
 import { CommonModule } from '@angular/common';
 import { Component, effect, inject, OnInit, signal, untracked } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
+import { MatDialog } from '@angular/material/dialog';
 import { MatIconModule } from '@angular/material/icon';
+import { RecipeDialogData, RecipeDialogComponent } from '@components/dialogs/recipe-dialog/recipe-dialog.component';
 import { RecipeCardComponent } from '@components/recipe-card/recipe-card.component';
 import { Recipe } from '@models/recipe.model';
 import { RecipeWithRecipeFoods } from '@models/recipe.model';
 import { DatabaseService } from '@services/database.service';
 import { DateService } from '@services/date.service';
+import { lastValueFrom } from 'rxjs';
 
 @Component({
     selector: 'app-page-recipes',
@@ -18,6 +21,7 @@ import { DateService } from '@services/date.service';
 export class RecipesPageComponent implements OnInit {
     databaseService = inject(DatabaseService);
     dateService = inject(DateService);
+    dialog = inject(MatDialog);
 
     recipes = signal<Array<Recipe>>([]);
     recipesWithRecipeFoods = signal<Array<RecipeWithRecipeFoods>>([]);
@@ -26,8 +30,22 @@ export class RecipesPageComponent implements OnInit {
      * Create a dialog to add a new recipe
      * @returns
      */
-    addRecipe() {
-        return true;
+    async addRecipe() {
+        const dialogData: RecipeDialogData = {
+            modify: false,
+        };
+        const dialogRef = this.dialog.open(RecipeDialogComponent, {
+            data: dialogData,
+            disableClose: true,
+        });
+        const newRecipe: string | undefined = await lastValueFrom(dialogRef.afterClosed());
+        if (newRecipe !== undefined) {
+            const success = await this.databaseService.createRecipe(newRecipe);
+            if (!success) {
+                console.error('Failed to add recipe: ' + JSON.stringify(newRecipe));
+            }
+        }
+        this.refreshRecipes();
     }
 
     /**

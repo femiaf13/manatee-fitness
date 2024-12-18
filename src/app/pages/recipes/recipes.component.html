@@ -2,6 +2,7 @@
     <!-- {{ recipesWithRecipeFoods() | json }} -->
     @for (recipesWithRecipeFood of recipesWithRecipeFoods(); track $index) {
         <app-recipe-card [recipeWithRecipeFood]="recipesWithRecipeFood"></app-recipe-card>
+        <br />
     }
     <div class="bottom-right">
         <button mat-fab (click)="addRecipe()">
