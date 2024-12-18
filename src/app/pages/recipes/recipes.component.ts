@@ -1,5 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, effect, inject, OnInit, signal, untracked } from '@angular/core';
+import { MatButtonModule } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
 import { RecipeCardComponent } from '@components/recipe-card/recipe-card.component';
 import { Recipe } from '@models/recipe.model';
 import { RecipeWithRecipeFoods } from '@models/recipe.model';
@@ -9,7 +11,7 @@ import { DateService } from '@services/date.service';
 @Component({
     selector: 'app-page-recipes',
     standalone: true,
-    imports: [CommonModule, RecipeCardComponent],
+    imports: [CommonModule, MatButtonModule, MatIconModule, RecipeCardComponent],
     templateUrl: './recipes.component.html',
     styleUrl: './recipes.component.css',
 })
@@ -19,6 +21,22 @@ export class RecipesPageComponent implements OnInit {
 
     recipes = signal<Array<Recipe>>([]);
     recipesWithRecipeFoods = signal<Array<RecipeWithRecipeFoods>>([]);
+
+    /**
+     * Create a dialog to add a new recipe
+     * @returns
+     */
+    addRecipe() {
+        return true;
+    }
+
+    /**
+     * Grab all recipes from the DB and set the signal with the value
+     */
+    async refreshRecipes() {
+        const recipes = await this.databaseService.getRecipes();
+        this.recipes.set(recipes);
+    }
 
     constructor() {
         this.dateService.setTitle('Recipes');
@@ -51,8 +69,7 @@ export class RecipesPageComponent implements OnInit {
         });
     }
 
-    async ngOnInit() {
-        const recipes = await this.databaseService.getRecipes();
-        this.recipes.set(recipes);
+    ngOnInit() {
+        this.refreshRecipes();
     }
 }

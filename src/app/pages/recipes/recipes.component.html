@@ -3,4 +3,9 @@
     @for (recipesWithRecipeFood of recipesWithRecipeFoods(); track $index) {
         <app-recipe-card [recipeWithRecipeFood]="recipesWithRecipeFood"></app-recipe-card>
     }
+    <div class="bottom-right">
+        <button mat-fab (click)="addRecipe()">
+            <mat-icon aria-hidden="false" aria-label="Plus sign" fontIcon="add"></mat-icon>
+        </button>
+    </div>
 </div>

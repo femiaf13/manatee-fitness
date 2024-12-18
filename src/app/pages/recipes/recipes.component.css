@@ -4,3 +4,9 @@
     margin: 0.5em;
     padding-bottom: 3em;
 }
+
+.bottom-right {
+    position: fixed;
+    bottom: 15px;
+    right: 15px;
+}
