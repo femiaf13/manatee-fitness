@@ -1,4 +1,4 @@
-import { Food } from './food.model';
+import { Food, SummedFood } from './food.model';
 
 export class Recipe {
     id: number;
@@ -10,7 +10,24 @@ export class Recipe {
     }
 }
 
-// TODO: Need equivalent of SummedMealFood
+export class SummedRecipeFood {
+    quantity_grams: number;
+    quantity_servings: number;
+    food: Food;
+    summed_food: SummedFood;
+
+    constructor() {
+        this.quantity_grams = 0;
+        this.quantity_servings = 0;
+        this.food = new Food();
+        this.summed_food = new SummedFood();
+    }
+}
+
+export interface RecipeWithRecipeFoods {
+    recipe: Recipe;
+    recipeFoods: Array<SummedRecipeFood>;
+}
 
 /**
  * This is a type predicate

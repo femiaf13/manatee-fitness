@@ -1,5 +1,3 @@
-import { Recipe } from './recipe.model';
-
 export class RecipeFood {
     recipe_id: number;
     food_id: number;
@@ -10,9 +8,4 @@ export class RecipeFood {
         this.food_id = foodId;
         this.quantity_grams = quantityGrams;
     }
-}
-
-export interface RecipeWithRecipeFoods {
-    recipe: Recipe;
-    recipeFoods: Array<RecipeFood>;
 }

@@ -526,6 +526,40 @@ pub fn find_summed_mealfood_by_meal(
 }
 
 #[tauri::command]
+/// Calculate the summed nutrional info for each food in a recipe
+pub fn find_summed_mealfood_by_recipe(
+    app_handle: tauri::AppHandle,
+    recipe_id: i32,
+) -> Vec<SummedMealFood> {
+    let database_url = app_handle.state::<AppState>().database_url.clone();
+    let connection = &mut establish_connection(database_url);
+    let mut answer: Vec<SummedMealFood> = vec![];
+
+    let recipe_foods_found = recipe_foods::table
+        .filter(recipe_foods::recipe_id.eq(recipe_id))
+        .load::<RecipeFood>(connection)
+        .unwrap_or(vec![]);
+
+    for item in recipe_foods_found.iter() {
+        let food = find_food_by_id(app_handle.clone(), item.food_id);
+        let summed_food = find_calories_by_recipefood(app_handle.clone(), item.food_id, recipe_id);
+        let mut quantity_servings = 0.0;
+        if food.grams_per_serving != 0.0 {
+            quantity_servings = item.quantity_grams / food.grams_per_serving
+        }
+        let summed_meal_food = SummedMealFood {
+            quantity_grams: item.quantity_grams,
+            quantity_servings,
+            food,
+            summed_food,
+        };
+        answer.push(summed_meal_food);
+    }
+
+    answer
+}
+
+#[tauri::command]
 pub fn find_calories_by_date(app_handle: tauri::AppHandle, date_to_find: Date) -> SummedFood {
     let database_url = app_handle.state::<AppState>().database_url.clone();
     let connection = &mut establish_connection(database_url);
@@ -631,6 +665,40 @@ fn find_calories_by_mealfood(
     let summed_food: SummedFood = query
         .bind::<Integer, _>(food_id)
         .bind::<Integer, _>(meal_id)
+        .get_result(connection)
+        .ok()
+        .unwrap();
+
+    summed_food
+}
+
+fn find_calories_by_recipefood(
+    app_handle: tauri::AppHandle,
+    food_id: i32,
+    recipe_id: i32,
+) -> SummedFood {
+    let database_url = app_handle.state::<AppState>().database_url.clone();
+    let connection = &mut establish_connection(database_url);
+    let query = sql_query(
+        "SELECT 
+                round(ifnull(SUM(RF.quantity_grams * F.calories_per_100g / 100), 0)) AS calories,
+                ifnull(SUM(RF.quantity_grams * F.fat / 100), 0) AS fat,
+                ifnull(SUM(RF.quantity_grams * F.carbs / 100), 0) AS protein,
+                ifnull(SUM(RF.quantity_grams * F.protein / 100), 0) AS carbs,
+                ifnull(SUM(RF.quantity_grams * F.cholesterol / 100), 0) AS cholesterol,
+                ifnull(SUM(RF.quantity_grams * F.fiber / 100), 0) AS fiber,
+                ifnull(SUM(RF.quantity_grams * F.sodium / 100), 0) AS sodium
+            FROM recipes R 
+                JOIN recipe_foods RF ON R.id = RF.recipe_id
+                JOIN foods F ON RF.food_id = F.id
+            WHERE 
+                F.id = ?
+                AND
+                R.id = ?;",
+    );
+    let summed_food: SummedFood = query
+        .bind::<Integer, _>(food_id)
+        .bind::<Integer, _>(recipe_id)
         .get_result(connection)
         .ok()
         .unwrap();

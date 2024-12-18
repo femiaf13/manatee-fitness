@@ -7,7 +7,7 @@ import { invoke } from '@tauri-apps/api/core';
 import { load, Store } from '@tauri-apps/plugin-store';
 import { platform } from '@tauri-apps/plugin-os';
 import { RecipeFood } from '@models/recipefood.model';
-import { Recipe } from '@models/recipe.model';
+import { Recipe, SummedRecipeFood } from '@models/recipe.model';
 
 @Injectable({
     providedIn: 'root',
@@ -211,6 +211,15 @@ export class DatabaseService {
      */
     public async getRecipes(): Promise<Array<Recipe>> {
         return await invoke<Array<Recipe>>('find_recipes');
+    }
+
+    /**
+     *
+     * @param recipeId ID of the recipe
+     * @returns summed nutritional info for each food in the recipe
+     */
+    public async getSummedFoodByRecipe(recipeId: number): Promise<Array<SummedRecipeFood>> {
+        return await invoke<Array<SummedRecipeFood>>('find_summed_mealfood_by_recipe', { recipeId: recipeId });
     }
 
     /**

@@ -2,7 +2,7 @@ import { CommonModule } from '@angular/common';
 import { Component, effect, inject, OnInit, signal, untracked } from '@angular/core';
 import { RecipeCardComponent } from '@components/recipe-card/recipe-card.component';
 import { Recipe } from '@models/recipe.model';
-import { RecipeWithRecipeFoods } from '@models/recipefood.model';
+import { RecipeWithRecipeFoods } from '@models/recipe.model';
 import { DatabaseService } from '@services/database.service';
 import { DateService } from '@services/date.service';
 
@@ -28,7 +28,7 @@ export class RecipesPageComponent implements OnInit {
             untracked(() => {
                 // Okay this needs explaining:
                 //
-                // Whenever the list of recipes is set we get the recipesfoods
+                // Whenever the list of recipes is set we get the summed recipefoods
                 // for each recipe and jam them all together into a specific object
                 // to make easy access for later.
                 //
@@ -36,11 +36,11 @@ export class RecipesPageComponent implements OnInit {
                 // calls.
                 this.recipesWithRecipeFoods.set([]);
                 for (const recipe of recipes) {
-                    this.databaseService.getRecipeFoodsByRecipe(recipe.id).then(recipeFoods => {
+                    this.databaseService.getSummedFoodByRecipe(recipe.id).then(summedFoods => {
                         this.recipesWithRecipeFoods.update(currentArray => {
                             const recipesWithRecipeFood: RecipeWithRecipeFoods = {
                                 recipe: recipe,
-                                recipeFoods: recipeFoods,
+                                recipeFoods: summedFoods,
                             };
                             currentArray.push(recipesWithRecipeFood);
                             return currentArray;

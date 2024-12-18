@@ -72,6 +72,7 @@ pub fn run() {
             update_recipefood,
             delete_recipefood,
             find_summed_mealfood_by_meal,
+            find_summed_mealfood_by_recipe,
             find_calories_by_date,
             find_calories_by_date_and_meal
         ])

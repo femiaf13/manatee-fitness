@@ -1,22 +1,25 @@
 <mat-expansion-panel>
     <mat-expansion-panel-header>
         <mat-panel-title>
-            {{ recipeWithRecipeFood().recipe.recipe_name }}
-            <i style="padding-left: 0.5em">0 kcal</i>
+            <span>
+                {{ recipeWithRecipeFood().recipe.recipe_name }}
+                <i style="padding-left: 0.5em">{{ totalCalories() }} kcal</i>
+            </span>
         </mat-panel-title>
-        <!-- <mat-panel-description> 0 kcal </mat-panel-description> -->
     </mat-expansion-panel-header>
-    <p>{{ recipeWithRecipeFood().recipeFoods | json }}</p>
     <mat-action-list #recipeList>
         @for (recipefood of recipeWithRecipeFood().recipeFoods; track recipefood) {
             <mat-list-item>
-                <span matListItemTitle>{{ recipefood.food_id }}</span>
+                <span matListItemTitle class="mat-body">{{ recipefood.food.description }}</span>
+                <span matListItemMeta>
+                    <i>{{ recipefood.summed_food.calories }} kcal</i>
+                </span>
             </mat-list-item>
             <mat-divider></mat-divider>
         }
     </mat-action-list>
     <mat-action-row>
-        <button mat-icon-button><mat-icon fontIcon="delete"></mat-icon></button>
-        <button mat-icon-button><mat-icon fontIcon="add"></mat-icon></button>
+        <button mat-button><mat-icon fontIcon="delete"></mat-icon></button>
+        <button mat-button><mat-icon fontIcon="add"></mat-icon></button>
     </mat-action-row>
 </mat-expansion-panel>
