@@ -5,6 +5,10 @@ import { MatDialog } from '@angular/material/dialog';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { MatIconModule } from '@angular/material/icon';
 import { MatListModule } from '@angular/material/list';
+import {
+    ConfirmationDialogData,
+    ConfirmationDialogComponent,
+} from '@components/dialogs/confirmation-dialog/confirmation-dialog.component';
 import { RecipeDialogData, RecipeDialogComponent } from '@components/dialogs/recipe-dialog/recipe-dialog.component';
 import { LongPressDirective } from '@directives/longpress.directive';
 import { RecipeWithRecipeFoods } from '@models/recipe.model';
@@ -32,6 +36,28 @@ export class RecipeCardComponent {
         }
         return total;
     });
+
+    async deleteRecipe(event: MouseEvent) {
+        event.stopPropagation();
+        event.preventDefault();
+
+        const dialogData: ConfirmationDialogData = {
+            title: `Delete ${this.recipeWithRecipeFood().recipe.recipe_name}?`,
+            content: `Are you sure you want to delete this recipe?`,
+            action: 'Delete',
+        };
+        const dialogRef = this.dialog.open(ConfirmationDialogComponent, {
+            data: dialogData,
+        });
+        const confirmed = await lastValueFrom(dialogRef.afterClosed());
+        if (confirmed) {
+            const success = await this.databaseService.deleteRecipe(this.recipeWithRecipeFood().recipe.id);
+            if (!success) {
+                console.error('Failed to delete recipe: ' + JSON.stringify(this.recipeWithRecipeFood()));
+            }
+            this.recipeChanged.emit();
+        }
+    }
 
     async onLongPressRecipeCard(event: MouseEvent) {
         event.preventDefault();

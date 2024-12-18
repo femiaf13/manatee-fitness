@@ -19,7 +19,7 @@
         }
     </mat-action-list>
     <mat-action-row>
-        <button mat-button><mat-icon fontIcon="delete"></mat-icon></button>
+        <button mat-button (click)="deleteRecipe($event)"><mat-icon fontIcon="delete"></mat-icon></button>
         <button mat-button><mat-icon fontIcon="add"></mat-icon></button>
     </mat-action-row>
 </mat-expansion-panel>
