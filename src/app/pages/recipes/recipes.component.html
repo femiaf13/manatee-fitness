@@ -1,7 +1,9 @@
 <div class="main-content">
     <!-- {{ recipesWithRecipeFoods() | json }} -->
     @for (recipesWithRecipeFood of recipesWithRecipeFoods(); track $index) {
-        <app-recipe-card [recipeWithRecipeFood]="recipesWithRecipeFood"></app-recipe-card>
+        <app-recipe-card
+            [recipeWithRecipeFood]="recipesWithRecipeFood"
+            (recipeChanged)="refreshRecipes()"></app-recipe-card>
         <br />
     }
     <div class="bottom-right">

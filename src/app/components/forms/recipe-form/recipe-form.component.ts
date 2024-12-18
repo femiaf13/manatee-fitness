@@ -1,4 +1,4 @@
-import { Component, inject, input, output } from '@angular/core';
+import { Component, effect, inject, input, output, untracked } from '@angular/core';
 import { NonNullableFormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -22,7 +22,16 @@ export class RecipeFormComponent {
         recipeName: ['', [Validators.required]],
     });
 
-    constructor() {}
+    constructor() {
+        effect(() => {
+            const inputRecipe = this.inputRecipe();
+
+            // When editing a recipe load the existing data
+            untracked(() => {
+                this.recipeForm.controls.recipeName.setValue(inputRecipe.recipe_name);
+            });
+        });
+    }
 
     onSubmit() {
         const rawFormValues = this.recipeForm.getRawValue();
