@@ -1,0 +1,12 @@
+<h2 mat-dialog-title>
+    Edit <i>{{ data.summedRecipeFood.food.description }}</i> from <i>{{ data.recipe.recipe_name }}</i>
+</h2>
+<mat-dialog-content>
+    <app-recipefood-form
+        [inputRecipe]="this.data.recipe"
+        [inputFood]="this.data.summedRecipeFood.food"
+        [initialQuantityGrams]="this.data.summedRecipeFood.quantity_grams"
+        [initialQuantityServings]="this.data.summedRecipeFood.quantity_servings"
+        (cancelSubmission)="onCancel()"
+        (outputRecipeFood)="onSubmit($event)"></app-recipefood-form>
+</mat-dialog-content>

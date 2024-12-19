@@ -11,8 +11,13 @@ import {
     ConfirmationDialogComponent,
 } from '@components/dialogs/confirmation-dialog/confirmation-dialog.component';
 import { RecipeDialogData, RecipeDialogComponent } from '@components/dialogs/recipe-dialog/recipe-dialog.component';
+import {
+    RecipeFoodDialogData,
+    RecipefoodDialogComponent,
+} from '@components/dialogs/recipefood/recipefood-dialog.component';
 import { LongPressDirective } from '@directives/longpress.directive';
 import { RecipeWithRecipeFoods, SummedRecipeFood } from '@models/recipe.model';
+import { RecipeFood } from '@models/recipefood.model';
 import { DatabaseService } from '@services/database.service';
 import { lastValueFrom } from 'rxjs';
 
@@ -110,6 +115,29 @@ export class RecipeCardComponent {
             );
             if (!success) {
                 console.error('Failed to delete recipe food: ' + JSON.stringify(food.food.description));
+            }
+            this.recipeChanged.emit();
+        }
+    }
+
+    async openRecipeFoodDialog(food: SummedRecipeFood) {
+        const dialogData: RecipeFoodDialogData = {
+            recipe: this.recipeWithRecipeFood().recipe,
+            summedRecipeFood: food,
+        };
+        const dialogRef = this.dialog.open(RecipefoodDialogComponent, {
+            data: dialogData,
+            disableClose: true,
+            width: '90vw',
+            height: '90vh',
+            maxWidth: '90vw',
+            maxHeight: '90vh',
+        });
+        const newRecipeFood: RecipeFood | undefined = await lastValueFrom(dialogRef.afterClosed());
+        if (newRecipeFood !== undefined) {
+            const success = await this.databaseService.updateRecipeFood(newRecipeFood);
+            if (!success) {
+                console.error('Failed to update recipe food: ' + JSON.stringify(newRecipeFood));
             }
             this.recipeChanged.emit();
         }

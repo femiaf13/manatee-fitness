@@ -9,7 +9,10 @@
     </mat-expansion-panel-header>
     <mat-action-list #recipeList>
         @for (recipefood of recipeWithRecipeFood().recipeFoods; track recipefood) {
-            <mat-list-item appLongPress (longPress)="onRecipeFoodLongPress($event, recipefood)">
+            <mat-list-item
+                appLongPress
+                (longPress)="onRecipeFoodLongPress($event, recipefood)"
+                (click)="openRecipeFoodDialog(recipefood)">
                 <span matListItemTitle class="mat-body">{{ recipefood.food.description }}</span>
                 <span matListItemMeta>
                     <i>{{ recipefood.summed_food.calories }} kcal</i>
