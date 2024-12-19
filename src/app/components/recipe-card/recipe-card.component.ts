@@ -12,7 +12,7 @@ import {
 } from '@components/dialogs/confirmation-dialog/confirmation-dialog.component';
 import { RecipeDialogData, RecipeDialogComponent } from '@components/dialogs/recipe-dialog/recipe-dialog.component';
 import { LongPressDirective } from '@directives/longpress.directive';
-import { RecipeWithRecipeFoods } from '@models/recipe.model';
+import { RecipeWithRecipeFoods, SummedRecipeFood } from '@models/recipe.model';
 import { DatabaseService } from '@services/database.service';
 import { lastValueFrom } from 'rxjs';
 
@@ -85,6 +85,31 @@ export class RecipeCardComponent {
             const success = await this.databaseService.updateRecipe(this.recipeWithRecipeFood().recipe.id, newRecipe);
             if (!success) {
                 console.error('Failed to update recipe: ' + JSON.stringify(newRecipe));
+            }
+            this.recipeChanged.emit();
+        }
+    }
+
+    async onRecipeFoodLongPress(event: Event, food: SummedRecipeFood) {
+        event.stopPropagation();
+        event.preventDefault();
+
+        const dialogData: ConfirmationDialogData = {
+            title: `Delete ${food.food.description}?`,
+            content: `Are you sure you want to delete this food from ${this.recipeWithRecipeFood().recipe.recipe_name}?`,
+            action: 'Delete',
+        };
+        const dialogRef = this.dialog.open(ConfirmationDialogComponent, {
+            data: dialogData,
+        });
+        const confirmed = await lastValueFrom(dialogRef.afterClosed());
+        if (confirmed) {
+            const success = await this.databaseService.deleteRecipeFood(
+                this.recipeWithRecipeFood().recipe.id,
+                food.food.id
+            );
+            if (!success) {
+                console.error('Failed to delete recipe food: ' + JSON.stringify(food.food.description));
             }
             this.recipeChanged.emit();
         }
