@@ -10,7 +10,6 @@ export interface FoodDialogData {
 
 @Component({
     selector: 'app-food-dialog',
-    standalone: true,
     imports: [MatDialogTitle, MatDialogContent, FoodFormComponent],
     templateUrl: './food-dialog.component.html',
     styleUrl: './food-dialog.component.css',

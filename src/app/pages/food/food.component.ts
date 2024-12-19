@@ -34,7 +34,6 @@ import { RecipeFood } from '@models/recipefood.model';
 
 @Component({
     selector: 'app-page-food',
-    standalone: true,
     imports: [
         CommonModule,
         MatAutocompleteModule,

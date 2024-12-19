@@ -8,7 +8,6 @@ import { MatListModule } from '@angular/material/list';
 
 @Component({
     selector: 'app-root',
-    standalone: true,
     imports: [CommonModule, MatSidenavModule, MatIconModule, MatListModule, RouterLink, RouterOutlet, TopBarComponent],
     templateUrl: './app.component.html',
     styleUrl: './app.component.css',

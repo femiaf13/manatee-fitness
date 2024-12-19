@@ -9,7 +9,6 @@ import { DateService } from '@services/date.service';
 
 @Component({
     selector: 'app-top-bar',
-    standalone: true,
     providers: [provideNativeDateAdapter()],
     imports: [MatButtonModule, MatDatepickerModule, MatIconModule, MatMenuModule, MatToolbarModule],
     templateUrl: './top-bar.component.html',

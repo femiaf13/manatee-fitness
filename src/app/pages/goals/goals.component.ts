@@ -10,7 +10,6 @@ import { DateService } from '@services/date.service';
 
 @Component({
     selector: 'app-page-goals',
-    standalone: true,
     imports: [ReactiveFormsModule, MatButtonModule, MatFormFieldModule, MatGridListModule, MatInputModule],
     templateUrl: './goals.component.html',
     styleUrl: './goals.component.css',

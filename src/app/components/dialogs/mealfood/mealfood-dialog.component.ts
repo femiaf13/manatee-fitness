@@ -12,7 +12,6 @@ export interface MealFoodDialogData {
 
 @Component({
     selector: 'app-mealfood-dialog',
-    standalone: true,
     imports: [CommonModule, MatDialogModule, MealfoodFormComponent],
     templateUrl: './mealfood-dialog.component.html',
     styleUrl: './mealfood-dialog.component.css',

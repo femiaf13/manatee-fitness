@@ -14,7 +14,6 @@ import { lastValueFrom } from 'rxjs';
 
 @Component({
     selector: 'app-page-diary',
-    standalone: true,
     imports: [CommonModule, MealCardComponent, MatButtonModule, MatProgressBarModule, SwipeDirective],
     templateUrl: './diary.component.html',
     styleUrl: './diary.component.css',

@@ -17,7 +17,6 @@ import { debounceTime, distinctUntilChanged, lastValueFrom } from 'rxjs';
 
 @Component({
     selector: 'app-page-recipes',
-    standalone: true,
     imports: [
         CommonModule,
         MatButtonModule,

@@ -7,7 +7,6 @@ import { Recipe } from '@models/recipe.model';
 
 @Component({
     selector: 'app-recipe-form',
-    standalone: true,
     imports: [ReactiveFormsModule, MatButtonModule, MatFormFieldModule, MatInputModule],
     templateUrl: './recipe-form.component.html',
     styleUrl: './recipe-form.component.css',

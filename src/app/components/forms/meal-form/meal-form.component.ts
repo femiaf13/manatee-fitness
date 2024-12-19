@@ -10,7 +10,6 @@ import { MealDTO } from '@models/meal.model';
 
 @Component({
     selector: 'app-meal-form',
-    standalone: true,
     providers: [provideNativeDateAdapter()],
     imports: [
         CommonModule,

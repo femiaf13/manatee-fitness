@@ -39,6 +39,12 @@ Manatee Fitness is developed in good faith and for general use. The developer wi
 
 Follow [Tauri's guide to install prerequisites](https://v2.tauri.app/start/prerequisites/)
 
+#### Upgrading Dependencies
+
+1. Use https://angular.dev/update-guide
+    - Upgrade Angular with: `npx ng update @angular/core@<version> @angular/cli@<version> @angular-eslint/schematics@<version> --allow-dirty` where version is something like `19`. *Note the addition of eslint compared to what the guide lists.*
+
+
 ## Run the application
 
 Depending on your target platform follow [Tauri's guide on running an app](https://v2.tauri.app/develop/).

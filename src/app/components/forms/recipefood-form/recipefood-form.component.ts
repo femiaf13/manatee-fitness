@@ -11,7 +11,6 @@ import { RecipeFood } from '@models/recipefood.model';
 
 @Component({
     selector: 'app-recipefood-form',
-    standalone: true,
     imports: [MatButtonModule, MatFormFieldModule, MatGridListModule, MatInputModule, ReactiveFormsModule],
     templateUrl: './recipefood-form.component.html',
     styleUrl: './recipefood-form.component.css',

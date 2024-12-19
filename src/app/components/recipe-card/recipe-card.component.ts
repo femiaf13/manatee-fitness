@@ -23,7 +23,6 @@ import { lastValueFrom } from 'rxjs';
 
 @Component({
     selector: 'app-recipe-card',
-    standalone: true,
     imports: [
         CommonModule,
         LongPressDirective,

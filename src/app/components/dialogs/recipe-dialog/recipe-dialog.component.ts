@@ -10,7 +10,6 @@ export interface RecipeDialogData {
 
 @Component({
     selector: 'app-recipe-dialog',
-    standalone: true,
     imports: [MatDialogTitle, MatDialogContent, RecipeFormComponent],
     templateUrl: './recipe-dialog.component.html',
     styleUrl: './recipe-dialog.component.css',

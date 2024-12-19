@@ -10,7 +10,6 @@ export interface ConfirmationDialogData {
 
 @Component({
     selector: 'app-confirmation-dialog',
-    standalone: true,
     imports: [MatButtonModule, MatDialogModule],
     templateUrl: './confirmation-dialog.component.html',
     styleUrl: './confirmation-dialog.component.css',

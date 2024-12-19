@@ -14,7 +14,6 @@ class BaseFoodListComponent {
 
 @Component({
     selector: 'app-food-list',
-    standalone: true,
     imports: [CommonModule, MatDividerModule, MatListModule],
     templateUrl: './local-food-list.component.html',
     styleUrl: './food-list.component.css',
@@ -26,7 +25,6 @@ export class LocalFoodListComponent extends BaseFoodListComponent {
 
 @Component({
     selector: 'app-off-food-list',
-    standalone: true,
     imports: [CommonModule, MatDividerModule, MatListModule],
     templateUrl: './food-list.component.html',
     styleUrl: './food-list.component.css',

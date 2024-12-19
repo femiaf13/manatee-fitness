@@ -12,7 +12,6 @@ import { MealFood } from '@models/mealfood.model';
 
 @Component({
     selector: 'app-mealfood-form',
-    standalone: true,
     imports: [MatButtonModule, MatFormFieldModule, MatGridListModule, MatInputModule, ReactiveFormsModule, RouterLink],
     templateUrl: './mealfood-form.component.html',
     styleUrl: './mealfood-form.component.css',

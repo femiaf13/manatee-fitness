@@ -9,7 +9,6 @@ import { FoodDTO } from '@models/food.model';
 
 @Component({
     selector: 'app-food-form',
-    standalone: true,
     imports: [
         CommonModule,
         ReactiveFormsModule,

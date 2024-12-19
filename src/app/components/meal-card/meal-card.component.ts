@@ -23,7 +23,6 @@ import { lastValueFrom } from 'rxjs';
 
 @Component({
     selector: 'app-meal-card',
-    standalone: true,
     imports: [
         LongPressDirective,
         MatButtonModule,
