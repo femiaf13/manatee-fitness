@@ -30,6 +30,28 @@ export interface RecipeWithRecipeFoods {
 }
 
 /**
+ * Apply a "contains" filter to an array of recipes by their name.
+ *
+ * NOTE: The filter will be processed with `filter.toLowerCase().trim()` inside the function
+ *
+ * EXPLANATION: We are filtering in JS instead of SQL here because the number of recipes should never be
+ * as large as the number of foods. It feels like overkill to take things down to SQL
+ * for something like this. It can be changed later if the performance ends up being a problem.
+ *
+ * @param recipes array of recipes to be filtered
+ * @param filter filter to apply to array
+ * @returns array of recipes that have a name containing the filter
+ */
+export function filterRecipes(recipes: Recipe[], filter: string): Recipe[] {
+    const trimmedFilter = filter.toLowerCase().trim();
+    const filteredRecipes = recipes.filter(function (recipe) {
+        const trimmedName = recipe.recipe_name.toLowerCase().trim();
+        return trimmedName.includes(trimmedFilter);
+    });
+    return filteredRecipes;
+}
+
+/**
  * This is a type predicate
  * https://www.typescriptlang.org/docs/handbook/2/narrowing.html#using-type-predicates
  *

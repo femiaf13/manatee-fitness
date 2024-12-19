@@ -1,5 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, effect, inject, OnInit, signal, untracked } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDialog } from '@angular/material/dialog';
@@ -8,7 +9,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { RecipeDialogData, RecipeDialogComponent } from '@components/dialogs/recipe-dialog/recipe-dialog.component';
 import { RecipeCardComponent } from '@components/recipe-card/recipe-card.component';
-import { Recipe } from '@models/recipe.model';
+import { filterRecipes, Recipe } from '@models/recipe.model';
 import { RecipeWithRecipeFoods } from '@models/recipe.model';
 import { DatabaseService } from '@services/database.service';
 import { DateService } from '@services/date.service';
@@ -65,20 +66,12 @@ export class RecipesPageComponent implements OnInit {
     /**
      * Grab all(or filtered) recipes from the DB and set the signal with the value
      *
-     * We are filtering in JS instead of SQL here because the number of recipes should never be
-     * as large as the number of foods. It feels like overkill to take things down to SQL
-     * for something like this. It can be changed later if the performance ends up being a problem.
-     *
      * @param [filter=undefined] Filter to apply to recipes that will be shown. **Default is no filter**
      */
     async refreshRecipes(filter: string | undefined = undefined) {
         let recipes = await this.databaseService.getRecipes();
         if (filter !== undefined) {
-            const trimmedFilter = filter.toLowerCase().trim();
-            recipes = recipes.filter(function (recipe) {
-                const trimmedName = recipe.recipe_name.toLowerCase().trim();
-                return trimmedName.includes(trimmedFilter);
-            });
+            recipes = filterRecipes(recipes, filter);
         }
         // NICE TO HAVE: Optimization for later is only setting this if
         // the new list of recipes is actually different from the current set.
@@ -89,9 +82,11 @@ export class RecipesPageComponent implements OnInit {
     constructor() {
         this.dateService.setTitle('Recipes');
 
-        this.searchText.valueChanges.pipe(debounceTime(100), distinctUntilChanged()).subscribe(searchTerm => {
-            this.refreshRecipes(searchTerm);
-        });
+        this.searchText.valueChanges
+            .pipe(debounceTime(100), distinctUntilChanged(), takeUntilDestroyed())
+            .subscribe(searchTerm => {
+                this.refreshRecipes(searchTerm);
+            });
 
         effect(() => {
             const recipes = this.recipes();

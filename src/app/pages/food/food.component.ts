@@ -23,7 +23,7 @@ import { MealfoodFormComponent } from '@components/forms/mealfood-form/mealfood-
 import { Food, FoodDTO } from '@models/food.model';
 import { Meal } from '@models/meal.model';
 import { MealFood } from '@models/mealfood.model';
-import { isRecipe, Recipe } from '@models/recipe.model';
+import { filterRecipes, isRecipe, Recipe } from '@models/recipe.model';
 import { DatabaseService } from '@services/database.service';
 import { DateService } from '@services/date.service';
 import { OpenFoodFactsService } from '@services/open-food-facts.service';
@@ -130,10 +130,11 @@ export class FoodPageComponent implements OnInit {
 
     async search(searchTerm: string): Promise<Array<Food | Recipe>> {
         let searchResult = [];
-        searchResult = await this.databaseService.getFoodsBySearch(searchTerm);
+        const trimmedFilter = searchTerm.toLowerCase().trim();
+        searchResult = await this.databaseService.getFoodsBySearch(trimmedFilter);
         if (this.addingToMeal()) {
             const recipeSearchResult = await this.databaseService.getRecipes();
-            return [...recipeSearchResult, ...searchResult];
+            return [...filterRecipes(recipeSearchResult, trimmedFilter), ...searchResult];
         }
         return searchResult;
     }
