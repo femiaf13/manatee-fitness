@@ -10,6 +10,7 @@
     <mat-action-list #recipeList>
         @for (recipefood of recipeWithRecipeFood().recipeFoods; track recipefood) {
             <mat-list-item
+                style="text-align: left"
                 appLongPress
                 (longPress)="onRecipeFoodLongPress($event, recipefood)"
                 (click)="openRecipeFoodDialog(recipefood)">
@@ -17,8 +18,19 @@
                 <span matListItemMeta>
                     <i>{{ recipefood.summed_food.calories }} kcal</i>
                 </span>
+                @if (recipefood.quantity_servings === 0 && recipefood.quantity_grams > 0) {
+                    <span matListItemLine>
+                        <i>{{ recipefood.quantity_grams }}g</i>
+                    </span>
+                } @else {
+                    <span matListItemLine>
+                        <i>
+                            {{ +recipefood.quantity_servings.toFixed(2) }} x
+                            {{ recipefood.food.serving_text ? recipefood.food.serving_text : '???' }}
+                        </i>
+                    </span>
+                }
             </mat-list-item>
-            <mat-divider></mat-divider>
         }
     </mat-action-list>
     <mat-action-row>
