@@ -20,7 +20,6 @@ import {
 import { FoodDialogComponent, FoodDialogData } from '@components/dialogs/food/food-dialog.component';
 import { LocalFoodListComponent, OpenFoodFactsFoodListComponent } from '@components/food-list/food-list.component';
 import { MealfoodFormComponent } from '@components/forms/mealfood-form/mealfood-form.component';
-import { RecipeFormComponent } from '@components/forms/recipe-form/recipe-form.component';
 import { Food, FoodDTO } from '@models/food.model';
 import { Meal } from '@models/meal.model';
 import { MealFood } from '@models/mealfood.model';
@@ -49,7 +48,6 @@ import { RecipeFood } from '@models/recipefood.model';
         ReactiveFormsModule,
         LocalFoodListComponent,
         MealfoodFormComponent,
-        RecipeFormComponent,
         OpenFoodFactsFoodListComponent,
         RecipefoodFormComponent,
     ],
