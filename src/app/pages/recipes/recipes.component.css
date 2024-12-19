@@ -5,6 +5,10 @@
     padding-bottom: 3em;
 }
 
+mat-form-field {
+    width: 90vw;
+}
+
 .bottom-right {
     position: fixed;
     bottom: 15px;

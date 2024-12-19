@@ -1,5 +1,8 @@
 <div class="main-content">
-    <!-- {{ recipesWithRecipeFoods() | json }} -->
+    <mat-form-field>
+        <mat-label>Search Recipes</mat-label>
+        <input matInput type="search" [formControl]="searchText" placeholder="Search" />
+    </mat-form-field>
     @for (recipesWithRecipeFood of recipesWithRecipeFoods(); track $index) {
         <app-recipe-card
             [recipeWithRecipeFood]="recipesWithRecipeFood"
