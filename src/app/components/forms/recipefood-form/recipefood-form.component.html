@@ -1,0 +1,79 @@
+@if (inputFood()) {
+    @if (inputFood().calories_per_serving !== 0) {
+        <mat-form-field>
+            <mat-label>Number of Servings</mat-label>
+            <input matInput type="number" placeholder="Enter Servings" [formControl]="servings" />
+            <span matTextSuffix>{{ inputFood().serving_text }}</span>
+        </mat-form-field>
+    } @else {
+        <!-- Need to handle situations where servings aren't defined -->
+        <mat-form-field>
+            <mat-label>Number of Grams</mat-label>
+            <input matInput type="number" [formControl]="grams" />
+            <span matTextSuffix>g</span>
+        </mat-form-field>
+    }
+
+    <br />
+    <mat-grid-list cols="2" rowHeight="5:2">
+        <mat-grid-tile>
+            <mat-form-field>
+                <mat-label>Calories</mat-label>
+                <input matInput [readonly]="true" [value]="summedMealFood().calories" />
+                <span matTextSuffix>kcal</span>
+            </mat-form-field>
+        </mat-grid-tile>
+
+        <mat-grid-tile>
+            <mat-form-field>
+                <mat-label>Fat</mat-label>
+                <input matInput [readonly]="true" [value]="summedMealFood().fat" />
+                <span matTextSuffix>g</span>
+            </mat-form-field>
+        </mat-grid-tile>
+
+        <mat-grid-tile>
+            <mat-form-field>
+                <mat-label>Carbs</mat-label>
+                <input matInput [readonly]="true" [value]="summedMealFood().carbs" />
+                <span matTextSuffix>g</span>
+            </mat-form-field>
+        </mat-grid-tile>
+
+        <mat-grid-tile>
+            <mat-form-field>
+                <mat-label>Protein</mat-label>
+                <input matInput [readonly]="true" [value]="summedMealFood().protein" />
+                <span matTextSuffix>g</span>
+            </mat-form-field>
+        </mat-grid-tile>
+
+        <mat-grid-tile>
+            <mat-form-field>
+                <mat-label>Cholesterol</mat-label>
+                <input matInput [readonly]="true" [value]="summedMealFood().cholesterol" />
+                <span matTextSuffix>mg</span>
+            </mat-form-field>
+        </mat-grid-tile>
+
+        <mat-grid-tile>
+            <mat-form-field>
+                <mat-label>Fiber</mat-label>
+                <input matInput [readonly]="true" [value]="summedMealFood().fiber" />
+                <span matTextSuffix>g</span>
+            </mat-form-field>
+        </mat-grid-tile>
+
+        <mat-grid-tile>
+            <mat-form-field>
+                <mat-label>Sodium</mat-label>
+                <input matInput [readonly]="true" [value]="summedMealFood().sodium" />
+                <span matTextSuffix>mg</span>
+            </mat-form-field>
+        </mat-grid-tile>
+    </mat-grid-list>
+    <div class="bottom-right">
+        <button mat-flat-button (click)="cancelSubmission.emit()" style="margin-right: 10px">Cancel</button>
+        <button mat-flat-button (click)="onSubmit()">Submit</button>
+    </div>
+}

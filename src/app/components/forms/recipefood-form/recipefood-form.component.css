@@ -1,0 +1,15 @@
+.serving-text {
+    font-size: large;
+    margin: 10px;
+}
+
+mat-grid-tile mat-form-field {
+    padding: 5px;
+    width: 100%;
+}
+
+.bottom-right {
+    position: absolute;
+    bottom: 15px;
+    right: 15px;
+}

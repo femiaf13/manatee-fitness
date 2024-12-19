@@ -20,6 +20,7 @@ import {
 import { FoodDialogComponent, FoodDialogData } from '@components/dialogs/food/food-dialog.component';
 import { LocalFoodListComponent, OpenFoodFactsFoodListComponent } from '@components/food-list/food-list.component';
 import { MealfoodFormComponent } from '@components/forms/mealfood-form/mealfood-form.component';
+import { RecipeFormComponent } from '@components/forms/recipe-form/recipe-form.component';
 import { Food, FoodDTO } from '@models/food.model';
 import { Meal } from '@models/meal.model';
 import { MealFood } from '@models/mealfood.model';
@@ -29,6 +30,8 @@ import { DateService } from '@services/date.service';
 import { OpenFoodFactsService } from '@services/open-food-facts.service';
 import { ScanService } from '@services/scan.service';
 import { debounceTime, distinctUntilChanged, lastValueFrom, switchMap } from 'rxjs';
+import { RecipefoodFormComponent } from '../../components/forms/recipefood-form/recipefood-form.component';
+import { RecipeFood } from '@models/recipefood.model';
 
 @Component({
     selector: 'app-page-food',
@@ -46,7 +49,9 @@ import { debounceTime, distinctUntilChanged, lastValueFrom, switchMap } from 'rx
         ReactiveFormsModule,
         LocalFoodListComponent,
         MealfoodFormComponent,
+        RecipeFormComponent,
         OpenFoodFactsFoodListComponent,
+        RecipefoodFormComponent,
     ],
     templateUrl: './food.component.html',
     styleUrl: './food.component.css',
@@ -90,6 +95,15 @@ export class FoodPageComponent implements OnInit {
     mealId: number | undefined = undefined;
     meal: Meal | undefined = undefined;
     addingToMeal = signal<boolean>(false);
+
+    /**
+     * Optional input parameter telling us if we're looking for food for a specific recipe
+     *
+     * This comes across as query parameter!
+     */
+    recipeId: number | undefined = undefined;
+    recipe: Recipe | undefined = undefined;
+    addingToRecipe = signal<boolean>(false);
 
     foodToAdd = signal<Food>(new Food());
 
@@ -139,6 +153,16 @@ export class FoodPageComponent implements OnInit {
         if (!result) {
             console.error('Unable to add meal food!');
             this.openSnackBar('Meal cannot have duplicate foods');
+        }
+        this.searchText.setValue('');
+        this.foodToAdd.set(new Food());
+    }
+
+    async onRecipeFoodSubmit(recipeFood: RecipeFood) {
+        const result = await this.databaseService.createRecipeFood(recipeFood);
+        if (!result) {
+            console.error('Unable to add recipe food!');
+            this.openSnackBar('Recipe cannot have duplicate foods');
         }
         this.searchText.setValue('');
         this.foodToAdd.set(new Food());
@@ -239,7 +263,7 @@ export class FoodPageComponent implements OnInit {
         this.searchText.setValue('');
 
         if (!isRecipe(food)) {
-            if (this.addingToMeal()) {
+            if (this.addingToMeal() || this.addingToRecipe()) {
                 this.foodToAdd.set(food);
             } else {
                 this.modifyFood(food);
@@ -286,6 +310,13 @@ export class FoodPageComponent implements OnInit {
             this.mealId = Number(mealIdParam);
             this.meal = await this.databaseService.getMealById(this.mealId);
             this.addingToMeal.set(true);
+            return;
+        }
+        const recipeIdParam: string | undefined = this.route.snapshot.queryParams['recipe'];
+        if (recipeIdParam) {
+            this.recipeId = Number(recipeIdParam);
+            this.recipe = await this.databaseService.getRecipeById(this.recipeId);
+            this.addingToRecipe.set(true);
         }
     }
 }

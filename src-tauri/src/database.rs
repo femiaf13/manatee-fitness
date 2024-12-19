@@ -363,6 +363,18 @@ pub fn create_recipe(app_handle: tauri::AppHandle, recipe_name: &str) -> bool {
 }
 
 #[tauri::command]
+pub fn find_recipe_by_id(app_handle: tauri::AppHandle, recipe_id: i32) -> Recipe {
+    let database_url = app_handle.state::<AppState>().database_url.clone();
+    let connection = &mut establish_connection(database_url);
+    use crate::schema::recipes::dsl::*;
+
+    recipes
+        .filter(id.eq(recipe_id))
+        .first::<Recipe>(connection)
+        .expect("Could not find recipe")
+}
+
+#[tauri::command]
 pub fn find_recipes(app_handle: tauri::AppHandle) -> Vec<Recipe> {
     let database_url = app_handle.state::<AppState>().database_url.clone();
     let connection = &mut establish_connection(database_url);

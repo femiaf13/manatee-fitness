@@ -3,6 +3,10 @@
         <!-- We are entering this page to select food for a meal -->
         <h2>Adding Food</h2>
         <h3>{{ meal.meal_name }} on {{ meal.meal_date }}</h3>
+    } @else if (addingToRecipe() && recipe) {
+        <h3>
+            Adding food to <i>{{ recipe.recipe_name }}</i>
+        </h3>
     }
     @if (addingToMeal() && meal && foodToAdd().id !== 0) {
         <!-- A food was selected, display the mealfood form -->
@@ -10,6 +14,11 @@
             [inputFood]="foodToAdd()"
             [inputMeal]="meal"
             (outputMealFood)="onMealFoodSubmit($event)"></app-mealfood-form>
+    } @else if (addingToRecipe() && recipe && foodToAdd().id !== 0) {
+        <app-recipefood-form
+            [inputFood]="foodToAdd()"
+            [inputRecipe]="recipe"
+            (outputRecipeFood)="onRecipeFoodSubmit($event)"></app-recipefood-form>
     } @else {
         <!-- Display the search bar if we aren't displaying the form -->
         <div>

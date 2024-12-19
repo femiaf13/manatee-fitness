@@ -207,6 +207,15 @@ export class DatabaseService {
 
     /**
      *
+     * @param id id to retrieve
+     * @returns recipe for the passed in ID
+     */
+    public async getRecipeById(id: number): Promise<Recipe> {
+        return await invoke<Recipe>('find_recipe_by_id', { recipeId: id });
+    }
+
+    /**
+     *
      * @returns All recipes in the database
      */
     public async getRecipes(): Promise<Array<Recipe>> {

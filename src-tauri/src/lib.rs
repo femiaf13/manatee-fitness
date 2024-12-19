@@ -65,6 +65,7 @@ pub fn run() {
             delete_mealfood,
             create_recipe,
             find_recipes,
+            find_recipe_by_id,
             update_recipe,
             delete_recipe,
             create_recipefood,
