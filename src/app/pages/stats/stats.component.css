@@ -6,3 +6,7 @@
     padding-bottom: 3em;
     z-index: 10;
 }
+
+apx-chart {
+    width: 90vw;
+}

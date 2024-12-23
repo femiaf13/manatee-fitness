@@ -22,7 +22,8 @@
                         "polyfills": ["zone.js"],
                         "tsConfig": "tsconfig.app.json",
                         "assets": ["src/assets"],
-                        "styles": ["src/styles.css", "@angular/material/prebuilt-themes/purple-green.css"]
+                        "styles": ["src/styles.css", "@angular/material/prebuilt-themes/purple-green.css"],
+                        "scripts": ["node_modules/apexcharts/dist/apexcharts.min.js"]
                     },
                     "configurations": {
                         "production": {
