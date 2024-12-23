@@ -1,10 +1,14 @@
 <div class="main-content">
-    <apx-chart
-        [annotations]="chartOptions.annotations"
-        [series]="chartOptions.series"
-        [chart]="chartOptions.chart"
-        [xaxis]="chartOptions.xaxis"
-        [dataLabels]="chartOptions.dataLabels"
-        [theme]="chartOptions.theme"
-        [title]="chartOptions.title"></apx-chart>
+    @if (chartOptions().xaxis.categories.length > 0) {
+        <apx-chart
+            [annotations]="chartOptions().annotations"
+            [series]="chartOptions().series"
+            [chart]="chartOptions().chart"
+            [xaxis]="chartOptions().xaxis"
+            [dataLabels]="chartOptions().dataLabels"
+            [theme]="chartOptions().theme"
+            [title]="chartOptions().title"></apx-chart>
+    } @else {
+        <p>No data available for the previous 30 days!</p>
+    }
 </div>

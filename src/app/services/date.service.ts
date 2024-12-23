@@ -9,7 +9,7 @@ export class DateService {
     public static readonly DATE_FORMAT_STRING = 'yyyy-MM-dd';
 
     selectedDate = signal(new Date());
-    selectedDateFormatted = computed(() => format(this.selectedDate(), DateService.DATE_FORMAT_STRING));
+    selectedDateFormatted = computed(() => DateService.formateDate(this.selectedDate()));
 
     pageTitle = signal<string>('');
 
@@ -41,6 +41,10 @@ export class DateService {
      */
     public setYesterday() {
         this.selectedDate.set(addDays(this.selectedDate(), -1));
+    }
+
+    public static formateDate(date: Date): string {
+        return format(date, DateService.DATE_FORMAT_STRING);
     }
 
     public static formatTime(time: string): string {
