@@ -13,31 +13,7 @@ import { ApexChart } from 'ng-apexcharts';
 // };
 
 export class BarChart {
-    annotations: ApexAnnotations = {
-        yaxis: [
-            {
-                y: 75,
-                width: '100%',
-                label: {
-                    text: 'goal',
-                    position: 'left',
-                    offsetX: -10,
-                    style: {
-                        background: '#fff',
-                        color: '#777',
-                        fontSize: '12px',
-                        fontFamily: 'Roboto, sans-serif',
-                        padding: {
-                            left: 5,
-                            right: 5,
-                            top: 3,
-                            bottom: 5,
-                        },
-                    },
-                },
-            },
-        ],
-    };
+    annotations: ApexAnnotations = {};
 
     chart: ApexChart = {
         height: 450,
@@ -70,7 +46,13 @@ export class BarChart {
      * @param yAxisTitle Name of the data on the y-axis e.g. 'calories'
      * @param title Title for the chart e.g. 'calories for <date>-<date>'
      */
-    constructor(data: Array<number>, datetimes: Array<string>, yAxisTitle: string, title: string) {
+    constructor(
+        data: Array<number>,
+        datetimes: Array<string>,
+        yAxisTitle: string,
+        title: string,
+        annotationValue: number | undefined = undefined
+    ) {
         this.title = {
             text: title,
             align: 'left',
@@ -94,6 +76,34 @@ export class BarChart {
 
         for (let index = 0; index < datetimes.length; index++) {
             (this.xaxis.categories as number[]).push(new Date(datetimes[index]).getTime());
+        }
+
+        if (annotationValue !== undefined) {
+            this.annotations = {
+                yaxis: [
+                    {
+                        y: annotationValue,
+                        width: '100%',
+                        label: {
+                            text: 'goal',
+                            position: 'left',
+                            offsetX: -10,
+                            style: {
+                                background: '#fff',
+                                color: '#777',
+                                fontSize: '12px',
+                                fontFamily: 'Roboto, sans-serif',
+                                padding: {
+                                    left: 5,
+                                    right: 5,
+                                    top: 3,
+                                    bottom: 5,
+                                },
+                            },
+                        },
+                    },
+                ],
+            };
         }
     }
 }

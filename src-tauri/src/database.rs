@@ -719,6 +719,7 @@ fn find_calories_by_recipefood(
 }
 
 #[tauri::command]
+/// Sum all food each day in the range, mostly useful for graphing data
 pub fn find_calories_between_dates(
     app_handle: tauri::AppHandle,
     start_date: &str,
