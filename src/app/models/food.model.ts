@@ -77,3 +77,12 @@ export class SummedFood {
         this.sodium = 0;
     }
 }
+
+export class SummedFoodWithDate extends SummedFood {
+    date: string;
+
+    constructor() {
+        super();
+        this.date = '1970-01-01';
+    }
+}

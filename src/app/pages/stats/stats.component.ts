@@ -1,5 +1,6 @@
 import { Component, inject } from '@angular/core';
 import { BarChart } from '@models/chart-bar.model';
+import { DatabaseService } from '@services/database.service';
 import { DateService } from '@services/date.service';
 import { NgApexchartsModule } from 'ng-apexcharts';
 
@@ -11,6 +12,8 @@ import { NgApexchartsModule } from 'ng-apexcharts';
 })
 export class StatsPageComponent {
     dateService = inject(DateService);
+    databaseService = inject(DatabaseService);
+
     public chartOptions: BarChart;
 
     constructor() {
@@ -40,5 +43,8 @@ export class StatsPageComponent {
             'Calories',
             'Calories for <date-range>'
         );
+        this.databaseService.getsummedFoodBetweenDates('2024-11-01', '2024-12-31').then(answer => {
+            console.log(JSON.stringify(answer));
+        });
     }
 }

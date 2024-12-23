@@ -717,3 +717,41 @@ fn find_calories_by_recipefood(
 
     summed_food
 }
+
+#[tauri::command]
+pub fn find_calories_between_dates(
+    app_handle: tauri::AppHandle,
+    start_date: &str,
+    end_date: &str,
+) -> Vec<SummedFoodWithDate> {
+    let database_url = app_handle.state::<AppState>().database_url.clone();
+    let connection = &mut establish_connection(database_url);
+    let query = sql_query(
+        "SELECT 
+	        M.meal_date as date,
+            round(ifnull(SUM(MF.quantity_grams * F.calories_per_100g / 100), 0)) AS calories,
+            round(ifnull(SUM(MF.quantity_grams * F.fat / 100), 0)) AS fat,
+            round(ifnull(SUM(MF.quantity_grams * F.carbs / 100), 0)) AS protein,
+            round(ifnull(SUM(MF.quantity_grams * F.protein / 100), 0)) AS carbs,
+            round(ifnull(SUM(MF.quantity_grams * F.cholesterol / 100), 0)) AS cholesterol,
+            round(ifnull(SUM(MF.quantity_grams * F.fiber / 100), 0)) AS fiber,
+            round(ifnull(SUM(MF.quantity_grams * F.sodium / 100), 0)) AS sodium
+        FROM meals M 
+            JOIN meal_foods MF ON M.id = MF.meal_id
+            JOIN foods F ON MF.food_id = F.id
+        WHERE 
+            M.meal_date BETWEEN ? AND ?
+        GROUP BY
+            M.meal_date
+        ORDER BY 
+            M.meal_date ASC;",
+    );
+    let summed_food: Vec<SummedFoodWithDate> = query
+        .bind::<Text, _>(start_date)
+        .bind::<Text, _>(end_date)
+        .get_results(connection)
+        .ok()
+        .unwrap_or(vec![]);
+
+    summed_food
+}

@@ -75,7 +75,8 @@ pub fn run() {
             find_summed_mealfood_by_meal,
             find_summed_mealfood_by_recipe,
             find_calories_by_date,
-            find_calories_by_date_and_meal
+            find_calories_by_date_and_meal,
+            find_calories_between_dates
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");

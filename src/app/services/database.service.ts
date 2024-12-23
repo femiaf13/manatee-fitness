@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Food, FoodDTO, SummedFood } from '@models/food.model';
+import { Food, FoodDTO, SummedFood, SummedFoodWithDate } from '@models/food.model';
 import { Goal } from '@models/goal.model';
 import { Meal, MealDTO } from '@models/meal.model';
 import { MealFood, SummedMealFood } from '@models/mealfood.model';
@@ -154,6 +154,13 @@ export class DatabaseService {
     public async getSummedFoodForDate(date: string): Promise<SummedFood> {
         return await invoke<SummedFood>('find_calories_by_date', {
             dateToFind: date,
+        });
+    }
+
+    public async getsummedFoodBetweenDates(startDate: string, endDate: string): Promise<Array<SummedFoodWithDate>> {
+        return await invoke<SummedFoodWithDate[]>('find_calories_between_dates', {
+            startDate: startDate,
+            endDate: endDate,
         });
     }
 

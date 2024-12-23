@@ -131,6 +131,27 @@ pub struct SummedFood {
     pub sodium: f32,
 }
 
+#[derive(Default, QueryableByName, Clone, Serialize)]
+#[diesel(check_for_backend(diesel::sqlite::Sqlite))]
+pub struct SummedFoodWithDate {
+    #[diesel(sql_type = Text)]
+    pub date: String,
+    #[diesel(sql_type = Float)]
+    pub calories: f32,
+    #[diesel(sql_type = Float)]
+    pub fat: f32,
+    #[diesel(sql_type = Float)]
+    pub carbs: f32,
+    #[diesel(sql_type = Float)]
+    pub protein: f32,
+    #[diesel(sql_type = Float)]
+    pub cholesterol: f32,
+    #[diesel(sql_type = Float)]
+    pub fiber: f32,
+    #[diesel(sql_type = Float)]
+    pub sodium: f32,
+}
+
 #[derive(Default, Clone, Serialize)]
 pub struct SummedMealFood {
     pub quantity_grams: f32,
