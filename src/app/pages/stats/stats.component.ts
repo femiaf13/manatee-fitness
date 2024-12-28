@@ -10,6 +10,7 @@ import { MatInputModule } from '@angular/material/input';
 import { BarChart } from '@models/chart-bar.model';
 import { DatabaseService } from '@services/database.service';
 import { DateService } from '@services/date.service';
+import { subDays } from 'date-fns';
 import { NgApexchartsModule } from 'ng-apexcharts';
 
 @Component({
@@ -36,12 +37,12 @@ export class StatsPageComponent {
 
     private formBuilder = inject(NonNullableFormBuilder);
     dateRangeForm = this.formBuilder.group({
-        start: [this.dateService.selectedDate(), [Validators.required]],
+        start: [subDays(this.dateService.selectedDate(), 7), [Validators.required]],
         end: [this.dateService.selectedDate(), [Validators.required]],
     });
 
     startDateSignal = toSignal(this.dateRangeForm.controls.start.valueChanges, {
-        initialValue: this.dateService.selectedDate(),
+        initialValue: subDays(this.dateService.selectedDate(), 7),
     });
     endDateSignal = toSignal(this.dateRangeForm.controls.end.valueChanges, {
         initialValue: this.dateService.selectedDate(),
