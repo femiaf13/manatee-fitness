@@ -43,6 +43,7 @@ export class DiaryComponent implements OnInit {
 
     async ngOnInit() {
         this.goal = await this.databaseService.getGoal();
+        this.refreshMeals(this.today());
     }
 
     async addMeal() {
