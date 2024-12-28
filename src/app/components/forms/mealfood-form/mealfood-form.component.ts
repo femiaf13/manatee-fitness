@@ -5,38 +5,24 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatGridListModule } from '@angular/material/grid-list';
 import { MatInputModule } from '@angular/material/input';
-import { RouterLink } from '@angular/router';
 import { Food, SummedFood } from '@models/food.model';
 import { Meal } from '@models/meal.model';
 import { MealFood } from '@models/mealfood.model';
 
 @Component({
     selector: 'app-mealfood-form',
-    imports: [MatButtonModule, MatFormFieldModule, MatGridListModule, MatInputModule, ReactiveFormsModule, RouterLink],
+    imports: [MatButtonModule, MatFormFieldModule, MatGridListModule, MatInputModule, ReactiveFormsModule],
     templateUrl: './mealfood-form.component.html',
     styleUrl: './mealfood-form.component.css',
 })
 export class MealfoodFormComponent {
     inputMeal = input.required<Meal>();
-    /**
-     * string | food is a quirk of how the autocomplete has to be wrangled
-     */
-    inputFood = input.required<string | Food>();
+    inputFood = input.required<Food>();
     initialQuantityGrams = input<number>(0);
     initialQuantityServings = input<number>(0.0);
 
-    actualFood = computed(() => {
-        const food: string | Food = this.inputFood();
-        // !side effect!
-        this.resetInputs();
-        // !End side effect!
-        if (typeof food === 'string') {
-            return null;
-        }
-        return food;
-    });
     outputMealFood = output<MealFood>();
-    cancel = output<boolean>();
+    cancelSubmission = output<boolean>();
 
     /**
      * Input in servings
@@ -50,10 +36,7 @@ export class MealfoodFormComponent {
     gramsSignal = toSignal(this.grams.valueChanges, { initialValue: this.grams.value });
 
     quantityInGrams = computed(() => {
-        const food: string | Food = this.inputFood();
-        if (typeof food === 'string') {
-            return 0;
-        }
+        const food = this.inputFood();
         if (food.grams_per_serving > 0) {
             return this.quantityInServings() * food.grams_per_serving;
         } else {
@@ -65,7 +48,7 @@ export class MealfoodFormComponent {
     });
     summedMealFood = computed(() => {
         const mealfood = new SummedFood();
-        const food = this.actualFood();
+        const food = this.inputFood();
         const quantityIn100Grams = this.quantityIn100Grams();
         if (food) {
             mealfood.calories = Math.round(quantityIn100Grams * food.calories_per_100g);
@@ -88,7 +71,7 @@ export class MealfoodFormComponent {
     }
 
     async onSubmit() {
-        const mealFood = new MealFood(this.inputMeal().id, this.actualFood()?.id, this.quantityInGrams());
+        const mealFood = new MealFood(this.inputMeal().id, this.inputFood().id, this.quantityInGrams());
         this.outputMealFood.emit(mealFood);
         this.resetInputs();
     }

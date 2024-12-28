@@ -13,7 +13,8 @@
         <app-mealfood-form
             [inputFood]="foodToAdd()"
             [inputMeal]="meal"
-            (outputMealFood)="onMealFoodSubmit($event)"></app-mealfood-form>
+            (outputMealFood)="onMealFoodSubmit($event)"
+            (cancelSubmission)="cancelMealFoodsubmit()"></app-mealfood-form>
     } @else if (addingToRecipe() && recipe && foodToAdd().id !== 0) {
         <app-recipefood-form
             [inputFood]="foodToAdd()"

@@ -1,9 +1,9 @@
-@if (actualFood()) {
-    @if (actualFood()?.calories_per_serving !== 0) {
+@if (inputFood()) {
+    @if (inputFood().calories_per_serving !== 0) {
         <mat-form-field>
             <mat-label>Number of Servings</mat-label>
             <input matInput type="number" placeholder="Enter Servings" [formControl]="servings" />
-            <span matTextSuffix>{{ actualFood()?.serving_text }}</span>
+            <span matTextSuffix>{{ inputFood().serving_text }}</span>
         </mat-form-field>
     } @else {
         <!-- Need to handle situations where servings aren't defined -->
@@ -73,7 +73,7 @@
         </mat-grid-tile>
     </mat-grid-list>
     <div class="bottom-right">
-        <a mat-flat-button (click)="cancel.emit(true)" style="margin-right: 10px" [routerLink]="['/diary']"> Cancel </a>
+        <a mat-flat-button (click)="cancelSubmission.emit(true)" style="margin-right: 10px"> Cancel </a>
         <button mat-flat-button (click)="onSubmit()">Submit</button>
     </div>
 }

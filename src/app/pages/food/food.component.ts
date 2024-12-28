@@ -156,6 +156,10 @@ export class FoodPageComponent implements OnInit {
         this.foodToAdd.set(new Food());
     }
 
+    cancelMealFoodsubmit() {
+        this.foodToAdd.set(new Food());
+    }
+
     async onRecipeFoodSubmit(recipeFood: RecipeFood) {
         const result = await this.databaseService.createRecipeFood(recipeFood);
         if (!result) {

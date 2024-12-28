@@ -8,6 +8,6 @@
         [inputFood]="this.data.summedMealFood.food"
         [initialQuantityGrams]="this.data.summedMealFood.quantity_grams"
         [initialQuantityServings]="this.data.summedMealFood.quantity_servings"
-        (cancel)="onCancel()"
+        (cancelSubmission)="onCancel()"
         (outputMealFood)="onSubmit($event)"></app-mealfood-form>
 </mat-dialog-content>
