@@ -5,12 +5,13 @@ Manatee Fitness is a calorie counting and nutrition tracking food diary highly i
 Manatee Fitness is free and open source. There will be no ads, no tracking, and every effort taken to make it as usable without an internet connection as possible.
 
 ## Screenshots
-
-<img src="./screenshots/diary.png" width="200" />
-<img src="./screenshots/search_foods.png" width="200" />
-<img src="./screenshots/add_mealfood.png" width="200" />
-<img src="./screenshots/recipes.png" width="200" />
-<img src="./screenshots/calorie_graph.png" width="200" />
+<p float="left">
+    <img src="./screenshots/diary.png" width="200" />
+    <img src="./screenshots/search_foods.png" width="200" />
+    <img src="./screenshots/add_mealfood.png" width="200" />
+    <img src="./screenshots/recipes.png" width="200" />
+    <img src="./screenshots/calorie_graph.png" width="200" />
+</p>
 
 ## Features
 
