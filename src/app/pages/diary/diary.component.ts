@@ -2,6 +2,7 @@ import { CommonModule } from '@angular/common';
 import { Component, effect, inject, OnInit, untracked } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDialog } from '@angular/material/dialog';
+import { MatIconModule } from '@angular/material/icon';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MealDialogComponent, MealDialogData } from '@components/dialogs/meal/meal-dialog.component';
 import { MealCardComponent } from '@components/meal-card/meal-card.component';
@@ -14,7 +15,7 @@ import { lastValueFrom } from 'rxjs';
 
 @Component({
     selector: 'app-page-diary',
-    imports: [CommonModule, MealCardComponent, MatButtonModule, MatProgressBarModule, SwipeDirective],
+    imports: [CommonModule, MealCardComponent, MatButtonModule, MatIconModule, MatProgressBarModule, SwipeDirective],
     templateUrl: './diary.component.html',
     styleUrl: './diary.component.css',
 })

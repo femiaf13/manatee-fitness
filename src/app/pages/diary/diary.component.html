@@ -21,5 +21,7 @@
         <app-meal-card [meal]="item" (mealChanged)="refreshMeals(today())"></app-meal-card>
         <br />
     }
-    <button class="bottom-right" mat-flat-button (click)="addMeal()">Add Meal</button>
+    <button class="bottom-right" mat-fab (click)="addMeal()">
+        <mat-icon aria-hidden="false" aria-label="Plus sign" fontIcon="add"></mat-icon>
+    </button>
 </div>
