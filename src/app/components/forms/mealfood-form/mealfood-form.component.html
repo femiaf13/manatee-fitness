@@ -1,4 +1,5 @@
 @if (inputFood()) {
+    <p>{{ inputFood().description }}</p>
     @if (inputFood().calories_per_serving !== 0) {
         <mat-form-field>
             <mat-label>Number of Servings</mat-label>
