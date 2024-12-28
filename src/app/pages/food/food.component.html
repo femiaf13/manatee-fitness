@@ -19,7 +19,8 @@
         <app-recipefood-form
             [inputFood]="foodToAdd()"
             [inputRecipe]="recipe"
-            (outputRecipeFood)="onRecipeFoodSubmit($event)"></app-recipefood-form>
+            (outputRecipeFood)="onRecipeFoodSubmit($event)"
+            (cancelSubmission)="cancelMealFoodsubmit()"></app-recipefood-form>
     } @else {
         <!-- Display the search bar if we aren't displaying the form -->
         <div>
