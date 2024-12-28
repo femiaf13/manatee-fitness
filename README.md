@@ -4,6 +4,22 @@ Manatee Fitness is a calorie counting and nutrition tracking food diary highly i
 
 Manatee Fitness is free and open source. There will be no ads, no tracking, and every effort taken to make it as usable without an internet connection as possible.
 
+## Screenshots
+
+<img src="./screenshots/diary.png" width="200" />
+<img src="./screenshots/search_foods.png" width="200" />
+<img src="./screenshots/add_mealfood.png" width="200" />
+<img src="./screenshots/recipes.png" width="200" />
+<img src="./screenshots/calorie_graph.png" width="200" />
+
+## Features
+
+- Create and edit meals, including name, date, and time
+- Create, edit, and search food. Both locally and imported from Open Food Facts
+- Maintain a recipe book of specific foods in specific quantities for easy re-use
+- Set goals for calorie consumption and macronutrients
+- See a visualization of your calorie consumption as a graph
+
 ## Privacy Policy
 
 This Privacy Policy explains and gives information regarding the collection, use, and disclosure of personal data when you utilize Manatee Fitness and the choices you have associated with that data. By utilizing the software, you accept the terms and conditions of this Policy. This Policy applies to this software and the developer is not responsible for the content or privacy practices on any third-party app not operated by the developer to which this software links or that links to this software.
@@ -29,23 +45,25 @@ This privacy policy may be updated from time to time as the functionalities of t
 Manatee Fitness is developed in good faith and for general use. The developer will not be held accountable for how you decide to use this software and will not be liable for any losses and/or damages in connection with the use of the software.
 
 
-## Prerequisites
+## Development
 
-### Recommended IDE Setup
+### Prerequisites
+
+#### Recommended IDE Setup
 
 [VS Code](https://code.visualstudio.com/) + all of the recommended extensions included in this project's extensions.json file. These include linters and formatters to give the code a consistent style with minimal effort for the developer.
 
-### Dependencies
+#### Dependencies
 
 Follow [Tauri's guide to install prerequisites](https://v2.tauri.app/start/prerequisites/)
 
-#### Upgrading Dependencies
+### Upgrading Dependencies
 
 1. Use https://angular.dev/update-guide
     - Upgrade Angular with: `npx ng update @angular/core@<version> @angular/cli@<version> @angular-eslint/schematics@<version> --allow-dirty` where version is something like `19`. *Note the addition of eslint compared to what the guide lists.*
 
 
-## Run the application
+### Run the application
 
 Depending on your target platform follow [Tauri's guide on running an app](https://v2.tauri.app/develop/).
 
