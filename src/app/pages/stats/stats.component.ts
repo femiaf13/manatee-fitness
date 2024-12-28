@@ -1,13 +1,29 @@
+import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, Component, effect, inject, signal, untracked } from '@angular/core';
+import { toSignal } from '@angular/core/rxjs-interop';
+import { NonNullableFormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
+import { MatButtonModule } from '@angular/material/button';
+import { provideNativeDateAdapter } from '@angular/material/core';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
 import { BarChart } from '@models/chart-bar.model';
 import { DatabaseService } from '@services/database.service';
 import { DateService } from '@services/date.service';
-import { subDays } from 'date-fns';
 import { NgApexchartsModule } from 'ng-apexcharts';
 
 @Component({
     selector: 'app-stats',
-    imports: [NgApexchartsModule],
+    providers: [provideNativeDateAdapter()],
+    imports: [
+        CommonModule,
+        MatButtonModule,
+        MatFormFieldModule,
+        MatInputModule,
+        MatDatepickerModule,
+        NgApexchartsModule,
+        ReactiveFormsModule,
+    ],
     templateUrl: './stats.component.html',
     styleUrl: './stats.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush,
@@ -18,16 +34,28 @@ export class StatsPageComponent {
 
     chartOptions = signal<BarChart>(new BarChart([], [], '', ''));
 
+    private formBuilder = inject(NonNullableFormBuilder);
+    dateRangeForm = this.formBuilder.group({
+        start: [this.dateService.selectedDate(), [Validators.required]],
+        end: [this.dateService.selectedDate(), [Validators.required]],
+    });
+
+    startDateSignal = toSignal(this.dateRangeForm.controls.start.valueChanges, {
+        initialValue: this.dateService.selectedDate(),
+    });
+    endDateSignal = toSignal(this.dateRangeForm.controls.end.valueChanges, {
+        initialValue: this.dateService.selectedDate(),
+    });
+
     constructor() {
         this.dateService.setTitle('Stats');
 
         effect(() => {
-            const selectedDate = this.dateService.selectedDate();
+            const endDate = DateService.formateDate(this.endDateSignal());
+            const startDate = DateService.formateDate(this.startDateSignal());
 
             untracked(() => {
                 this.databaseService.getGoal().then(goal => {
-                    const endDate = this.dateService.selectedDateFormatted();
-                    const startDate = DateService.formateDate(subDays(selectedDate, 30));
                     this.databaseService.getsummedFoodBetweenDates(startDate, endDate).then(summedFoods => {
                         // Split the actual return into seperate arrays and pass into bar chart constructor
                         const calorieData: Array<number> = [];

@@ -7,6 +7,11 @@
     z-index: 10;
 }
 
+mat-form-field {
+    width: 90vw;
+    max-width: 90vw;
+}
+
 apx-chart {
     width: 90vw;
     max-width: 90vw;
