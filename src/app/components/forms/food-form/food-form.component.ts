@@ -1,11 +1,13 @@
 import { CommonModule } from '@angular/common';
-import { Component, effect, inject, input, output, untracked } from '@angular/core';
+import { Component, effect, inject, input, output, signal, untracked } from '@angular/core';
 import { NonNullableFormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatGridListModule } from '@angular/material/grid-list';
 import { MatInputModule } from '@angular/material/input';
+import { MatMenuModule } from '@angular/material/menu';
 import { FoodDTO } from '@models/food.model';
+import { UnitConversionService } from '@services/unit-conversion.service';
 
 @Component({
     selector: 'app-food-form',
@@ -16,11 +18,14 @@ import { FoodDTO } from '@models/food.model';
         MatFormFieldModule,
         MatGridListModule,
         MatInputModule,
+        MatMenuModule,
     ],
     templateUrl: './food-form.component.html',
     styleUrl: './food-form.component.css',
 })
 export class FoodFormComponent {
+    unitConversionService = inject(UnitConversionService);
+
     inputFood = input<FoodDTO>(new FoodDTO());
     outputFood = output<FoodDTO>();
     cancel = output<boolean>();
@@ -41,25 +46,39 @@ export class FoodFormComponent {
         sodiumPerServing: [0, Validators.min(0)],
     });
 
-    gramsPerServing$ = this.foodForm.controls.gramsPerServing.valueChanges;
+    servingUnit = signal<string>('g');
+
+    selectUnit(unit: string) {
+        const convertedGramsPerServing = this.unitConversionService
+            .convert(this.foodForm.controls.gramsPerServing.value)
+            .from(this.servingUnit())
+            .to(unit);
+        this.servingUnit.set(unit);
+        this.foodForm.controls.gramsPerServing.setValue(convertedGramsPerServing);
+    }
 
     onSubmit() {
         const rawFormValues = this.foodForm.getRawValue();
+
+        const gramsPerServing = this.unitConversionService
+            .convert(rawFormValues.gramsPerServing)
+            .from(this.servingUnit())
+            .to('g');
         // Convert the per servings numbers back to per 100g for the DB
-        const caloriesPer100g = (rawFormValues.caloriesPerServing / rawFormValues.gramsPerServing) * 100;
-        const fatPer100g = (rawFormValues.fatPerServing / rawFormValues.gramsPerServing) * 100;
-        const carbsPer100g = (rawFormValues.carbsPerServing / rawFormValues.gramsPerServing) * 100;
-        const proteinPer100g = (rawFormValues.proteinPerServing / rawFormValues.gramsPerServing) * 100;
-        const cholesterolPer100g = (rawFormValues.cholesterolPerServing / rawFormValues.gramsPerServing) * 100;
-        const fiberPer100g = (rawFormValues.fiberPerServing / rawFormValues.gramsPerServing) * 100;
-        const sodiumPer100g = (rawFormValues.sodiumPerServing / rawFormValues.gramsPerServing) * 100;
+        const caloriesPer100g = (rawFormValues.caloriesPerServing / gramsPerServing) * 100;
+        const fatPer100g = (rawFormValues.fatPerServing / gramsPerServing) * 100;
+        const carbsPer100g = (rawFormValues.carbsPerServing / gramsPerServing) * 100;
+        const proteinPer100g = (rawFormValues.proteinPerServing / gramsPerServing) * 100;
+        const cholesterolPer100g = (rawFormValues.cholesterolPerServing / gramsPerServing) * 100;
+        const fiberPer100g = (rawFormValues.fiberPerServing / gramsPerServing) * 100;
+        const sodiumPer100g = (rawFormValues.sodiumPerServing / gramsPerServing) * 100;
 
         const foodDtoOutput: FoodDTO = new FoodDTO(
             rawFormValues.barcode,
             rawFormValues.description,
             rawFormValues.brand,
             +caloriesPer100g.toFixed(1),
-            rawFormValues.gramsPerServing,
+            +gramsPerServing.toFixed(1),
             rawFormValues.servingText,
             +fatPer100g.toFixed(1),
             +carbsPer100g.toFixed(1),

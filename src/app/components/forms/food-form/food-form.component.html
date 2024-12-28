@@ -33,15 +33,16 @@
 
         <mat-grid-tile>
             <mat-form-field>
-                <mat-label>Grams per serving</mat-label>
-                <input matInput type="number" placeholder="Grams per serving" formControlName="gramsPerServing" />
+                <mat-label>Serving Quantity</mat-label>
+                <input matInput type="number" placeholder="Serving Quantity" formControlName="gramsPerServing" />
+                <button mat-button [matMenuTriggerFor]="menu" matTextSuffix>{{ servingUnit() }}</button>
             </mat-form-field>
         </mat-grid-tile>
 
         <mat-grid-tile>
             <mat-form-field>
                 <mat-label>Serving amount</mat-label>
-                <input matInput placeholder="Quantity of a serving" formControlName="servingText" />
+                <input matInput placeholder="1 can" formControlName="servingText" />
             </mat-form-field>
         </mat-grid-tile>
 
@@ -104,3 +105,10 @@
         </mat-grid-tile>
     </form>
 </mat-grid-list>
+
+<mat-menu #menu="matMenu">
+    <button (click)="selectUnit('g')" mat-menu-item>Grams</button>
+    <button (click)="selectUnit('kg')" mat-menu-item>Kilograms</button>
+    <button (click)="selectUnit('oz')" mat-menu-item>Ounces</button>
+    <button (click)="selectUnit('lb')" mat-menu-item>Pounds</button>
+</mat-menu>

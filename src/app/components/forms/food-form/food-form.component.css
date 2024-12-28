@@ -3,7 +3,7 @@ mat-form-field {
     width: 100%;
 }
 
-button {
+mat-grid-tile button {
     margin: 10px;
 }
 
