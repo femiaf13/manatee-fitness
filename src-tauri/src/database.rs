@@ -695,8 +695,8 @@ fn find_calories_by_recipefood(
         "SELECT 
                 round(ifnull(SUM(RF.quantity_grams * F.calories_per_100g / 100), 0)) AS calories,
                 ifnull(SUM(RF.quantity_grams * F.fat / 100), 0) AS fat,
-                ifnull(SUM(MF.quantity_grams * F.protein / 100), 0) AS protein,
-                ifnull(SUM(MF.quantity_grams * F.carbs / 100), 0) AS carbs,
+                ifnull(SUM(RF.quantity_grams * F.protein / 100), 0) AS protein,
+                ifnull(SUM(RF.quantity_grams * F.carbs / 100), 0) AS carbs,
                 ifnull(SUM(RF.quantity_grams * F.cholesterol / 100), 0) AS cholesterol,
                 ifnull(SUM(RF.quantity_grams * F.fiber / 100), 0) AS fiber,
                 ifnull(SUM(RF.quantity_grams * F.sodium / 100), 0) AS sodium
