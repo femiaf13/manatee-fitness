@@ -1,6 +1,6 @@
 # Manatee Fitness
 
-Manatee Fitness is a calorie counting and nutrition tracking food diary highly inspired by the wonderful work done over at [Waistline](https://github.com/davidhealey/waistline). Seriously it's a great app and I have so much respect for the work they've done. The biggest difference is that this project uses Tauri instead of Cordova.
+Manatee Fitness is a calorie counting and nutrition tracking food diary highly inspired by the wonderful work done over at [Waistline](https://github.com/davidhealey/waistline). Seriously it's a great app and I have a ton of respect for the work they've done. I've had some pain points with the UX of Waistline and am using this project as a fresh start to address those!
 
 Manatee Fitness is free and open source. There will be no ads, no tracking, and every effort taken to make it as usable without an internet connection as possible.
 
@@ -17,6 +17,7 @@ Manatee Fitness is free and open source. There will be no ads, no tracking, and 
 
 - Create and edit meals, including name, date, and time
 - Create, edit, and search food. Both locally and imported from Open Food Facts
+- Barcode scanning on mobile platforms!
 - Maintain a recipe book of specific foods in specific quantities for easy re-use
 - Set goals for calorie consumption and macronutrients
 - See a visualization of your calorie consumption as a graph
