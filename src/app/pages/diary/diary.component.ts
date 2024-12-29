@@ -84,7 +84,8 @@ export class DiaryComponent implements OnInit {
         this.chartOptions.set(
             new DonutChart(
                 [summedFoodForDay.carbs, summedFoodForDay.fat, summedFoodForDay.protein],
-                ['Carbs', 'Fat', 'Protein']
+                ['Carbs', 'Fat', 'Protein'],
+                'Macronutrients'
             )
         );
         if (this.goal !== undefined && this.goal.calories !== 0) {
