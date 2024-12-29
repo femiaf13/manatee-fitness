@@ -18,6 +18,11 @@
     </mat-form-field>
     <br />
     @if (barChartOptions().xaxis.categories.length > 0) {
+        <p style="width: 90vw">
+            <i>
+                Note: If the beginning or end of the range has no data it will be left off of the graph to save space
+            </i>
+        </p>
         <apx-chart
             [annotations]="barChartOptions().annotations"
             [series]="barChartOptions().series"
@@ -26,9 +31,6 @@
             [dataLabels]="barChartOptions().dataLabels"
             [theme]="barChartOptions().theme"
             [title]="barChartOptions().title"></apx-chart>
-        <i style="width: 90vw">
-            Note: If the beginning or end of the range has no data it will be left off of the graph to save space
-        </i>
         <br />
         <apx-chart
             [series]="donutChartOptions().series"
