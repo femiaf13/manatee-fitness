@@ -8,6 +8,7 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { BarChart } from '@models/chart-bar.model';
+import { DonutChart } from '@models/chart-donut.model';
 import { DatabaseService } from '@services/database.service';
 import { DateService } from '@services/date.service';
 import { subDays } from 'date-fns';
@@ -33,7 +34,8 @@ export class StatsPageComponent {
     dateService = inject(DateService);
     databaseService = inject(DatabaseService);
 
-    chartOptions = signal<BarChart>(new BarChart([], [], '', ''));
+    barChartOptions = signal<BarChart>(new BarChart([], [], '', ''));
+    donutChartOptions = signal<DonutChart>(new DonutChart([], []));
 
     private formBuilder = inject(NonNullableFormBuilder);
     dateRangeForm = this.formBuilder.group({
@@ -62,14 +64,30 @@ export class StatsPageComponent {
                         const calorieData: Array<number> = [];
                         const dateData: Array<string> = [];
                         const yAxisTitle = 'Calories';
+                        // Variables for the donut chart
+                        let summedFatData: number = 0;
+                        let summedCarbsData: number = 0;
+                        let summedProteinData: number = 0;
 
                         for (const summedFood of summedFoods) {
                             calorieData.push(summedFood.calories);
                             dateData.push(summedFood.date);
+                            summedFatData += summedFood.fat;
+                            summedCarbsData += summedFood.carbs;
+                            summedProteinData += summedFood.protein;
                         }
 
                         const title = `Calories: ${dateData[0]} to ${dateData[dateData.length - 1]}`;
-                        this.chartOptions.set(new BarChart(calorieData, dateData, yAxisTitle, title, goal?.calories));
+                        this.barChartOptions.set(
+                            new BarChart(calorieData, dateData, yAxisTitle, title, goal?.calories)
+                        );
+                        this.donutChartOptions.set(
+                            new DonutChart(
+                                [summedCarbsData, summedFatData, summedProteinData],
+                                ['Carbs', 'Fat', 'Protein'],
+                                `Macronutrients: ${dateData[0]} to ${dateData[dateData.length - 1]}`
+                            )
+                        );
                     });
                 });
             });

@@ -17,18 +17,25 @@
         }
     </mat-form-field>
     <br />
-    @if (chartOptions().xaxis.categories.length > 0) {
+    @if (barChartOptions().xaxis.categories.length > 0) {
         <apx-chart
-            [annotations]="chartOptions().annotations"
-            [series]="chartOptions().series"
-            [chart]="chartOptions().chart"
-            [xaxis]="chartOptions().xaxis"
-            [dataLabels]="chartOptions().dataLabels"
-            [theme]="chartOptions().theme"
-            [title]="chartOptions().title"></apx-chart>
+            [annotations]="barChartOptions().annotations"
+            [series]="barChartOptions().series"
+            [chart]="barChartOptions().chart"
+            [xaxis]="barChartOptions().xaxis"
+            [dataLabels]="barChartOptions().dataLabels"
+            [theme]="barChartOptions().theme"
+            [title]="barChartOptions().title"></apx-chart>
         <i style="width: 90vw">
             Note: If the beginning or end of the range has no data it will be left off of the graph to save space
         </i>
+        <br />
+        <apx-chart
+            [series]="donutChartOptions().series"
+            [chart]="donutChartOptions().chart"
+            [labels]="donutChartOptions().labels"
+            [theme]="donutChartOptions().theme"
+            [title]="donutChartOptions().title"></apx-chart>
     } @else {
         <p>No data available!</p>
     }
