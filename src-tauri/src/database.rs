@@ -595,8 +595,8 @@ pub fn find_calories_by_date(app_handle: tauri::AppHandle, date_to_find: Date) -
         "SELECT 
                 round(ifnull(SUM(MF.quantity_grams * F.calories_per_100g / 100), 0)) AS calories,
                 ifnull(SUM(MF.quantity_grams * F.fat / 100), 0) AS fat,
-                ifnull(SUM(MF.quantity_grams * F.carbs / 100), 0) AS protein,
-                ifnull(SUM(MF.quantity_grams * F.protein / 100), 0) AS carbs,
+                ifnull(SUM(MF.quantity_grams * F.protein / 100), 0) AS protein,
+                ifnull(SUM(MF.quantity_grams * F.carbs / 100), 0) AS carbs,
                 ifnull(SUM(MF.quantity_grams * F.cholesterol / 100), 0) AS cholesterol,
                 ifnull(SUM(MF.quantity_grams * F.fiber / 100), 0) AS fiber,
                 ifnull(SUM(MF.quantity_grams * F.sodium / 100), 0) AS sodium
@@ -627,8 +627,8 @@ pub fn find_calories_by_date_and_meal(
         "SELECT 
                 round(ifnull(SUM(MF.quantity_grams * F.calories_per_100g / 100), 0)) AS calories,
                 ifnull(SUM(MF.quantity_grams * F.fat / 100), 0) AS fat,
-                ifnull(SUM(MF.quantity_grams * F.carbs / 100), 0) AS protein,
-                ifnull(SUM(MF.quantity_grams * F.protein / 100), 0) AS carbs,
+                ifnull(SUM(MF.quantity_grams * F.protein / 100), 0) AS protein,
+                ifnull(SUM(MF.quantity_grams * F.carbs / 100), 0) AS carbs,
                 ifnull(SUM(MF.quantity_grams * F.cholesterol / 100), 0) AS cholesterol,
                 ifnull(SUM(MF.quantity_grams * F.fiber / 100), 0) AS fiber,
                 ifnull(SUM(MF.quantity_grams * F.sodium / 100), 0) AS sodium
@@ -661,8 +661,8 @@ fn find_calories_by_mealfood(
         "SELECT 
                 round(ifnull(SUM(MF.quantity_grams * F.calories_per_100g / 100), 0)) AS calories,
                 ifnull(SUM(MF.quantity_grams * F.fat / 100), 0) AS fat,
-                ifnull(SUM(MF.quantity_grams * F.carbs / 100), 0) AS protein,
-                ifnull(SUM(MF.quantity_grams * F.protein / 100), 0) AS carbs,
+                ifnull(SUM(MF.quantity_grams * F.protein / 100), 0) AS protein,
+                ifnull(SUM(MF.quantity_grams * F.carbs / 100), 0) AS carbs,
                 ifnull(SUM(MF.quantity_grams * F.cholesterol / 100), 0) AS cholesterol,
                 ifnull(SUM(MF.quantity_grams * F.fiber / 100), 0) AS fiber,
                 ifnull(SUM(MF.quantity_grams * F.sodium / 100), 0) AS sodium
@@ -695,8 +695,8 @@ fn find_calories_by_recipefood(
         "SELECT 
                 round(ifnull(SUM(RF.quantity_grams * F.calories_per_100g / 100), 0)) AS calories,
                 ifnull(SUM(RF.quantity_grams * F.fat / 100), 0) AS fat,
-                ifnull(SUM(RF.quantity_grams * F.carbs / 100), 0) AS protein,
-                ifnull(SUM(RF.quantity_grams * F.protein / 100), 0) AS carbs,
+                ifnull(SUM(MF.quantity_grams * F.protein / 100), 0) AS protein,
+                ifnull(SUM(MF.quantity_grams * F.carbs / 100), 0) AS carbs,
                 ifnull(SUM(RF.quantity_grams * F.cholesterol / 100), 0) AS cholesterol,
                 ifnull(SUM(RF.quantity_grams * F.fiber / 100), 0) AS fiber,
                 ifnull(SUM(RF.quantity_grams * F.sodium / 100), 0) AS sodium
@@ -732,8 +732,8 @@ pub fn find_calories_between_dates(
 	        M.meal_date as date,
             round(ifnull(SUM(MF.quantity_grams * F.calories_per_100g / 100), 0)) AS calories,
             round(ifnull(SUM(MF.quantity_grams * F.fat / 100), 0)) AS fat,
-            round(ifnull(SUM(MF.quantity_grams * F.carbs / 100), 0)) AS protein,
-            round(ifnull(SUM(MF.quantity_grams * F.protein / 100), 0)) AS carbs,
+            round(ifnull(SUM(MF.quantity_grams * F.protein / 100), 0)) AS protein,
+            round(ifnull(SUM(MF.quantity_grams * F.carbs / 100), 0)) AS carbs,
             round(ifnull(SUM(MF.quantity_grams * F.cholesterol / 100), 0)) AS cholesterol,
             round(ifnull(SUM(MF.quantity_grams * F.fiber / 100), 0)) AS fiber,
             round(ifnull(SUM(MF.quantity_grams * F.sodium / 100), 0)) AS sodium
