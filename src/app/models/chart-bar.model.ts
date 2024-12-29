@@ -33,6 +33,7 @@ export class BarChart {
 
     theme: ApexTheme = {
         mode: 'dark',
+        palette: 'palette10',
     };
 
     series: ApexAxisChartSeries;

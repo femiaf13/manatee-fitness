@@ -21,6 +21,14 @@
         <app-meal-card [meal]="item" (mealChanged)="refreshMeals(today())"></app-meal-card>
         <br />
     }
+    @if (totalCalories > 0) {
+        <apx-chart
+            [series]="chartOptions().series"
+            [chart]="chartOptions().chart"
+            [labels]="chartOptions().labels"
+            [theme]="chartOptions().theme"></apx-chart>
+    }
+
     <button class="bottom-right" mat-fab (click)="addMeal()">
         <mat-icon aria-hidden="false" aria-label="Plus sign" fontIcon="add"></mat-icon>
     </button>

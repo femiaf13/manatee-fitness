@@ -40,6 +40,11 @@ mat-progress-bar {
     width: 100%;
 }
 
+apx-chart {
+    width: 90vw;
+    max-width: 90vw;
+}
+
 .mat-mdc-progress-bar {
     --mdc-linear-progress-track-height: 10px;
     --mdc-linear-progress-active-indicator-height: 10px;
