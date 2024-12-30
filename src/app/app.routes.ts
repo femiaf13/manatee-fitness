@@ -4,6 +4,7 @@ import { FoodPageComponent } from '@pages/food/food.component';
 import { GoalsComponent } from '@pages/goals/goals.component';
 import { RecipesPageComponent } from '@pages/recipes/recipes.component';
 import { StatsPageComponent } from '@pages/stats/stats.component';
+import { WeightPageComponent } from '@pages/weight/weight.component';
 
 export const routes: Routes = [
     { path: 'diary', component: DiaryComponent },
@@ -11,5 +12,6 @@ export const routes: Routes = [
     { path: 'food', component: FoodPageComponent },
     { path: 'recipes', component: RecipesPageComponent },
     { path: 'stats', component: StatsPageComponent },
+    { path: 'weight', component: WeightPageComponent },
     { path: '**', component: DiaryComponent },
 ];
