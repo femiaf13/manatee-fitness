@@ -38,9 +38,14 @@
                     </mat-list-item>
                 }
             </mat-action-list>
+            <mat-chip-set role="list">
+                <mat-chip role="listitem">{{ summedCarbsRounded() }}g Carbs</mat-chip>
+                <mat-chip role="listitem">{{ summedFatRounded() }}g Fat</mat-chip>
+                <mat-chip role="listitem">{{ summedProteinRounded() }}g Protein</mat-chip>
+                <mat-chip role="listitem">{{ summedCaloriesRounded() }} kcal</mat-chip>
+            </mat-chip-set>
         </mat-card-content>
         <mat-card-actions align="end">
-            {{ summedMeal.calories }} Calories
             <button mat-button (click)="deleteMeal($event)">
                 <mat-icon aria-hidden="false" aria-label="Delete meal icon" fontIcon="delete"></mat-icon>
             </button>

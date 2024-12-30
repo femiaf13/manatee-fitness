@@ -1,6 +1,7 @@
-import { Component, computed, effect, inject, input, output, untracked } from '@angular/core';
+import { Component, computed, effect, inject, input, output, signal, untracked } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
+import { MatChipsModule } from '@angular/material/chips';
 import { MatDialog } from '@angular/material/dialog';
 import { MatIconModule } from '@angular/material/icon';
 import { MatListModule } from '@angular/material/list';
@@ -27,6 +28,7 @@ import { lastValueFrom } from 'rxjs';
         LongPressDirective,
         MatButtonModule,
         MatCardModule,
+        MatChipsModule,
         MatIconModule,
         MatListModule,
         RouterLink,
@@ -51,10 +53,11 @@ export class MealCardComponent {
         }
     });
     foods: Array<SummedMealFood> = [];
-    summedMeal: SummedFood = new SummedFood();
-
-    // TODO: Should grab mealfoods so we have access to quantity, and the ability to
-    // modify the mealfood. This will likely come with a re-org of how the mealfoods are displayed
+    summedMeal = signal<SummedFood>(new SummedFood());
+    summedCarbsRounded = computed(() => this.summedMeal().carbs.toFixed(1));
+    summedFatRounded = computed(() => this.summedMeal().fat.toFixed(1));
+    summedProteinRounded = computed(() => this.summedMeal().protein.toFixed(1));
+    summedCaloriesRounded = computed(() => this.summedMeal().calories.toFixed(1));
 
     constructor() {
         // This effect will automatically re-run anytime the meal signal is changed,
@@ -70,7 +73,7 @@ export class MealCardComponent {
                     dateToFind: meal.meal_date,
                     mealToFind: meal.meal_name,
                 }).then(summedFood => {
-                    this.summedMeal = summedFood;
+                    this.summedMeal.set(summedFood);
                 });
             });
         });
