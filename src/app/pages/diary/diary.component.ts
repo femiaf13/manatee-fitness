@@ -48,6 +48,9 @@ export class DiaryComponent implements OnInit {
             const todayFormatted = this.today();
 
             untracked(() => {
+                // Controls if donut chart shows so reset it now to prevent it
+                // sticking around slightly too long
+                this.totalCalories = 0;
                 this.refreshMeals(todayFormatted);
             });
         });
