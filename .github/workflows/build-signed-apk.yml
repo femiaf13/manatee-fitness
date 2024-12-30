@@ -1,0 +1,77 @@
+name: 'publish'
+
+on: [push]
+# on:
+#     push:
+#         branches:
+#             - release
+
+    # workflow_dispatch:
+
+jobs:
+    publish-android:
+        runs-on: ubuntu-latest
+        permissions:
+            contents: write
+        steps:
+            - uses: actions/checkout@v4
+
+            - uses: pnpm/action-setup@v4
+              with:
+                  version: 8
+
+            - name: Setup Java
+              uses: actions/setup-java@v4
+              with:
+                  distribution: 'zulu'
+                  java-version: '17'
+
+            - name: Setup Android SDK
+              uses: android-actions/setup-android@v3
+
+            - name: Install NDK
+              run: sdkmanager "ndk;28.0.12433566"
+
+            - name: setup node
+              uses: actions/setup-node@v4
+              with:
+                  node-version: lts/*
+
+            - name: install Rust stable
+              uses: dtolnay/rust-toolchain@stable
+              with:
+                  targets: aarch64-linux-android,armv7-linux-androideabi,i686-linux-android,x86_64-linux-android
+
+            - name: Install dependencies
+              run: pnpm install
+
+            - name: setup Android signing
+              run: |
+                  cd src-tauri/gen/android
+                  echo "keyAlias=${{ secrets.ANDROID_KEY_ALIAS }}" > keystore.properties
+                  echo "password=${{ secrets.ANDROID_KEY_PASSWORD }}" >> keystore.properties
+                  base64 -d <<< "${{ secrets.ANDROID_KEY_BASE64 }}" > $RUNNER_TEMP/keystore.jks
+                  echo "storeFile=$RUNNER_TEMP/keystore.jks" >> keystore.properties
+
+            - name: Build app bundle
+              run: cargo tauri android build --apk --target aarch64 --target armv7
+              env:
+                  NDK_HOME: ${{ env.ANDROID_HOME }}/ndk/28.0.12433566
+
+            - name: Get Node project version
+              id: package-version
+              uses: martinbeentjes/npm-get-version-action@v1.3.1
+
+            - name: Rename APK file
+              run: |
+                  mv ./src-tauri/gen/android/app/build/outputs/apk/universal/release/app-universal-release.apk ./src-tauri/gen/android/app/build/outputs/apk/universal/release/manatee-fitness-${{ steps.package-version.outputs.current-version}}.apk
+
+            - name: Publish
+              uses: softprops/action-gh-release@v1
+              with:
+                  draft: true
+                  name: App v${{ steps.package-version.outputs.current-version}}
+                  tag_name: v${{ steps.package-version.outputs.current-version}}
+                  generate_release_notes: true
+                  files: |
+                      ./src-tauri/gen/android/app/build/outputs/apk/universal/release/manatee-fitness-${{ steps.package-version.outputs.current-version}}.apk
