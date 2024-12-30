@@ -12,6 +12,9 @@ export class DonutChart {
         },
     };
 
+    // These colors are pulled from node_modules/@angular/material/prebuilt-themes/purple-green.css
+    colors: Array<string> = ['#7b1fa2', '#69f0ae', '#f44336'];
+
     theme: ApexTheme = {
         mode: 'dark',
         palette: 'palette10',

@@ -24,6 +24,7 @@
     @if (totalCalories > 0) {
         <apx-chart
             [series]="chartOptions().series"
+            [colors]="chartOptions().colors"
             [chart]="chartOptions().chart"
             [labels]="chartOptions().labels"
             [theme]="chartOptions().theme"
