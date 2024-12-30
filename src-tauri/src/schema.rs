@@ -51,6 +51,15 @@ diesel::table! {
     }
 }
 
+diesel::table! {
+    weigh_ins (id) {
+        id -> Integer,
+        weigh_in_date -> Date,
+        weight_kg -> Float,
+        weight_lb -> Float,
+    }
+}
+
 diesel::joinable!(meal_foods -> foods (food_id));
 diesel::joinable!(meal_foods -> meals (meal_id));
 diesel::joinable!(recipe_foods -> foods (food_id));
@@ -62,4 +71,5 @@ diesel::allow_tables_to_appear_in_same_query!(
     meals,
     recipe_foods,
     recipes,
+    weigh_ins,
 );

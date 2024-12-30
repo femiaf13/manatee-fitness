@@ -756,3 +756,77 @@ pub fn find_calories_between_dates(
 
     summed_food
 }
+
+#[tauri::command]
+pub fn create_weigh_in(app_handle: tauri::AppHandle, weigh_in: WeighInDTO) -> bool {
+    let database_url = app_handle.state::<AppState>().database_url.clone();
+    let connection = &mut establish_connection(database_url);
+    use crate::schema::weigh_ins::dsl::*;
+
+    let query_result = insert_into(weigh_ins).values(&weigh_in).execute(connection);
+
+    let result: bool = match query_result {
+        Ok(_number_of_rows) => true,
+        Err(_e) => false,
+    };
+
+    result
+}
+
+#[tauri::command]
+pub fn find_weigh_ins_between_dates(
+    app_handle: tauri::AppHandle,
+    start_date: Date,
+    end_date: Date,
+) -> Vec<WeighIn> {
+    let database_url = app_handle.state::<AppState>().database_url.clone();
+    let connection = &mut establish_connection(database_url);
+    use crate::schema::weigh_ins::dsl::*;
+
+    weigh_ins
+        .filter(weigh_in_date.between(start_date, end_date))
+        .load::<WeighIn>(connection)
+        .unwrap_or(vec![])
+}
+
+#[tauri::command]
+pub fn update_weigh_in_by_dto(
+    app_handle: tauri::AppHandle,
+    weigh_in_id: i32,
+    weigh_in_dto: WeighInDTO,
+) -> bool {
+    let database_url = app_handle.state::<AppState>().database_url.clone();
+    let connection = &mut establish_connection(database_url);
+    use crate::schema::weigh_ins::dsl::*;
+
+    let query_result = diesel::update(weigh_ins)
+        .filter(id.eq(weigh_in_id))
+        .set((
+            weigh_in_date.eq(weigh_in_dto.weigh_in_date),
+            weight_kg.eq(weigh_in_dto.weight_kg),
+        ))
+        .execute(connection);
+
+    let result: bool = match query_result {
+        Ok(_number_of_rows) => true,
+        Err(_e) => false,
+    };
+
+    result
+}
+
+#[tauri::command]
+pub fn delete_weigh_in(app_handle: tauri::AppHandle, weigh_in_id: i32) -> bool {
+    let database_url = app_handle.state::<AppState>().database_url.clone();
+    let connection = &mut establish_connection(database_url);
+    use crate::schema::weigh_ins::dsl::*;
+
+    let query_result = diesel::delete(weigh_ins.filter(id.eq(weigh_in_id))).execute(connection);
+
+    let result = match query_result {
+        Ok(_number_of_rows) => true,
+        Err(_e) => false,
+    };
+
+    result
+}

@@ -39,8 +39,13 @@ pub fn run() {
             // find_calories_by_date(app.app_handle().clone(), date!(2024 - 10 - 30));
             // find_calories_by_date_and_meal(app.app_handle().clone(), date!(2024 - 10 - 30), "dinner");
             // let foods = find_foods_by_meal(app.app_handle().clone(), 3);
+            // let weigh_ins = find_weigh_ins_between_dates(
+            //     app.app_handle().clone(),
+            //     date!(2024 - 12 - 01),
+            //     date!(2024 - 12 - 02),
+            // );
 
-            // let pretty_json = serde_json::to_string_pretty(&foods).ok().unwrap();
+            // let pretty_json = serde_json::to_string_pretty(&weigh_ins).ok().unwrap();
             // println!("{}", pretty_json);
 
             Ok(())
@@ -76,7 +81,11 @@ pub fn run() {
             find_summed_mealfood_by_recipe,
             find_calories_by_date,
             find_calories_by_date_and_meal,
-            find_calories_between_dates
+            find_calories_between_dates,
+            create_weigh_in,
+            find_weigh_ins_between_dates,
+            update_weigh_in_by_dto,
+            delete_weigh_in,
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
