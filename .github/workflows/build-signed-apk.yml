@@ -54,7 +54,7 @@ jobs:
                   echo "storeFile=$RUNNER_TEMP/keystore.jks" >> keystore.properties
 
             - name: Build app bundle
-              run: cargo tauri android build --apk --target aarch64 --target armv7
+              run: pnpm tauri android build --apk --target aarch64 --target armv7
               env:
                   NDK_HOME: ${{ env.ANDROID_HOME }}/ndk/28.0.12433566
 
