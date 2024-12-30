@@ -8,6 +8,7 @@ import { load, Store } from '@tauri-apps/plugin-store';
 import { platform } from '@tauri-apps/plugin-os';
 import { RecipeFood } from '@models/recipefood.model';
 import { Recipe, SummedRecipeFood } from '@models/recipe.model';
+import { WeighIn, WeighInDTO } from '@models/weigh-in.model';
 
 @Injectable({
     providedIn: 'root',
@@ -294,5 +295,55 @@ export class DatabaseService {
      */
     public async deleteRecipeFood(recipeId: number, foodId: number): Promise<boolean> {
         return await invoke<boolean>('delete_recipefood', { recipeId: recipeId, foodId: foodId });
+    }
+
+    /** Weigh-in Methods */
+
+    /**
+     * Create a new weigh-in
+     * @param weighIn Weigh-in to create
+     * @returns true on success, false on error
+     */
+    public async createWeighIn(weighIn: WeighInDTO): Promise<boolean> {
+        return await invoke<boolean>('create_weigh_in', {
+            weighIn: weighIn,
+        });
+    }
+
+    /**
+     * Get all weigh ins between start date and end date
+     * @param startDate date formatted as YYYY-MM-DD
+     * @param endDate date formatted as YYYY-MM-DD
+     * @returns Array of all weigh-ins between suplied dates
+     */
+    public async getWeighInsBetweenDates(startDate: string, endDate: string): Promise<WeighIn[]> {
+        return await invoke<WeighIn[]>('find_weigh_ins_between_dates', {
+            startDate: startDate,
+            endDate: endDate,
+        });
+    }
+
+    /**
+     * Update a weigh-in
+     * @param weighInId ID of the weigh-in that will be updated
+     * @param weighIn Weigh-in data to update
+     * @returns true on success, false on error
+     */
+    public async updateWeighIn(weighInId: number, weighIn: WeighInDTO): Promise<boolean> {
+        return await invoke<boolean>('update_weigh_in_by_dto', {
+            weighInid: weighInId,
+            weighInDto: weighIn,
+        });
+    }
+
+    /**
+     * Delete a weigh-in
+     * @param weighInId ID of the weigh-in that will be deleted
+     * @returns true on success, false on error
+     */
+    public async deleteWeighIn(weighInId: number): Promise<boolean> {
+        return await invoke<boolean>('delete_weigh_in', {
+            weighInid: weighInId,
+        });
     }
 }
