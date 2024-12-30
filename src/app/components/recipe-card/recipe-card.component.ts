@@ -15,7 +15,9 @@ import {
     RecipeFoodDialogData,
     RecipefoodDialogComponent,
 } from '@components/dialogs/recipefood/recipefood-dialog.component';
+import { SummedFoodChipsComponent } from '@components/summed-food-chips/summed-food-chips.component';
 import { LongPressDirective } from '@directives/longpress.directive';
+import { SummedFood } from '@models/food.model';
 import { RecipeWithRecipeFoods, SummedRecipeFood } from '@models/recipe.model';
 import { RecipeFood } from '@models/recipefood.model';
 import { DatabaseService } from '@services/database.service';
@@ -31,6 +33,7 @@ import { lastValueFrom } from 'rxjs';
         MatListModule,
         MatIconModule,
         RouterLink,
+        SummedFoodChipsComponent,
     ],
     templateUrl: './recipe-card.component.html',
     styleUrl: './recipe-card.component.css',
@@ -42,12 +45,18 @@ export class RecipeCardComponent {
     recipeWithRecipeFood = input.required<RecipeWithRecipeFoods>();
     recipeChanged = output<void>();
 
-    totalCalories = computed(() => {
-        let total = 0;
+    summedRecipe = computed(() => {
+        const summedRecipe = new SummedFood();
         for (const recipeFood of this.recipeWithRecipeFood().recipeFoods) {
-            total += recipeFood.summed_food.calories;
+            summedRecipe.calories += recipeFood.summed_food.calories;
+            summedRecipe.carbs += recipeFood.summed_food.carbs;
+            summedRecipe.fat += recipeFood.summed_food.fat;
+            summedRecipe.protein += recipeFood.summed_food.protein;
+            summedRecipe.cholesterol += recipeFood.summed_food.cholesterol;
+            summedRecipe.fiber += recipeFood.summed_food.fiber;
+            summedRecipe.sodium += recipeFood.summed_food.sodium;
         }
-        return total;
+        return summedRecipe;
     });
 
     async deleteRecipe(event: MouseEvent) {

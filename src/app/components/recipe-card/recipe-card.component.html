@@ -3,7 +3,6 @@
         <mat-panel-title>
             <span>
                 {{ recipeWithRecipeFood().recipe.recipe_name }}
-                <i style="padding-left: 0.5em">{{ totalCalories() }} kcal</i>
             </span>
         </mat-panel-title>
     </mat-expansion-panel-header>
@@ -33,6 +32,7 @@
             </mat-list-item>
         }
     </mat-action-list>
+    <app-summed-food-chips [summedFood]="summedRecipe()"></app-summed-food-chips>
     <mat-action-row>
         <button mat-button (click)="deleteRecipe($event)"><mat-icon fontIcon="delete"></mat-icon></button>
         <button [routerLink]="['/food']" [queryParams]="{ recipe: recipeWithRecipeFood().recipe.id }" mat-button>

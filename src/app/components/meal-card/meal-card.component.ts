@@ -1,7 +1,6 @@
 import { Component, computed, effect, inject, input, output, signal, untracked } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
-import { MatChipsModule } from '@angular/material/chips';
 import { MatDialog } from '@angular/material/dialog';
 import { MatIconModule } from '@angular/material/icon';
 import { MatListModule } from '@angular/material/list';
@@ -12,6 +11,7 @@ import {
 } from '@components/dialogs/confirmation-dialog/confirmation-dialog.component';
 import { MealDialogData, MealDialogComponent } from '@components/dialogs/meal/meal-dialog.component';
 import { MealfoodDialogComponent, MealFoodDialogData } from '@components/dialogs/mealfood/mealfood-dialog.component';
+import { SummedFoodChipsComponent } from '@components/summed-food-chips/summed-food-chips.component';
 import { LongPressDirective } from '@directives/longpress.directive';
 import { SwipeDirective } from '@directives/swipe.directive';
 import { SummedFood } from '@models/food.model';
@@ -28,10 +28,10 @@ import { lastValueFrom } from 'rxjs';
         LongPressDirective,
         MatButtonModule,
         MatCardModule,
-        MatChipsModule,
         MatIconModule,
         MatListModule,
         RouterLink,
+        SummedFoodChipsComponent,
         SwipeDirective,
     ],
     templateUrl: './meal-card.component.html',
@@ -54,10 +54,6 @@ export class MealCardComponent {
     });
     foods: Array<SummedMealFood> = [];
     summedMeal = signal<SummedFood>(new SummedFood());
-    summedCarbsRounded = computed(() => this.summedMeal().carbs.toFixed(1));
-    summedFatRounded = computed(() => this.summedMeal().fat.toFixed(1));
-    summedProteinRounded = computed(() => this.summedMeal().protein.toFixed(1));
-    summedCaloriesRounded = computed(() => this.summedMeal().calories.toFixed(1));
 
     constructor() {
         // This effect will automatically re-run anytime the meal signal is changed,
