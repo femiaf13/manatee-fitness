@@ -1,12 +1,11 @@
 name: 'publish'
 
-on: [push]
-# on:
-#     push:
-#         branches:
-#             - release
+on:
+  push:
+    tags:
+    - 'v*.*.*'
 
-    # workflow_dispatch:
+  workflow_dispatch:
 
 jobs:
     publish-android:
