@@ -36,18 +36,17 @@ export class WeightPageComponent {
     dateService = inject(DateService);
     databaseService = inject(DatabaseService);
 
-    lineChartOptions = signal<LineChart>(new LineChart([], [], '', ''));
+    lineChartOptions = signal<LineChart>(new LineChart([], [], [], ''));
 
     private formBuilder = inject(NonNullableFormBuilder);
     dateRangeForm = this.formBuilder.group({
-        start: [subDays(this.dateService.selectedDate(), 7), [Validators.required]],
+        start: [subDays(this.dateService.selectedDate(), 30), [Validators.required]],
         end: [this.dateService.selectedDate(), [Validators.required]],
         useMetric: [false],
-        showTrend: [true],
     });
 
     startDateSignal = toSignal(this.dateRangeForm.controls.start.valueChanges, {
-        initialValue: subDays(this.dateService.selectedDate(), 7),
+        initialValue: subDays(this.dateService.selectedDate(), 30),
     });
     endDateSignal = toSignal(this.dateRangeForm.controls.end.valueChanges, {
         initialValue: this.dateService.selectedDate(),
@@ -57,11 +56,31 @@ export class WeightPageComponent {
         initialValue: this.dateRangeForm.controls.useMetric.value,
     });
 
-    showTrendSignal = toSignal(this.dateRangeForm.controls.showTrend.valueChanges, {
-        initialValue: this.dateRangeForm.controls.showTrend.value,
-    });
-
     weighIns = signal<Array<WeighIn>>([]);
+
+    /**
+     * Calculate an exponential moving average with 10% smoothing
+     * @param weights raw weight data
+     * @returns Weight data after smoothing
+     */
+    calculateTrendData(weights: Array<number>): Array<number> {
+        const smoothedWeights: Array<number> = [];
+
+        if (weights.length >= 1) {
+            smoothedWeights.push(weights[0]);
+
+            for (let i = 1; i < weights.length; i++) {
+                const weight = weights[i];
+                const prevElement = smoothedWeights[i - 1];
+                // Round after smoothing it to prevent ugly numbers
+                const smoothedWeight = (prevElement + 0.1 * (weight - prevElement)).toFixed(1);
+
+                smoothedWeights.push(+smoothedWeight);
+            }
+        }
+
+        return smoothedWeights;
+    }
 
     constructor() {
         this.dateService.setTitle('Weight');
@@ -72,7 +91,7 @@ export class WeightPageComponent {
 
             untracked(() => {
                 this.databaseService.getWeighInsBetweenDates(startDate, endDate).then(weighIns => {
-                    // Split the actual return into seperate arrays and pass into bar chart constructor
+                    // Split the actual return into seperate arrays and pass into line chart constructor
                     const weightData: Array<number> = [];
                     const dateData: Array<string> = [];
 
@@ -82,12 +101,18 @@ export class WeightPageComponent {
                         } else {
                             weightData.push(+weighIn.weight_lb.toFixed(1));
                         }
-
                         dateData.push(weighIn.weigh_in_date);
                     }
 
                     const title = `Weight(${unit}): ${dateData[0]} to ${dateData[dateData.length - 1]}`;
-                    this.lineChartOptions.set(new LineChart(weightData, dateData, unit, title));
+                    this.lineChartOptions.set(
+                        new LineChart(
+                            [weightData, this.calculateTrendData(weightData)],
+                            dateData,
+                            ['Exact Measurements', 'Smoothed Data'],
+                            title
+                        )
+                    );
                 });
             });
         });

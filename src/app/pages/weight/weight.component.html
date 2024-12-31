@@ -19,16 +19,18 @@
             }
         </mat-form-field>
         <br />
-        <mat-slide-toggle labelPosition="before" formControlName="useMetric">Use Metric</mat-slide-toggle>
-        <mat-slide-toggle labelPosition="before" formControlName="showTrend">Show Trend</mat-slide-toggle>
+        <mat-slide-toggle labelPosition="before" formControlName="useMetric">Metric</mat-slide-toggle>
     </form>
     <br />
     @if (lineChartOptions().xaxis.categories.length > 0) {
         <apx-chart
             [annotations]="lineChartOptions().annotations"
+            [colors]="lineChartOptions().colors"
             [series]="lineChartOptions().series"
             [chart]="lineChartOptions().chart"
+            [markers]="lineChartOptions().markers"
             [xaxis]="lineChartOptions().xaxis"
+            [yaxis]="lineChartOptions().yaxis"
             [dataLabels]="lineChartOptions().dataLabels"
             [stroke]="lineChartOptions().stroke"
             [theme]="lineChartOptions().theme"

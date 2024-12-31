@@ -1,4 +1,4 @@
-import { ApexChart, ApexStroke } from 'ng-apexcharts';
+import { ApexChart, ApexMarkers, ApexStroke } from 'ng-apexcharts';
 
 export class LineChart {
     annotations: ApexAnnotations = {};
@@ -15,17 +15,31 @@ export class LineChart {
         },
     };
 
+    // These colors are pulled from node_modules/@angular/material/prebuilt-themes/purple-green.css
+    colors: Array<string> = ['#7b1fa2', '#69f0ae', '#f44336'];
+
     dataLabels: ApexDataLabels = {
         enabled: false,
     };
 
+    markers: ApexMarkers = {
+        // How to alternate markers if that's ever needed?
+        // size: [2, 0],
+        size: 0,
+    };
+
     stroke: ApexStroke = {
         curve: 'straight',
+        width: [2, 5],
     };
 
     theme: ApexTheme = {
         mode: 'dark',
         palette: 'palette10',
+    };
+
+    yaxis: ApexYAxis = {
+        show: true,
     };
 
     series: ApexAxisChartSeries;
@@ -34,15 +48,15 @@ export class LineChart {
 
     /**
      *
-     * @param data Data points for the y-axis. e.g. calories eaten in a day
+     * @param data Arrays of data series for the y-axis. e.g. calories eaten in a day
      * @param datetimes String version of dates for x-axis e.g. '2024-12-01'
-     * @param yAxisTitle Name of the data on the y-axis e.g. 'calories'
+     * @param yAxisTitles Names of the data on the y-axis e.g. 'calories'
      * @param title Title for the chart e.g. 'calories for <date>-<date>'
      */
     constructor(
-        data: Array<number>,
+        data: Array<number[]>,
         datetimes: Array<string>,
-        yAxisTitle: string,
+        yAxisTitles: Array<string>,
         title: string,
         annotationValue: number | undefined = undefined
     ) {
@@ -55,12 +69,16 @@ export class LineChart {
             },
         };
 
-        this.series = [
-            {
+        this.series = [];
+
+        for (let i = 0; i < data.length; i++) {
+            const dataSet = data[i];
+            const yAxisTitle = yAxisTitles[i];
+            this.series.push({
                 name: yAxisTitle,
-                data: data,
-            },
-        ];
+                data: dataSet,
+            });
+        }
 
         this.xaxis = {
             type: 'datetime',
