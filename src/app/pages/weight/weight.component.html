@@ -24,6 +24,7 @@
     <br />
     @if (lineChartOptions().xaxis.categories.length > 0) {
         <apx-chart
+            #chartObj
             [annotations]="lineChartOptions().annotations"
             [colors]="lineChartOptions().colors"
             [series]="lineChartOptions().series"

@@ -9,6 +9,7 @@ import {
     ResourceStatus,
     signal,
     untracked,
+    viewChild,
 } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { NonNullableFormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
@@ -26,7 +27,7 @@ import { WeighIn, WeighInDTO } from '@models/weigh-in.model';
 import { DatabaseService } from '@services/database.service';
 import { DateService } from '@services/date.service';
 import { subDays } from 'date-fns';
-import { NgApexchartsModule } from 'ng-apexcharts';
+import { ChartComponent, NgApexchartsModule } from 'ng-apexcharts';
 import { lastValueFrom } from 'rxjs';
 
 @Component({
@@ -51,6 +52,10 @@ export class WeightPageComponent {
     dateService = inject(DateService);
     databaseService = inject(DatabaseService);
     dialog = inject(MatDialog);
+
+    // This gets us a reference to the chart's component, needed
+    // for the jank described below
+    chart = viewChild(ChartComponent);
 
     lineChartOptions = signal<LineChart>(new LineChart([], [], [], ''));
 
@@ -183,7 +188,7 @@ export class WeightPageComponent {
 
             for (const weighIn of weighIns) {
                 if (this.useMetricSignal()) {
-                    weightData.push(weighIn.weight_kg);
+                    weightData.push(+weighIn.weight_kg.toFixed(1));
                 } else {
                     weightData.push(+weighIn.weight_lb.toFixed(1));
                 }
@@ -191,6 +196,9 @@ export class WeightPageComponent {
             }
 
             const title = `Weight(${unit}): ${dateData[0]} to ${dateData[dateData.length - 1]}`;
+            // Blank the data before updating it because it might help
+            // with the bug described below
+            this.chart()?.updateSeries([], false);
             this.lineChartOptions.set(
                 new LineChart(
                     [weightData, this.calculateTrendData(weightData)],
@@ -199,6 +207,24 @@ export class WeightPageComponent {
                     title
                 )
             );
+            /**
+             * JANK VARIETY HOUR
+             *
+             * This is happening because for some reason if we don't
+             * then my pixel 7a will not update until another UI element
+             * is interacted with. This bug was not present on desktop, the
+             * android emulator, OR my phone when running over the debugger...
+             */
+            this.chart()?.updateSeries([
+                {
+                    name: 'Exact Measurements',
+                    data: weightData,
+                },
+                {
+                    name: 'Smoothed Data',
+                    data: this.calculateTrendData(weightData),
+                },
+            ]);
         });
     }
 
