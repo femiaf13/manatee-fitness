@@ -1,0 +1,28 @@
+.main-content {
+    position: relative;
+    display: grid;
+    justify-content: center;
+    margin: 0.5em;
+    padding-bottom: 3em;
+    z-index: 10;
+}
+
+.bottom-right {
+    position: fixed;
+    bottom: 15px;
+    right: 15px;
+}
+
+mat-slide-toggle {
+    padding-right: 15px;
+}
+
+mat-form-field {
+    width: 90vw;
+    max-width: 90vw;
+}
+
+apx-chart {
+    width: 90vw;
+    max-width: 90vw;
+}

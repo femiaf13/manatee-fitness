@@ -1,0 +1,6 @@
+CREATE TABLE weigh_ins (
+    id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+    weigh_in_date DATE NOT NULL UNIQUE,
+    weight_kg REAL NOT NULL,
+    weight_lb REAL NOT NULL GENERATED ALWAYS AS (weight_kg * 2.205) STORED
+);

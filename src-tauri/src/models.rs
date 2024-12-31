@@ -159,3 +159,21 @@ pub struct SummedMealFood {
     pub food: Food,
     pub summed_food: SummedFood,
 }
+
+#[derive(Identifiable, Queryable, Selectable, PartialEq, Clone, Serialize)]
+#[diesel(table_name = crate::schema::weigh_ins)]
+#[diesel(check_for_backend(diesel::sqlite::Sqlite))]
+pub struct WeighIn {
+    pub id: i32,
+    pub weigh_in_date: time::Date,
+    pub weight_kg: f32,
+    pub weight_lb: f32,
+}
+
+#[derive(Deserialize, Insertable)]
+#[diesel(table_name = crate::schema::weigh_ins)]
+#[diesel(check_for_backend(diesel::sqlite::Sqlite))]
+pub struct WeighInDTO {
+    pub weigh_in_date: time::Date,
+    pub weight_kg: f32,
+}

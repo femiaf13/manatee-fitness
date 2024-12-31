@@ -1,0 +1,59 @@
+<div class="main-content">
+    <!-- {{ weighIns() | json }} -->
+    <form [formGroup]="dateRangeForm">
+        <mat-form-field>
+            <mat-label>Enter a date range</mat-label>
+            <mat-date-range-input [formGroup]="dateRangeForm" [rangePicker]="picker">
+                <input matStartDate formControlName="start" placeholder="Start date" />
+                <input matEndDate formControlName="end" placeholder="End date" />
+            </mat-date-range-input>
+            <mat-hint>MM/DD/YYYY – MM/DD/YYYY</mat-hint>
+            <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+            <mat-date-range-picker #picker></mat-date-range-picker>
+
+            @if (dateRangeForm.controls.start.hasError('matStartDateInvalid')) {
+                <mat-error>Invalid start date</mat-error>
+            }
+            @if (dateRangeForm.controls.end.hasError('matEndDateInvalid')) {
+                <mat-error>Invalid end date</mat-error>
+            }
+        </mat-form-field>
+        <br />
+        <mat-slide-toggle labelPosition="before" formControlName="useMetric">Metric</mat-slide-toggle>
+    </form>
+    <br />
+    @if (lineChartOptions().xaxis.categories.length > 0) {
+        <apx-chart
+            #chartObj
+            [annotations]="lineChartOptions().annotations"
+            [colors]="lineChartOptions().colors"
+            [series]="lineChartOptions().series"
+            [chart]="lineChartOptions().chart"
+            [markers]="lineChartOptions().markers"
+            [xaxis]="lineChartOptions().xaxis"
+            [yaxis]="lineChartOptions().yaxis"
+            [dataLabels]="lineChartOptions().dataLabels"
+            [stroke]="lineChartOptions().stroke"
+            [theme]="lineChartOptions().theme"
+            [title]="lineChartOptions().title"></apx-chart>
+        <p style="width: 90vw">
+            <i>
+                Note: If the beginning or end of the range has no data it will be left off of the graph to save space
+            </i>
+        </p>
+    } @else {
+        <p>No data available!</p>
+    }
+
+    @if (isResourceResolved()) {
+        @if (alreadyWeighedInToday()) {
+            <button class="bottom-right" mat-fab (click)="modifyWeight()">
+                <mat-icon aria-hidden="false" aria-label="Edit pen" fontIcon="edit"></mat-icon>
+            </button>
+        } @else {
+            <button class="bottom-right" mat-fab (click)="addWeight()">
+                <mat-icon aria-hidden="false" aria-label="Plus sign" fontIcon="add"></mat-icon>
+            </button>
+        }
+    }
+</div>

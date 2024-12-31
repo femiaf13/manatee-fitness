@@ -1,0 +1,9 @@
+<h2 mat-dialog-title>{{ this.data.modify ? 'Edit' : 'Add' }} Weigh-In</h2>
+<mat-dialog-content>
+    @if (this.data.weighIn !== undefined) {
+        <app-weighin-form
+            [inputWeighIn]="this.data.weighIn"
+            (cancelSubmission)="onCancel()"
+            (outputWeighIn)="onSubmit($event)"></app-weighin-form>
+    }
+</mat-dialog-content>
