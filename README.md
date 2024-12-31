@@ -11,6 +11,7 @@ Manatee Fitness is free and open source. There will be no ads, no tracking, and 
     <img src="./screenshots/add_mealfood.png" width="200" />
     <img src="./screenshots/recipes.png" width="200" />
     <img src="./screenshots/calorie_graph.png" width="200" />
+    <img src="./screenshots/weight_graph.png" width="200" />
 </p>
 
 ## Features
@@ -21,6 +22,7 @@ Manatee Fitness is free and open source. There will be no ads, no tracking, and 
 - Maintain a recipe book of specific foods in specific quantities for easy re-use
 - Set goals for calorie consumption and macronutrients
 - See a visualization of your calorie consumption as a graph
+- Record your weight and have your progress graphed for you
 
 ## Privacy Policy
 
