@@ -77,8 +77,7 @@ export class WeightPageComponent {
     // Trying something experimental with a resource signal
     todaysWeighInResource = resource({
         // The request value recomputes whenever any read signals change.
-        // Linechart is here to force a recalculation after adding a new weigh-in
-        request: () => ({ today: this.dateService.selectedDateFormatted(), lineChart: this.lineChartOptions() }),
+        request: () => ({ today: this.dateService.selectedDateFormatted() }),
         // The resource calls this function every time the `request` value changes.
         loader: ({ request }) => this.databaseService.getWeighInsBetweenDates(request.today, request.today),
     });
@@ -118,7 +117,8 @@ export class WeightPageComponent {
             const endDate = DateService.formateDate(this.endDateSignal());
             const startDate = DateService.formateDate(this.startDateSignal());
             const unit = this.useMetricSignal() ? 'kg' : 'lbs';
-            this.refreshWeightChart(startDate, endDate, unit);
+            await this.refreshWeightChart(startDate, endDate, unit);
+            this.todaysWeighInResource.reload();
         }
     }
 
@@ -145,7 +145,8 @@ export class WeightPageComponent {
                 const endDate = DateService.formateDate(this.endDateSignal());
                 const startDate = DateService.formateDate(this.startDateSignal());
                 const unit = this.useMetricSignal() ? 'kg' : 'lbs';
-                this.refreshWeightChart(startDate, endDate, unit);
+                await this.refreshWeightChart(startDate, endDate, unit);
+                this.todaysWeighInResource.reload();
             }
         }
     }
