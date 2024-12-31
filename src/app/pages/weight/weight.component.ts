@@ -199,14 +199,6 @@ export class WeightPageComponent {
             // Blank the data before updating it because it might help
             // with the bug described below
             this.chart()?.updateSeries([], false);
-            this.lineChartOptions.set(
-                new LineChart(
-                    [weightData, this.calculateTrendData(weightData)],
-                    dateData,
-                    ['Exact Measurements', 'Smoothed Data'],
-                    title
-                )
-            );
             /**
              * JANK VARIETY HOUR
              *
@@ -215,16 +207,16 @@ export class WeightPageComponent {
              * is interacted with. This bug was not present on desktop, the
              * android emulator, OR my phone when running over the debugger...
              */
-            this.chart()?.updateSeries([
-                {
-                    name: 'Exact Measurements',
-                    data: weightData,
-                },
-                {
-                    name: 'Smoothed Data',
-                    data: this.calculateTrendData(weightData),
-                },
-            ]);
+            setTimeout(() => {
+                this.lineChartOptions.set(
+                    new LineChart(
+                        [weightData, this.calculateTrendData(weightData)],
+                        dateData,
+                        ['Exact Measurements', 'Smoothed Data'],
+                        title
+                    )
+                );
+            }, 250);
         });
     }
 
