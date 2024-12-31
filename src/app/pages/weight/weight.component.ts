@@ -1,11 +1,22 @@
 import { CommonModule } from '@angular/common';
-import { ChangeDetectionStrategy, Component, effect, inject, signal, untracked } from '@angular/core';
+import {
+    ChangeDetectionStrategy,
+    Component,
+    computed,
+    effect,
+    inject,
+    resource,
+    ResourceStatus,
+    signal,
+    untracked,
+} from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { NonNullableFormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { provideNativeDateAdapter } from '@angular/material/core';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { LineChart } from '@models/chart-line.model';
@@ -22,6 +33,7 @@ import { NgApexchartsModule } from 'ng-apexcharts';
         CommonModule,
         MatButtonModule,
         MatFormFieldModule,
+        MatIconModule,
         MatInputModule,
         MatDatepickerModule,
         MatSlideToggleModule,
@@ -57,6 +69,25 @@ export class WeightPageComponent {
     });
 
     weighIns = signal<Array<WeighIn>>([]);
+
+    // Trying something experimental with a resource signal
+    todaysWeighInResource = resource({
+        // The request value recomputes whenever any read signals change.
+        request: () => ({ today: this.dateService.selectedDateFormatted() }),
+        // The resource calls this function every time the `request` value changes.
+        loader: ({ request }) => this.databaseService.getWeighInsBetweenDates(request.today, request.today),
+    });
+    /** Create a computed signals based on the result of the resource's loader function. */
+    // Signal to be able to tell when the request is done
+    isResourceResolved = computed(() => this.todaysWeighInResource.status() == ResourceStatus.Resolved);
+    // Has there been a weigh in today? Will control which icon gets displayed
+    alreadyWeighedInToday = computed(() => {
+        const databaseResult = this.todaysWeighInResource.value();
+        if (databaseResult === undefined) {
+            return false;
+        }
+        return databaseResult.length > 0;
+    });
 
     /**
      * Calculate an exponential moving average with 10% smoothing

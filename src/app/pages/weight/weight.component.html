@@ -43,4 +43,14 @@
     } @else {
         <p>No data available!</p>
     }
+
+    @if (isResourceResolved()) {
+        <button class="bottom-right" mat-fab>
+            @if (alreadyWeighedInToday()) {
+                <mat-icon aria-hidden="false" aria-label="Edit pen" fontIcon="edit"></mat-icon>
+            } @else {
+                <mat-icon aria-hidden="false" aria-label="Plus sign" fontIcon="add"></mat-icon>
+            }
+        </button>
+    }
 </div>

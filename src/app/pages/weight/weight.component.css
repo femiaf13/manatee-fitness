@@ -7,6 +7,12 @@
     z-index: 10;
 }
 
+.bottom-right {
+    position: fixed;
+    bottom: 15px;
+    right: 15px;
+}
+
 mat-slide-toggle {
     padding-right: 15px;
 }
