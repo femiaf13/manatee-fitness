@@ -216,7 +216,7 @@ export class WeightPageComponent {
                         title
                     )
                 );
-            }, 250);
+            }, 150);
         });
     }
 
