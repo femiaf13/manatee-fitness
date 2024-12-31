@@ -6,3 +6,17 @@
     padding-bottom: 3em;
     z-index: 10;
 }
+
+mat-slide-toggle {
+    padding-right: 15px;
+}
+
+mat-form-field {
+    width: 90vw;
+    max-width: 90vw;
+}
+
+apx-chart {
+    width: 90vw;
+    max-width: 90vw;
+}

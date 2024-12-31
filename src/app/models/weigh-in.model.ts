@@ -1,20 +1,20 @@
 export class WeighInDTO {
-    weighInDate: string;
-    weightKg: number;
+    weigh_in_date: string;
+    weight_kg: number;
 
     constructor() {
-        this.weighInDate = '';
-        this.weightKg = 0;
+        this.weigh_in_date = '';
+        this.weight_kg = 0;
     }
 }
 
 export class WeighIn extends WeighInDTO {
     id: number;
-    weightLb: number;
+    weight_lb: number;
 
     constructor() {
         super();
         this.id = 0;
-        this.weightLb = 0;
+        this.weight_lb = 0;
     }
 }
