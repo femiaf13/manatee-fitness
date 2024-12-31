@@ -6,7 +6,9 @@ import { MatButtonModule } from '@angular/material/button';
 import { provideNativeDateAdapter } from '@angular/material/core';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatGridListModule } from '@angular/material/grid-list';
 import { MatInputModule } from '@angular/material/input';
+import { MatSelectModule } from '@angular/material/select';
 import { BarChart } from '@models/chart-bar.model';
 import { DonutChart } from '@models/chart-donut.model';
 import { DatabaseService } from '@services/database.service';
@@ -23,6 +25,8 @@ import { NgApexchartsModule } from 'ng-apexcharts';
         MatFormFieldModule,
         MatInputModule,
         MatDatepickerModule,
+        MatGridListModule,
+        MatSelectModule,
         NgApexchartsModule,
         ReactiveFormsModule,
     ],
@@ -37,10 +41,13 @@ export class StatsPageComponent {
     barChartOptions = signal<BarChart>(new BarChart([], [], '', ''));
     donutChartOptions = signal<DonutChart>(new DonutChart([], []));
 
+    readonly selectionOptions = ['Calories', 'Fat', 'Carbs', 'Protein', 'Cholesterol', 'Fiber', 'Sodium'];
+
     private formBuilder = inject(NonNullableFormBuilder);
     dateRangeForm = this.formBuilder.group({
         start: [subDays(this.dateService.selectedDate(), 7), [Validators.required]],
         end: [this.dateService.selectedDate(), [Validators.required]],
+        dataToGraph: ['Calories', [Validators.required]],
     });
 
     startDateSignal = toSignal(this.dateRangeForm.controls.start.valueChanges, {
@@ -48,6 +55,9 @@ export class StatsPageComponent {
     });
     endDateSignal = toSignal(this.dateRangeForm.controls.end.valueChanges, {
         initialValue: this.dateService.selectedDate(),
+    });
+    dataToGraphSignal = toSignal(this.dateRangeForm.controls.dataToGraph.valueChanges, {
+        initialValue: this.dateRangeForm.controls.dataToGraph.value,
     });
 
     constructor() {

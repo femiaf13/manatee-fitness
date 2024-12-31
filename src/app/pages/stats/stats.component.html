@@ -1,45 +1,63 @@
 <div class="main-content">
-    <mat-form-field>
-        <mat-label>Enter a date range</mat-label>
-        <mat-date-range-input [formGroup]="dateRangeForm" [rangePicker]="picker">
-            <input matStartDate formControlName="start" placeholder="Start date" />
-            <input matEndDate formControlName="end" placeholder="End date" />
-        </mat-date-range-input>
-        <mat-hint>MM/DD/YYYY – MM/DD/YYYY</mat-hint>
-        <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
-        <mat-date-range-picker #picker></mat-date-range-picker>
+    <mat-grid-list cols="2" rowHeight="80px">
+        <form [formGroup]="dateRangeForm">
+            <mat-grid-tile [colspan]="2">
+                <mat-form-field>
+                    <mat-label>Enter a date range</mat-label>
+                    <mat-date-range-input [formGroup]="dateRangeForm" [rangePicker]="picker">
+                        <input matStartDate formControlName="start" placeholder="Start date" />
+                        <input matEndDate formControlName="end" placeholder="End date" />
+                    </mat-date-range-input>
+                    <mat-hint>MM/DD/YYYY – MM/DD/YYYY</mat-hint>
+                    <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+                    <mat-date-range-picker #picker></mat-date-range-picker>
 
-        @if (dateRangeForm.controls.start.hasError('matStartDateInvalid')) {
-            <mat-error>Invalid start date</mat-error>
+                    @if (dateRangeForm.controls.start.hasError('matStartDateInvalid')) {
+                        <mat-error>Invalid start date</mat-error>
+                    }
+                    @if (dateRangeForm.controls.end.hasError('matEndDateInvalid')) {
+                        <mat-error>Invalid end date</mat-error>
+                    }
+                </mat-form-field>
+            </mat-grid-tile>
+            <mat-grid-tile>
+                <mat-form-field>
+                    <mat-label>Data to graph</mat-label>
+                    <mat-select formControlName="dataToGraph">
+                        @for (dataType of selectionOptions; track dataType) {
+                            <mat-option [value]="dataType">{{ dataType }}</mat-option>
+                        }
+                    </mat-select>
+                </mat-form-field>
+            </mat-grid-tile>
+            <mat-grid-tile>
+                <small style="padding-bottom: 20px">
+                    <i>
+                        If the beginning or end of the range has no data it will be left off of the graph to save space
+                    </i>
+                </small>
+            </mat-grid-tile>
+        </form>
+    </mat-grid-list>
+    <div style="width: 90vw">
+        @if (barChartOptions().xaxis.categories.length > 0) {
+            <apx-chart
+                [annotations]="barChartOptions().annotations"
+                [series]="barChartOptions().series"
+                [chart]="barChartOptions().chart"
+                [xaxis]="barChartOptions().xaxis"
+                [dataLabels]="barChartOptions().dataLabels"
+                [theme]="barChartOptions().theme"
+                [title]="barChartOptions().title"></apx-chart>
+            <apx-chart
+                [series]="donutChartOptions().series"
+                [chart]="donutChartOptions().chart"
+                [colors]="donutChartOptions().colors"
+                [labels]="donutChartOptions().labels"
+                [theme]="donutChartOptions().theme"
+                [title]="donutChartOptions().title"></apx-chart>
+        } @else {
+            <p>No data available!</p>
         }
-        @if (dateRangeForm.controls.end.hasError('matEndDateInvalid')) {
-            <mat-error>Invalid end date</mat-error>
-        }
-    </mat-form-field>
-    <br />
-    @if (barChartOptions().xaxis.categories.length > 0) {
-        <p style="width: 90vw">
-            <i>
-                Note: If the beginning or end of the range has no data it will be left off of the graph to save space
-            </i>
-        </p>
-        <apx-chart
-            [annotations]="barChartOptions().annotations"
-            [series]="barChartOptions().series"
-            [chart]="barChartOptions().chart"
-            [xaxis]="barChartOptions().xaxis"
-            [dataLabels]="barChartOptions().dataLabels"
-            [theme]="barChartOptions().theme"
-            [title]="barChartOptions().title"></apx-chart>
-        <br />
-        <apx-chart
-            [series]="donutChartOptions().series"
-            [chart]="donutChartOptions().chart"
-            [colors]="donutChartOptions().colors"
-            [labels]="donutChartOptions().labels"
-            [theme]="donutChartOptions().theme"
-            [title]="donutChartOptions().title"></apx-chart>
-    } @else {
-        <p>No data available!</p>
-    }
+    </div>
 </div>
