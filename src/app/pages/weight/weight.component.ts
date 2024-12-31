@@ -15,16 +15,19 @@ import { NonNullableFormBuilder, ReactiveFormsModule, Validators } from '@angula
 import { MatButtonModule } from '@angular/material/button';
 import { provideNativeDateAdapter } from '@angular/material/core';
 import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatDialog } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
+import { WeighInDialogComponent, WeighInDialogData } from '@components/dialogs/weighin-dialog/weighin-dialog.component';
 import { LineChart } from '@models/chart-line.model';
-import { WeighIn } from '@models/weigh-in.model';
+import { WeighIn, WeighInDTO } from '@models/weigh-in.model';
 import { DatabaseService } from '@services/database.service';
 import { DateService } from '@services/date.service';
 import { subDays } from 'date-fns';
 import { NgApexchartsModule } from 'ng-apexcharts';
+import { lastValueFrom } from 'rxjs';
 
 @Component({
     selector: 'app-page-weight',
@@ -47,6 +50,7 @@ import { NgApexchartsModule } from 'ng-apexcharts';
 export class WeightPageComponent {
     dateService = inject(DateService);
     databaseService = inject(DatabaseService);
+    dialog = inject(MatDialog);
 
     lineChartOptions = signal<LineChart>(new LineChart([], [], [], ''));
 
@@ -58,10 +62,10 @@ export class WeightPageComponent {
     });
 
     startDateSignal = toSignal(this.dateRangeForm.controls.start.valueChanges, {
-        initialValue: subDays(this.dateService.selectedDate(), 30),
+        initialValue: this.dateRangeForm.controls.start.value,
     });
     endDateSignal = toSignal(this.dateRangeForm.controls.end.valueChanges, {
-        initialValue: this.dateService.selectedDate(),
+        initialValue: this.dateRangeForm.controls.end.value,
     });
 
     useMetricSignal = toSignal(this.dateRangeForm.controls.useMetric.valueChanges, {
@@ -73,7 +77,8 @@ export class WeightPageComponent {
     // Trying something experimental with a resource signal
     todaysWeighInResource = resource({
         // The request value recomputes whenever any read signals change.
-        request: () => ({ today: this.dateService.selectedDateFormatted() }),
+        // Linechart is here to force a recalculation after adding a new weigh-in
+        request: () => ({ today: this.dateService.selectedDateFormatted(), lineChart: this.lineChartOptions() }),
         // The resource calls this function every time the `request` value changes.
         loader: ({ request }) => this.databaseService.getWeighInsBetweenDates(request.today, request.today),
     });
@@ -88,6 +93,62 @@ export class WeightPageComponent {
         }
         return databaseResult.length > 0;
     });
+    todaysWeighIn = computed(() => {
+        return this.todaysWeighInResource.value();
+    });
+
+    async addWeight() {
+        const placeholderWeighIn = new WeighInDTO();
+        placeholderWeighIn.weigh_in_date = this.dateService.selectedDateFormatted();
+        const dialogData: WeighInDialogData = {
+            modify: false,
+            weighIn: placeholderWeighIn,
+        };
+        const dialogRef = this.dialog.open(WeighInDialogComponent, {
+            data: dialogData,
+            disableClose: true,
+        });
+        const newWeighIn: WeighInDTO | undefined = await lastValueFrom(dialogRef.afterClosed());
+        if (newWeighIn !== undefined) {
+            const success = await this.databaseService.createWeighIn(newWeighIn);
+            if (!success) {
+                console.error('Failed to add weigh-in: ' + JSON.stringify(newWeighIn));
+            }
+            // TODO: This is repeated code but I'll fix it later(which we all know means never)
+            const endDate = DateService.formateDate(this.endDateSignal());
+            const startDate = DateService.formateDate(this.startDateSignal());
+            const unit = this.useMetricSignal() ? 'kg' : 'lbs';
+            this.refreshWeightChart(startDate, endDate, unit);
+        }
+    }
+
+    async modifyWeight() {
+        const todaysWeighIn = this.todaysWeighIn();
+        if (todaysWeighIn !== undefined) {
+            const dialogData: WeighInDialogData = {
+                modify: true,
+                // Just accessing first element feels wrong but will
+                // always be right based on how it's called
+                weighIn: todaysWeighIn[0],
+            };
+            const dialogRef = this.dialog.open(WeighInDialogComponent, {
+                data: dialogData,
+                disableClose: true,
+            });
+            const newWeighIn: WeighInDTO | undefined = await lastValueFrom(dialogRef.afterClosed());
+            if (newWeighIn !== undefined) {
+                const success = await this.databaseService.updateWeighIn(todaysWeighIn[0].id, newWeighIn);
+                if (!success) {
+                    console.error('Failed to update weigh-in: ' + JSON.stringify(newWeighIn));
+                }
+                // TODO: This is repeated code but I'll fix it later(which we all know means never)
+                const endDate = DateService.formateDate(this.endDateSignal());
+                const startDate = DateService.formateDate(this.startDateSignal());
+                const unit = this.useMetricSignal() ? 'kg' : 'lbs';
+                this.refreshWeightChart(startDate, endDate, unit);
+            }
+        }
+    }
 
     /**
      * Calculate an exponential moving average with 10% smoothing
@@ -113,6 +174,33 @@ export class WeightPageComponent {
         return smoothedWeights;
     }
 
+    async refreshWeightChart(startDate: string, endDate: string, unit: string) {
+        this.databaseService.getWeighInsBetweenDates(startDate, endDate).then(weighIns => {
+            // Split the actual return into seperate arrays and pass into line chart constructor
+            const weightData: Array<number> = [];
+            const dateData: Array<string> = [];
+
+            for (const weighIn of weighIns) {
+                if (this.useMetricSignal()) {
+                    weightData.push(weighIn.weight_kg);
+                } else {
+                    weightData.push(+weighIn.weight_lb.toFixed(1));
+                }
+                dateData.push(weighIn.weigh_in_date);
+            }
+
+            const title = `Weight(${unit}): ${dateData[0]} to ${dateData[dateData.length - 1]}`;
+            this.lineChartOptions.set(
+                new LineChart(
+                    [weightData, this.calculateTrendData(weightData)],
+                    dateData,
+                    ['Exact Measurements', 'Smoothed Data'],
+                    title
+                )
+            );
+        });
+    }
+
     constructor() {
         this.dateService.setTitle('Weight');
         effect(() => {
@@ -121,30 +209,7 @@ export class WeightPageComponent {
             const unit = this.useMetricSignal() ? 'kg' : 'lbs';
 
             untracked(() => {
-                this.databaseService.getWeighInsBetweenDates(startDate, endDate).then(weighIns => {
-                    // Split the actual return into seperate arrays and pass into line chart constructor
-                    const weightData: Array<number> = [];
-                    const dateData: Array<string> = [];
-
-                    for (const weighIn of weighIns) {
-                        if (this.useMetricSignal()) {
-                            weightData.push(weighIn.weight_kg);
-                        } else {
-                            weightData.push(+weighIn.weight_lb.toFixed(1));
-                        }
-                        dateData.push(weighIn.weigh_in_date);
-                    }
-
-                    const title = `Weight(${unit}): ${dateData[0]} to ${dateData[dateData.length - 1]}`;
-                    this.lineChartOptions.set(
-                        new LineChart(
-                            [weightData, this.calculateTrendData(weightData)],
-                            dateData,
-                            ['Exact Measurements', 'Smoothed Data'],
-                            title
-                        )
-                    );
-                });
+                this.refreshWeightChart(startDate, endDate, unit);
             });
         });
     }

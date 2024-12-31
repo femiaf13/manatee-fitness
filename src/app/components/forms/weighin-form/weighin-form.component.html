@@ -1,0 +1,20 @@
+<form [formGroup]="weighInForm">
+    <mat-form-field>
+        <mat-label>Weight</mat-label>
+        <input matInput type="number" placeholder="Enter weight" formControlName="weight" />
+        <button mat-button [matMenuTriggerFor]="menu" matTextSuffix>{{ weightUnit() }}</button>
+    </mat-form-field>
+    <mat-form-field>
+        <mat-label>Date</mat-label>
+        <input matInput [readonly]="true" [value]="inputWeighIn().weigh_in_date" />
+    </mat-form-field>
+    <button mat-flat-button style="float: right" type="submit" [disabled]="!weighInForm.valid" (click)="onSubmit()">
+        Submit
+    </button>
+    <button mat-flat-button style="float: right" (click)="onCancel()">Cancel</button>
+</form>
+
+<mat-menu #menu="matMenu">
+    <button (click)="selectUnit('kg')" mat-menu-item>Kilograms</button>
+    <button (click)="selectUnit('lb')" mat-menu-item>Pounds</button>
+</mat-menu>

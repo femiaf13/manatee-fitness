@@ -331,7 +331,7 @@ export class DatabaseService {
      */
     public async updateWeighIn(weighInId: number, weighIn: WeighInDTO): Promise<boolean> {
         return await invoke<boolean>('update_weigh_in_by_dto', {
-            weighInid: weighInId,
+            weighInId: weighInId,
             weighInDto: weighIn,
         });
     }
@@ -343,7 +343,7 @@ export class DatabaseService {
      */
     public async deleteWeighIn(weighInId: number): Promise<boolean> {
         return await invoke<boolean>('delete_weigh_in', {
-            weighInid: weighInId,
+            weighInId: weighInId,
         });
     }
 }

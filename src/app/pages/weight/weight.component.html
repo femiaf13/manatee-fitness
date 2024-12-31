@@ -45,12 +45,14 @@
     }
 
     @if (isResourceResolved()) {
-        <button class="bottom-right" mat-fab>
-            @if (alreadyWeighedInToday()) {
+        @if (alreadyWeighedInToday()) {
+            <button class="bottom-right" mat-fab (click)="modifyWeight()">
                 <mat-icon aria-hidden="false" aria-label="Edit pen" fontIcon="edit"></mat-icon>
-            } @else {
+            </button>
+        } @else {
+            <button class="bottom-right" mat-fab (click)="addWeight()">
                 <mat-icon aria-hidden="false" aria-label="Plus sign" fontIcon="add"></mat-icon>
-            }
-        </button>
+            </button>
+        }
     }
 </div>
