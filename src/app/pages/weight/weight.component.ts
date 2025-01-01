@@ -212,7 +212,7 @@ export class WeightPageComponent {
                     new LineChart(
                         [weightData, this.calculateTrendData(weightData)],
                         dateData,
-                        ['Exact Measurements', 'Smoothed Data'],
+                        ['Exact Measurements', 'Rolling Average'],
                         title
                     )
                 );
