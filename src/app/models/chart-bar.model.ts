@@ -84,6 +84,8 @@ export class BarChart {
                 yaxis: [
                     {
                         y: annotationValue,
+                        borderColor: '#69f0ae',
+                        fillColor: '#69f0ae',
                         width: '100%',
                         label: {
                             text: 'goal',

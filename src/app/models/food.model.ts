@@ -86,3 +86,13 @@ export class SummedFoodWithDate extends SummedFood {
         this.date = '1970-01-01';
     }
 }
+
+export enum SummedFoodDataTypes {
+    Calories = 'Calories',
+    Fat = 'Fat',
+    Carbs = 'Carbs',
+    Protein = 'Protein',
+    Cholesterol = 'Cholesterol',
+    Fiber = 'Fiber',
+    Sodium = 'Sodium',
+}
