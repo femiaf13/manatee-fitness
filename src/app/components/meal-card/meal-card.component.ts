@@ -75,7 +75,7 @@ export class MealCardComponent {
         });
     }
 
-    async onLongPressMealCard(event: MouseEvent) {
+    async onLongPressMealCard(event: MouseEvent | TouchEvent) {
         event.preventDefault();
 
         // Pop up the meal dialog and handle its return here
