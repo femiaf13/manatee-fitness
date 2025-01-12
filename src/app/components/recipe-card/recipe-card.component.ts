@@ -81,7 +81,7 @@ export class RecipeCardComponent {
         }
     }
 
-    async onLongPressRecipeCard(event: MouseEvent) {
+    async onLongPressRecipeCard(event: MouseEvent | TouchEvent) {
         event.preventDefault();
 
         // Pop up the recipe dialog and handle its return here
