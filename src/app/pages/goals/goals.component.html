@@ -44,4 +44,41 @@
         <br />
         <button mat-flat-button type="submit" [disabled]="!goalForm.valid" (click)="onSubmit()">Submit</button>
     </form>
+
+    {{ nutritionForm.value | json }}
+
+    <form [formGroup]="nutritionForm" (ngSubmit)="(true)">
+        <mat-slide-toggle labelPosition="before" formControlName="useMetric">Metric</mat-slide-toggle>
+        <mat-form-field>
+            <mat-label>Weight</mat-label>
+            <input matInput type="number" placeholder="Weight" formControlName="weight" />
+            <span matTextSuffix>{{ weightUnit() }}</span>
+        </mat-form-field>
+
+        <mat-form-field>
+            <mat-label>Height</mat-label>
+            <input matInput type="number" placeholder="Height" formControlName="height" />
+            <span matTextSuffix>{{ heightUnit() }}</span>
+        </mat-form-field>
+
+        <mat-form-field>
+            <mat-label>Age</mat-label>
+            <input matInput type="number" placeholder="Age" formControlName="age" />
+            <span matTextSuffix>years</span>
+        </mat-form-field>
+
+        <mat-form-field>
+            <mat-label>Activity Level</mat-label>
+            <mat-select formControlName="activityLevel">
+                <mat-option [value]="1.0">Base</mat-option>
+                <mat-option [value]="1.2">Sedentary</mat-option>
+                <mat-option [value]="1.375">Lightly active</mat-option>
+                <mat-option [value]="1.55">Moderately active</mat-option>
+                <mat-option [value]="1.725">Active</mat-option>
+                <mat-option [value]="1.9">Very active</mat-option>
+            </mat-select>
+        </mat-form-field>
+        <br />
+        <button mat-flat-button type="submit" [disabled]="!nutritionForm.valid">Submit</button>
+    </form>
 </div>
