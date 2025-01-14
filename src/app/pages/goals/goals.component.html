@@ -47,9 +47,8 @@
                 <button mat-flat-button type="submit" [disabled]="!goalForm.valid" (click)="onSubmit()">Submit</button>
             </form>
         </mat-tab>
-        <mat-tab label="Calculate">
-            {{ calculatedCalories() }}
-
+        <mat-tab label="Calculate Calories">
+            <p>{{ calculatedCalories() }}</p>
             <form [formGroup]="nutritionForm" (ngSubmit)="(true)">
                 <mat-slide-toggle labelPosition="before" formControlName="useMetric">Metric</mat-slide-toggle>
                 <mat-form-field>
@@ -101,11 +100,22 @@
                     </mat-select>
                 </mat-form-field>
                 <br />
-                @if (calculatedCalories() < DANGEROUS_CALORIE_THRESHOLD) {
-                    <p>HERE BE DANGER</p>
-                }
                 <button mat-flat-button type="submit" [disabled]="!nutritionForm.valid">Submit</button>
+                <br /><br />
+                <p>
+                    @if (calculatedCalories() < DANGEROUS_CALORIE_THRESHOLD && calculatedCalories() !== 0) {
+                        <p>
+                            <strong>
+                                Going under 1200 calories can be dangerous! Please make sure you're not going to hurt
+                                yourself.
+                            </strong>
+                        </p>
+                    }
+                    DISCLAIMER: This is an estimate using the Mifflin-St Jeor Equation. Please use your best judgement
+                    and consult a medical professional if necesary before making any changes to your diet.
+                </p>
             </form>
         </mat-tab>
+        <mat-tab label="Calculate Macros">Calculating Macronutrients will go here</mat-tab>
     </mat-tab-group>
 </div>

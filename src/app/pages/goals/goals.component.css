@@ -7,6 +7,10 @@
     z-index: 10;
 }
 
+mat-tab-group {
+    width: 100vw;
+}
+
 mat-form-field {
     width: 150px;
     padding: 10px;
