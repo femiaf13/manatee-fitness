@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, effect, inject, OnInit, signal, untracked } from '@angular/core';
+import { Component, computed, effect, inject, OnInit, signal, untracked } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { NonNullableFormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
@@ -44,21 +44,51 @@ export class GoalsComponent implements OnInit {
         sodium: [0, Validators.min(0)],
     });
 
+    weightUnit = signal<string>('lb');
+    heightUnit = signal<string>('in');
+
     nutritionForm = this.formBuilder.group({
-        weight: [0, [Validators.required, Validators.min(0)]],
-        height: [0, [Validators.required, Validators.min(0)]],
+        weight: [0, [Validators.required, Validators.min(50)]],
+        height: [0, [Validators.required, Validators.min(10)]],
         age: [0, [Validators.required, Validators.min(18)]],
         activityLevel: [1.0, [Validators.required, Validators.min(1.0)]],
+        isMale: [true, [Validators.required]],
         useMetric: [false, [Validators.required]],
     });
 
+    nutritionFormSignal = toSignal(this.nutritionForm.valueChanges, { initialValue: this.nutritionForm.value });
     useMetricSignal = toSignal(this.nutritionForm.controls.useMetric.valueChanges, {
         initialValue: this.nutritionForm.controls.useMetric.value,
     });
 
-    weightUnit = signal<string>('lb');
-    heightUnit = signal<string>('in');
-    useMetric = signal<boolean>(false);
+    calculatedCalories = computed(() => {
+        const formulaInputs = this.nutritionFormSignal();
+        if (this.nutritionForm.valid) {
+            // This is the Mifflin St Jeor equation from
+            // https://en.wikipedia.org/wiki/Basal_metabolic_rate#BMR_estimation_formulas
+            const convertedWeight = this.unitConversionService
+                .convert(formulaInputs.weight)
+                .from(this.weightUnit())
+                .to('kg');
+
+            const convertedHeight = this.unitConversionService
+                .convert(formulaInputs.height)
+                .from(this.heightUnit())
+                .to('cm');
+
+            let baseMetabolicRate = 10 * convertedWeight;
+            baseMetabolicRate += 6.25 * convertedHeight;
+            baseMetabolicRate -= 5 * (formulaInputs.age as number);
+            if (formulaInputs.isMale === true) {
+                baseMetabolicRate += 5;
+            } else {
+                baseMetabolicRate -= 161;
+            }
+
+            return +(baseMetabolicRate * (formulaInputs.activityLevel as number)).toFixed(0);
+        }
+        return 0;
+    });
 
     async onSubmit() {
         const goal = new Goal(
