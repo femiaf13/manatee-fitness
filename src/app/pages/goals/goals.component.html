@@ -45,7 +45,7 @@
         <button mat-flat-button type="submit" [disabled]="!goalForm.valid" (click)="onSubmit()">Submit</button>
     </form>
 
-    {{ nutritionForm.value | json }}
+    {{ calculatedCalories() }}
 
     <form [formGroup]="nutritionForm" (ngSubmit)="(true)">
         <mat-slide-toggle labelPosition="before" formControlName="useMetric">Metric</mat-slide-toggle>
@@ -76,6 +76,13 @@
                 <mat-option [value]="1.55">Moderately active</mat-option>
                 <mat-option [value]="1.725">Active</mat-option>
                 <mat-option [value]="1.9">Very active</mat-option>
+            </mat-select>
+        </mat-form-field>
+        <mat-form-field>
+            <mat-label>Sex</mat-label>
+            <mat-select formControlName="isMale">
+                <mat-option [value]="true">Male</mat-option>
+                <mat-option [value]="false">Female</mat-option>
             </mat-select>
         </mat-form-field>
         <br />
