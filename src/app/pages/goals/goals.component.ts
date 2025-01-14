@@ -8,6 +8,7 @@ import { MatGridListModule } from '@angular/material/grid-list';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
+import { MatTabsModule } from '@angular/material/tabs';
 import { Goal } from '@models/goal.model';
 import { DatabaseService } from '@services/database.service';
 import { DateService } from '@services/date.service';
@@ -24,6 +25,7 @@ import { UnitConversionService } from '@services/unit-conversion.service';
         MatInputModule,
         MatSelectModule,
         MatSlideToggleModule,
+        MatTabsModule,
     ],
     templateUrl: './goals.component.html',
     styleUrl: './goals.component.css',

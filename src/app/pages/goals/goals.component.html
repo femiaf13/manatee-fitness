@@ -1,91 +1,96 @@
 <div class="main-content">
-    <form [formGroup]="goalForm">
-        <mat-form-field>
-            <mat-label>Calories</mat-label>
-            <input matInput type="number" placeholder="Calories" formControlName="calories" />
-            <span matTextSuffix>kcal</span>
-        </mat-form-field>
+    <mat-tab-group dynamicHeight>
+        <mat-tab label="Goals">
+            <form [formGroup]="goalForm">
+                <mat-form-field>
+                    <mat-label>Calories</mat-label>
+                    <input matInput type="number" placeholder="Calories" formControlName="calories" />
+                    <span matTextSuffix>kcal</span>
+                </mat-form-field>
 
-        <mat-form-field>
-            <mat-label>Fat</mat-label>
-            <input matInput type="number" placeholder="Fat" formControlName="fat" />
-            <span matTextSuffix>g</span>
-        </mat-form-field>
+                <mat-form-field>
+                    <mat-label>Fat</mat-label>
+                    <input matInput type="number" placeholder="Fat" formControlName="fat" />
+                    <span matTextSuffix>g</span>
+                </mat-form-field>
 
-        <mat-form-field>
-            <mat-label>Carbs</mat-label>
-            <input matInput type="number" placeholder="Carbs" formControlName="carbs" />
-            <span matTextSuffix>g</span>
-        </mat-form-field>
+                <mat-form-field>
+                    <mat-label>Carbs</mat-label>
+                    <input matInput type="number" placeholder="Carbs" formControlName="carbs" />
+                    <span matTextSuffix>g</span>
+                </mat-form-field>
 
-        <mat-form-field>
-            <mat-label>Protein</mat-label>
-            <input matInput type="number" placeholder="Protein" formControlName="protein" />
-            <span matTextSuffix>g</span>
-        </mat-form-field>
+                <mat-form-field>
+                    <mat-label>Protein</mat-label>
+                    <input matInput type="number" placeholder="Protein" formControlName="protein" />
+                    <span matTextSuffix>g</span>
+                </mat-form-field>
 
-        <mat-form-field>
-            <mat-label>Cholesterol</mat-label>
-            <input matInput type="number" placeholder="Cholesterol" formControlName="cholesterol" />
-            <span matTextSuffix>mg</span>
-        </mat-form-field>
+                <mat-form-field>
+                    <mat-label>Cholesterol</mat-label>
+                    <input matInput type="number" placeholder="Cholesterol" formControlName="cholesterol" />
+                    <span matTextSuffix>mg</span>
+                </mat-form-field>
 
-        <mat-form-field>
-            <mat-label>Fiber</mat-label>
-            <input matInput type="number" placeholder="Fiber" formControlName="fiber" />
-            <span matTextSuffix>g</span>
-        </mat-form-field>
+                <mat-form-field>
+                    <mat-label>Fiber</mat-label>
+                    <input matInput type="number" placeholder="Fiber" formControlName="fiber" />
+                    <span matTextSuffix>g</span>
+                </mat-form-field>
 
-        <mat-form-field>
-            <mat-label>Sodium</mat-label>
-            <input matInput type="number" placeholder="Sodium" formControlName="sodium" />
-            <span matTextSuffix>mg</span>
-        </mat-form-field>
-        <br />
-        <button mat-flat-button type="submit" [disabled]="!goalForm.valid" (click)="onSubmit()">Submit</button>
-    </form>
+                <mat-form-field>
+                    <mat-label>Sodium</mat-label>
+                    <input matInput type="number" placeholder="Sodium" formControlName="sodium" />
+                    <span matTextSuffix>mg</span>
+                </mat-form-field>
+                <br />
+                <button mat-flat-button type="submit" [disabled]="!goalForm.valid" (click)="onSubmit()">Submit</button>
+            </form>
+        </mat-tab>
+        <mat-tab label="Calculate">
+            {{ calculatedCalories() }}
 
-    {{ calculatedCalories() }}
+            <form [formGroup]="nutritionForm" (ngSubmit)="(true)">
+                <mat-slide-toggle labelPosition="before" formControlName="useMetric">Metric</mat-slide-toggle>
+                <mat-form-field>
+                    <mat-label>Weight</mat-label>
+                    <input matInput type="number" placeholder="Weight" formControlName="weight" />
+                    <span matTextSuffix>{{ weightUnit() }}</span>
+                </mat-form-field>
 
-    <form [formGroup]="nutritionForm" (ngSubmit)="(true)">
-        <mat-slide-toggle labelPosition="before" formControlName="useMetric">Metric</mat-slide-toggle>
-        <mat-form-field>
-            <mat-label>Weight</mat-label>
-            <input matInput type="number" placeholder="Weight" formControlName="weight" />
-            <span matTextSuffix>{{ weightUnit() }}</span>
-        </mat-form-field>
+                <mat-form-field>
+                    <mat-label>Height</mat-label>
+                    <input matInput type="number" placeholder="Height" formControlName="height" />
+                    <span matTextSuffix>{{ heightUnit() }}</span>
+                </mat-form-field>
 
-        <mat-form-field>
-            <mat-label>Height</mat-label>
-            <input matInput type="number" placeholder="Height" formControlName="height" />
-            <span matTextSuffix>{{ heightUnit() }}</span>
-        </mat-form-field>
+                <mat-form-field>
+                    <mat-label>Age</mat-label>
+                    <input matInput type="number" placeholder="Age" formControlName="age" />
+                    <span matTextSuffix>years</span>
+                </mat-form-field>
 
-        <mat-form-field>
-            <mat-label>Age</mat-label>
-            <input matInput type="number" placeholder="Age" formControlName="age" />
-            <span matTextSuffix>years</span>
-        </mat-form-field>
-
-        <mat-form-field>
-            <mat-label>Activity Level</mat-label>
-            <mat-select formControlName="activityLevel">
-                <mat-option [value]="1.0">Base</mat-option>
-                <mat-option [value]="1.2">Sedentary</mat-option>
-                <mat-option [value]="1.375">Lightly active</mat-option>
-                <mat-option [value]="1.55">Moderately active</mat-option>
-                <mat-option [value]="1.725">Active</mat-option>
-                <mat-option [value]="1.9">Very active</mat-option>
-            </mat-select>
-        </mat-form-field>
-        <mat-form-field>
-            <mat-label>Sex</mat-label>
-            <mat-select formControlName="isMale">
-                <mat-option [value]="true">Male</mat-option>
-                <mat-option [value]="false">Female</mat-option>
-            </mat-select>
-        </mat-form-field>
-        <br />
-        <button mat-flat-button type="submit" [disabled]="!nutritionForm.valid">Submit</button>
-    </form>
+                <mat-form-field>
+                    <mat-label>Activity Level</mat-label>
+                    <mat-select formControlName="activityLevel">
+                        <mat-option [value]="1.0">Base</mat-option>
+                        <mat-option [value]="1.2">Sedentary</mat-option>
+                        <mat-option [value]="1.375">Lightly active</mat-option>
+                        <mat-option [value]="1.55">Moderately active</mat-option>
+                        <mat-option [value]="1.725">Active</mat-option>
+                        <mat-option [value]="1.9">Very active</mat-option>
+                    </mat-select>
+                </mat-form-field>
+                <mat-form-field>
+                    <mat-label>Sex</mat-label>
+                    <mat-select formControlName="isMale">
+                        <mat-option [value]="true">Male</mat-option>
+                        <mat-option [value]="false">Female</mat-option>
+                    </mat-select>
+                </mat-form-field>
+                <br />
+                <button mat-flat-button type="submit" [disabled]="!nutritionForm.valid">Submit</button>
+            </form>
+        </mat-tab>
+    </mat-tab-group>
 </div>
