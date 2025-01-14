@@ -101,6 +101,9 @@
                     </mat-select>
                 </mat-form-field>
                 <br />
+                @if (calculatedCalories() < DANGEROUS_CALORIE_THRESHOLD) {
+                    <p>HERE BE DANGER</p>
+                }
                 <button mat-flat-button type="submit" [disabled]="!nutritionForm.valid">Submit</button>
             </form>
         </mat-tab>

@@ -35,6 +35,8 @@ export class GoalsComponent implements OnInit {
     databaseService = inject(DatabaseService);
     unitConversionService = inject(UnitConversionService);
 
+    readonly DANGEROUS_CALORIE_THRESHOLD = 1200;
+
     private formBuilder = inject(NonNullableFormBuilder);
     goalForm = this.formBuilder.group({
         calories: [0, [Validators.required, Validators.min(0)]],
