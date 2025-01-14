@@ -82,6 +82,18 @@
                     </mat-select>
                 </mat-form-field>
                 <mat-form-field>
+                    <mat-label>Weight Strategy</mat-label>
+                    <mat-select formControlName="weightStrategy">
+                        <mat-option [value]="0.8">Fast loss (-20%)</mat-option>
+                        <mat-option [value]="0.85">Medium loss (-15%)</mat-option>
+                        <mat-option [value]="0.9">Slow loss (-10%)</mat-option>
+                        <mat-option [value]="1.0">Maintain</mat-option>
+                        <mat-option [value]="1.1">Slow gain (+10%)</mat-option>
+                        <mat-option [value]="1.15">Medium gain (+15%)</mat-option>
+                        <mat-option [value]="1.2">Fast gain (+20%)</mat-option>
+                    </mat-select>
+                </mat-form-field>
+                <mat-form-field>
                     <mat-label>Sex</mat-label>
                     <mat-select formControlName="isMale">
                         <mat-option [value]="true">Male</mat-option>

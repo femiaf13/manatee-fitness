@@ -55,6 +55,7 @@ export class GoalsComponent implements OnInit {
         age: [0, [Validators.required, Validators.min(18)]],
         activityLevel: [1.0, [Validators.required, Validators.min(1.0)]],
         isMale: [true, [Validators.required]],
+        weightStrategy: [1.0, [Validators.required]],
         useMetric: [false, [Validators.required]],
     });
 
@@ -86,8 +87,9 @@ export class GoalsComponent implements OnInit {
             } else {
                 baseMetabolicRate -= 161;
             }
+            const maintenanceCalories = baseMetabolicRate * (formulaInputs.activityLevel as number);
 
-            return +(baseMetabolicRate * (formulaInputs.activityLevel as number)).toFixed(0);
+            return +(maintenanceCalories * (formulaInputs.weightStrategy as number)).toFixed(0);
         }
         return 0;
     });
