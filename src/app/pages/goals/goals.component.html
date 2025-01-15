@@ -1,47 +1,173 @@
 <div class="main-content">
-    <form [formGroup]="goalForm">
-        <mat-form-field>
-            <mat-label>Calories</mat-label>
-            <input matInput type="number" placeholder="Calories" formControlName="calories" />
-            <span matTextSuffix>kcal</span>
-        </mat-form-field>
+    <mat-tab-group dynamicHeight>
+        <mat-tab label="Goals">
+            <form [formGroup]="goalForm">
+                <mat-form-field>
+                    <mat-label>Calories</mat-label>
+                    <input matInput type="number" placeholder="Calories" formControlName="calories" />
+                    <span matTextSuffix>kcal</span>
+                </mat-form-field>
 
-        <mat-form-field>
-            <mat-label>Fat</mat-label>
-            <input matInput type="number" placeholder="Fat" formControlName="fat" />
-            <span matTextSuffix>g</span>
-        </mat-form-field>
+                <mat-form-field>
+                    <mat-label>Fat</mat-label>
+                    <input matInput type="number" placeholder="Fat" formControlName="fat" />
+                    <span matTextSuffix>g</span>
+                </mat-form-field>
 
-        <mat-form-field>
-            <mat-label>Carbs</mat-label>
-            <input matInput type="number" placeholder="Carbs" formControlName="carbs" />
-            <span matTextSuffix>g</span>
-        </mat-form-field>
+                <mat-form-field>
+                    <mat-label>Carbs</mat-label>
+                    <input matInput type="number" placeholder="Carbs" formControlName="carbs" />
+                    <span matTextSuffix>g</span>
+                </mat-form-field>
 
-        <mat-form-field>
-            <mat-label>Protein</mat-label>
-            <input matInput type="number" placeholder="Protein" formControlName="protein" />
-            <span matTextSuffix>g</span>
-        </mat-form-field>
+                <mat-form-field>
+                    <mat-label>Protein</mat-label>
+                    <input matInput type="number" placeholder="Protein" formControlName="protein" />
+                    <span matTextSuffix>g</span>
+                </mat-form-field>
 
-        <mat-form-field>
-            <mat-label>Cholesterol</mat-label>
-            <input matInput type="number" placeholder="Cholesterol" formControlName="cholesterol" />
-            <span matTextSuffix>mg</span>
-        </mat-form-field>
+                <mat-form-field>
+                    <mat-label>Cholesterol</mat-label>
+                    <input matInput type="number" placeholder="Cholesterol" formControlName="cholesterol" />
+                    <span matTextSuffix>mg</span>
+                </mat-form-field>
 
-        <mat-form-field>
-            <mat-label>Fiber</mat-label>
-            <input matInput type="number" placeholder="Fiber" formControlName="fiber" />
-            <span matTextSuffix>g</span>
-        </mat-form-field>
+                <mat-form-field>
+                    <mat-label>Fiber</mat-label>
+                    <input matInput type="number" placeholder="Fiber" formControlName="fiber" />
+                    <span matTextSuffix>g</span>
+                </mat-form-field>
 
-        <mat-form-field>
-            <mat-label>Sodium</mat-label>
-            <input matInput type="number" placeholder="Sodium" formControlName="sodium" />
-            <span matTextSuffix>mg</span>
-        </mat-form-field>
-        <br />
-        <button mat-flat-button type="submit" [disabled]="!goalForm.valid" (click)="onSubmit()">Submit</button>
-    </form>
+                <mat-form-field>
+                    <mat-label>Sodium</mat-label>
+                    <input matInput type="number" placeholder="Sodium" formControlName="sodium" />
+                    <span matTextSuffix>mg</span>
+                </mat-form-field>
+                <br />
+                <button mat-flat-button type="submit" [disabled]="!goalForm.valid" (click)="onSubmit()">Submit</button>
+            </form>
+        </mat-tab>
+        <mat-tab label="Calories">
+            <p style="margin-top: 10px">Calculated Calories: {{ calculatedCalories() }}</p>
+            <form [formGroup]="nutritionForm" (ngSubmit)="onSubmitCalories()">
+                <mat-form-field>
+                    <mat-label>Current Weight</mat-label>
+                    <input matInput type="number" placeholder="Weight" formControlName="weight" />
+                    <span matTextSuffix>{{ weightUnit() }}</span>
+                </mat-form-field>
+
+                <mat-form-field>
+                    <mat-label>Height</mat-label>
+                    <input matInput type="number" placeholder="Height" formControlName="height" />
+                    <span matTextSuffix>{{ heightUnit() }}</span>
+                </mat-form-field>
+
+                <mat-form-field>
+                    <mat-label>Age</mat-label>
+                    <input matInput type="number" placeholder="Age" formControlName="age" />
+                    <span matTextSuffix>years</span>
+                </mat-form-field>
+
+                <mat-form-field>
+                    <mat-label>Activity Level</mat-label>
+                    <mat-select formControlName="activityLevel">
+                        <mat-option [value]="1.0">Base</mat-option>
+                        <mat-option [value]="1.2">Sedentary</mat-option>
+                        <mat-option [value]="1.375">Lightly active</mat-option>
+                        <mat-option [value]="1.55">Moderately active</mat-option>
+                        <mat-option [value]="1.725">Active</mat-option>
+                        <mat-option [value]="1.9">Very active</mat-option>
+                    </mat-select>
+                </mat-form-field>
+                <mat-form-field>
+                    <mat-label>Weight Strategy</mat-label>
+                    <mat-select formControlName="weightStrategy">
+                        <mat-option [value]="0.8">Fast loss (-20%)</mat-option>
+                        <mat-option [value]="0.85">Medium loss (-15%)</mat-option>
+                        <mat-option [value]="0.9">Slow loss (-10%)</mat-option>
+                        <mat-option [value]="1.0">Maintain</mat-option>
+                        <mat-option [value]="1.1">Slow gain (+10%)</mat-option>
+                        <mat-option [value]="1.15">Medium gain (+15%)</mat-option>
+                        <mat-option [value]="1.2">Fast gain (+20%)</mat-option>
+                    </mat-select>
+                </mat-form-field>
+                <mat-form-field>
+                    <mat-label>Sex</mat-label>
+                    <mat-select formControlName="isMale">
+                        <mat-option [value]="true">Male</mat-option>
+                        <mat-option [value]="false">Female</mat-option>
+                    </mat-select>
+                </mat-form-field>
+                <br />
+                <mat-slide-toggle style="margin-right: 30px" labelPosition="before" formControlName="useMetric"
+                    >Metric</mat-slide-toggle
+                >
+                <button mat-flat-button type="submit" [disabled]="!nutritionForm.valid">Submit</button>
+                <br /><br />
+                <p>
+                    @if (calculatedCalories() < DANGEROUS_CALORIE_THRESHOLD && calculatedCalories() !== 0) {
+                        <p>
+                            <strong>
+                                Going under 1200 calories can be dangerous! Please make sure you're not going to hurt
+                                yourself.
+                            </strong>
+                        </p>
+                    }
+                    DISCLAIMER: This is an estimate using the Mifflin-St Jeor Equation. Please use your best judgement
+                    and consult a medical professional if necesary before making any changes to your diet.
+                </p>
+            </form>
+        </mat-tab>
+        <mat-tab label="Macros">
+            <p style="margin-top: 10px">Calculating for a daily intake of {{ caloriesSignal() }} calories</p>
+            <form [formGroup]="macrosForm" (ngSubmit)="onSubmitMacros()">
+                <mat-form-field>
+                    <mat-label>Fat Target</mat-label>
+                    <input matInput type="number" placeholder="Weight" formControlName="fatPercentage" />
+                    <span matTextSuffix>%</span>
+                    @if (!macrosForm.controls.fatPercentage.valid) {
+                        <mat-error>Minimum fat target is {{ MINIMUM_FAT_PERCENTAGE }}</mat-error>
+                    }
+                </mat-form-field>
+
+                <mat-form-field>
+                    <mat-label>Fat</mat-label>
+                    <input matInput [readonly]="true" [value]="fatGrams()" />
+                    <span matTextSuffix>g</span>
+                </mat-form-field>
+
+                <mat-form-field>
+                    <mat-label>Carbs Target</mat-label>
+                    <input matInput type="number" placeholder="Height" formControlName="carbsPercentage" />
+                    <span matTextSuffix>%</span>
+                    @if (!macrosForm.controls.carbsPercentage.valid) {
+                        <mat-error>Minimum fat target is {{ MINIMUM_CARBS_PERCENTAGE }}</mat-error>
+                    }
+                </mat-form-field>
+
+                <mat-form-field>
+                    <mat-label>Carbs</mat-label>
+                    <input matInput [readonly]="true" [value]="carbsGrams()" />
+                    <span matTextSuffix>g</span>
+                </mat-form-field>
+
+                <mat-form-field>
+                    <mat-label>Protein Target</mat-label>
+                    <input matInput type="number" placeholder="Age" formControlName="proteinPercentage" />
+                    <span matTextSuffix>%</span>
+                    @if (!macrosForm.controls.proteinPercentage.valid) {
+                        <mat-error>Minimum fat target is {{ MINIMUM_PROTEIN_PERCENTAGE }}</mat-error>
+                    }
+                </mat-form-field>
+
+                <mat-form-field>
+                    <mat-label>Protein</mat-label>
+                    <input matInput [readonly]="true" [value]="proteinGrams()" />
+                    <span matTextSuffix>g</span>
+                </mat-form-field>
+                <br /><br />
+                <button mat-flat-button type="submit" [disabled]="!macrosForm.valid">Submit</button>
+            </form>
+        </mat-tab>
+    </mat-tab-group>
 </div>
