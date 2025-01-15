@@ -47,12 +47,11 @@
                 <button mat-flat-button type="submit" [disabled]="!goalForm.valid" (click)="onSubmit()">Submit</button>
             </form>
         </mat-tab>
-        <mat-tab label="Calculate Calories">
-            <p>{{ calculatedCalories() }}</p>
+        <mat-tab label="Calories">
+            <p style="margin-top: 10px">Calculated Calories: {{ calculatedCalories() }}</p>
             <form [formGroup]="nutritionForm" (ngSubmit)="onSubmitCalories()">
-                <mat-slide-toggle labelPosition="before" formControlName="useMetric">Metric</mat-slide-toggle>
                 <mat-form-field>
-                    <mat-label>Weight</mat-label>
+                    <mat-label>Current Weight</mat-label>
                     <input matInput type="number" placeholder="Weight" formControlName="weight" />
                     <span matTextSuffix>{{ weightUnit() }}</span>
                 </mat-form-field>
@@ -100,6 +99,9 @@
                     </mat-select>
                 </mat-form-field>
                 <br />
+                <mat-slide-toggle style="margin-right: 30px" labelPosition="before" formControlName="useMetric"
+                    >Metric</mat-slide-toggle
+                >
                 <button mat-flat-button type="submit" [disabled]="!nutritionForm.valid">Submit</button>
                 <br /><br />
                 <p>
@@ -116,6 +118,6 @@
                 </p>
             </form>
         </mat-tab>
-        <mat-tab label="Calculate Macros">Calculating Macronutrients will go here</mat-tab>
+        <mat-tab label="Macros">Calculating Macronutrients will go here</mat-tab>
     </mat-tab-group>
 </div>
