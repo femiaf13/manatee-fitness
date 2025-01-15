@@ -118,6 +118,56 @@
                 </p>
             </form>
         </mat-tab>
-        <mat-tab label="Macros">Calculating Macronutrients will go here</mat-tab>
+        <mat-tab label="Macros">
+            <p style="margin-top: 10px">Calculating for a daily intake of {{ caloriesSignal() }} calories</p>
+            <form [formGroup]="macrosForm" (ngSubmit)="onSubmitMacros()">
+                <mat-form-field>
+                    <mat-label>Fat Target</mat-label>
+                    <input matInput type="number" placeholder="Weight" formControlName="fatPercentage" />
+                    <span matTextSuffix>%</span>
+                    @if (!macrosForm.controls.fatPercentage.valid) {
+                        <mat-error>Minimum fat target is {{ MINIMUM_FAT_PERCENTAGE }}</mat-error>
+                    }
+                </mat-form-field>
+
+                <mat-form-field>
+                    <mat-label>Fat</mat-label>
+                    <input matInput [readonly]="true" [value]="fatGrams()" />
+                    <span matTextSuffix>g</span>
+                </mat-form-field>
+
+                <mat-form-field>
+                    <mat-label>Carbs Target</mat-label>
+                    <input matInput type="number" placeholder="Height" formControlName="carbsPercentage" />
+                    <span matTextSuffix>%</span>
+                    @if (!macrosForm.controls.carbsPercentage.valid) {
+                        <mat-error>Minimum fat target is {{ MINIMUM_CARBS_PERCENTAGE }}</mat-error>
+                    }
+                </mat-form-field>
+
+                <mat-form-field>
+                    <mat-label>Carbs</mat-label>
+                    <input matInput [readonly]="true" [value]="carbsGrams()" />
+                    <span matTextSuffix>g</span>
+                </mat-form-field>
+
+                <mat-form-field>
+                    <mat-label>Protein Target</mat-label>
+                    <input matInput type="number" placeholder="Age" formControlName="proteinPercentage" />
+                    <span matTextSuffix>%</span>
+                    @if (!macrosForm.controls.proteinPercentage.valid) {
+                        <mat-error>Minimum fat target is {{ MINIMUM_PROTEIN_PERCENTAGE }}</mat-error>
+                    }
+                </mat-form-field>
+
+                <mat-form-field>
+                    <mat-label>Protein</mat-label>
+                    <input matInput [readonly]="true" [value]="proteinGrams()" />
+                    <span matTextSuffix>g</span>
+                </mat-form-field>
+                <br /><br />
+                <button mat-flat-button type="submit" [disabled]="!macrosForm.valid">Submit</button>
+            </form>
+        </mat-tab>
     </mat-tab-group>
 </div>
