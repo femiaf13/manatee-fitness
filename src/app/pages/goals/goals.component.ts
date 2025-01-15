@@ -8,6 +8,7 @@ import { MatGridListModule } from '@angular/material/grid-list';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatTabsModule } from '@angular/material/tabs';
 import { Goal } from '@models/goal.model';
 import { DatabaseService } from '@services/database.service';
@@ -33,6 +34,7 @@ import { UnitConversionService } from '@services/unit-conversion.service';
 export class GoalsComponent implements OnInit {
     dateService = inject(DateService);
     databaseService = inject(DatabaseService);
+    snackBar = inject(MatSnackBar);
     unitConversionService = inject(UnitConversionService);
 
     readonly DANGEROUS_CALORIE_THRESHOLD = 1200;
@@ -96,6 +98,18 @@ export class GoalsComponent implements OnInit {
         return 0;
     });
 
+    /**
+     *
+     * @param message Notification message
+     * @param action Text used for the dismissal button
+     * @param duration Duration in ms before notification dismisses itself. Defaults to 15s
+     */
+    private openSnackBar(message: string, action: string = 'Dismiss', duration = 15000) {
+        this.snackBar.open(message, action, {
+            duration: duration,
+        });
+    }
+
     async onSubmit() {
         const goal = new Goal(
             this.goalForm.controls.calories.value,
@@ -107,6 +121,23 @@ export class GoalsComponent implements OnInit {
             this.goalForm.controls.sodium.value
         );
         await this.databaseService.setGoal(goal);
+        this.openSnackBar('Goal entered!');
+    }
+
+    async onSubmitCalories() {
+        const goalCalories = this.calculatedCalories();
+        const goal = new Goal(
+            goalCalories,
+            this.goalForm.controls.fat.value,
+            this.goalForm.controls.carbs.value,
+            this.goalForm.controls.protein.value,
+            this.goalForm.controls.cholesterol.value,
+            this.goalForm.controls.fiber.value,
+            this.goalForm.controls.sodium.value
+        );
+        await this.databaseService.setGoal(goal);
+        this.goalForm.controls.calories.setValue(goalCalories);
+        this.openSnackBar('Calories set!');
     }
 
     async ngOnInit() {

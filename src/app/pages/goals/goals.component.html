@@ -49,7 +49,7 @@
         </mat-tab>
         <mat-tab label="Calculate Calories">
             <p>{{ calculatedCalories() }}</p>
-            <form [formGroup]="nutritionForm" (ngSubmit)="(true)">
+            <form [formGroup]="nutritionForm" (ngSubmit)="onSubmitCalories()">
                 <mat-slide-toggle labelPosition="before" formControlName="useMetric">Metric</mat-slide-toggle>
                 <mat-form-field>
                     <mat-label>Weight</mat-label>
