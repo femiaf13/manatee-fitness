@@ -228,12 +228,12 @@ export class GoalsComponent implements OnInit {
             this.goalForm.controls.cholesterol.setValue(goal.cholesterol);
             this.goalForm.controls.fiber.setValue(goal.fiber);
             this.goalForm.controls.sodium.setValue(goal.sodium);
-            // I need to do this to trigger the computed signals' initial computation
-            // for some reason if I init the form with these values instead it won't get called
-            this.macrosForm.controls.fatPercentage.setValue(30);
-            this.macrosForm.controls.carbsPercentage.setValue(50);
-            this.macrosForm.controls.proteinPercentage.setValue(20);
         }
+        // I need to do this to trigger the computed signals' initial computation
+        // for some reason if I init the form with these values instead it won't get called
+        this.macrosForm.controls.fatPercentage.setValue(30);
+        this.macrosForm.controls.carbsPercentage.setValue(50);
+        this.macrosForm.controls.proteinPercentage.setValue(20);
     }
 
     constructor() {
