@@ -1,4 +1,4 @@
-# Manatee Fitness
+# Manatee Fitness <img src="./src-tauri/gen/android/app/src/main/res/mipmap-xxxhdpi/ic_launcher_round.png" width="50" /> 
 
 Manatee Fitness is a calorie counting and nutrition tracking food diary highly inspired by the wonderful work done over at [Waistline](https://github.com/davidhealey/waistline). Seriously it's a great app and I have a ton of respect for the work they've done. I've had some pain points with the UX of Waistline and am using this project as a fresh start to address those!
 
