@@ -51,7 +51,7 @@ This privacy policy may be updated from time to time as the functionalities of t
 ## Disclaimer
 Manatee Fitness is developed in good faith and for general use. The developer will not be held accountable for how you decide to use this software and will not be liable for any losses and/or damages in connection with the use of the software.
 
-The current placeholder logo is AI generated. This is not ideal and will be replaced once the artist I commissioned for a proper logo is finished.
+Big shout out to [Caius Nocturne](https://nocturne.works) for the adorable icon!
 
 ## Development
 
